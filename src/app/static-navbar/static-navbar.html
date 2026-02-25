@@ -1,0 +1,26 @@
+<div class="ak-scroll">
+</div>
+<div class="ak-fixedbar">
+    <div class="ak-content-fixedbar">
+        <div class="ak-btns">
+            <a class="ak-btn-play" href="/download">
+                <span>JUGAR</span>
+                Gratis
+            </a>
+            <a class="ak-btn-retro" href="/register">
+                REGISTRATE
+                <span>VAMOS
+                    <span></span>
+                </span>
+            </a>
+        </div>
+        <div class="ak-block-video" [ngClass]="{'ak-open': isOpen}">
+            <a class="ak-btn-reduce" (click)="reduceVideo()"></a>
+            <div class="ak-text">
+              <div class="ak-title">GUÍA</div>
+              <div class="ak-baseline">MODO HÉROES AERMYFUS</div>
+            </div>
+            <a target="_blank" href="https://youtube.com/shorts/8ddoiQAOl0k?si=O7mLcIGXOqc_BZ32" class="ak-btn-video ak-modal-trigger" (click)="openModal()"></a>
+            <script type="application/json" [attr.data-config]="modalConfig"></script>
+          </div>
+    </div>

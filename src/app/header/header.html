@@ -1,0 +1,165 @@
+<div class="header-full-container-new-version">
+  <div class="header-full-container-new-version-left">
+    <div class="header-full-container-new-version-left-main">
+      <h3>Aermyfus</h3>
+    </div>
+
+    <div class="header-full-container-new-version-left-logo">
+      <a routerLink="/">
+        <img src="assets/logo.png" alt="">
+      </a>
+    </div>
+
+    <div class="header-full-container-new-version-left-menu ng-star-inserted">
+
+      <!-- Juego -->
+      <div class="header-full-container-new-version-left-menu-item">
+        <span>Juego</span>
+        <div class="header-full-container-new-version-left-menu-item-arrow"></div>
+
+        <div class="dropdown-menu">
+          <div class="dropdown-menu-top"></div>
+          <div class="dropdown-menu-content">
+            <a routerLink="/" class="linka">
+              <div class="dropdown-menu-content-item">Descubrir</div>
+            </a>
+            <a routerLink="/ranking" class="linka">
+              <div class="dropdown-menu-content-item">Clasificaciones</div>
+            </a>
+            <a routerLink="/register" class="linka">
+              <div class="dropdown-menu-content-item">Registro</div>
+            </a>
+            <a routerLink="/download" class="linka">
+              <div class="dropdown-menu-content-item">Descarga el juego</div>
+            </a>
+          </div>
+        </div>
+      </div>
+
+      <!-- Actualidad -->
+<div class="header-full-container-new-version-left-menu-item">
+  <span>Actualidad</span>
+  <div class="header-full-container-new-version-left-menu-item-arrow"></div>
+
+  <div class="dropdown-menu">
+    <div class="dropdown-menu-top"></div>
+    <div class="dropdown-menu-content">
+
+      <!-- Noticias → Facebook -->
+      <a href="https://www.facebook.com/aermyfusretro" target="_blank" class="linka">
+        <div class="dropdown-menu-content-item">Todas las noticias</div>
+      </a>
+
+      <!-- Guías → YouTube -->
+      <a href="https://www.youtube.com/@aermyfus" target="_blank" class="linka">
+        <div class="dropdown-menu-content-item">Guias</div>
+      </a>
+
+    </div>
+  </div>
+</div>
+
+      <!-- Utilidades -->
+      <div class="header-full-container-new-version-left-menu-item">
+        <span>Utilidades</span>
+        <div class="header-full-container-new-version-left-menu-item-arrow"></div>
+
+        <div class="dropdown-menu">
+          <div class="dropdown-menu-top"></div>
+          <div class="dropdown-menu-content">
+            <a href="https://retro.dofuscreator.com/" target="_blank" class="linka">
+              <div class="dropdown-menu-content-item">Diseña tu set</div>
+            </a>
+            <a href="https://solomonk.fr/es/" target="_blank" class="linka">
+              <div class="dropdown-menu-content-item">Enciclopedia Retro</div>
+            </a>
+            <a href="https://dofusdb.fr/es" target="_blank" class="linka">
+              <div class="dropdown-menu-content-item">Enciclopedia Frigost</div>
+            </a>
+          </div>
+        </div>
+      </div>
+
+      <!-- Redes -->
+      <div class="header-full-container-new-version-left-menu-item">
+        <span>Redes</span>
+        <div class="header-full-container-new-version-left-menu-item-arrow"></div>
+
+        <div class="dropdown-menu">
+          <div class="dropdown-menu-top"></div>
+          <div class="dropdown-menu-content">
+            <a href="https://chat.whatsapp.com/GP7GydWP3VX58O9d5rBecX" target="_blank" class="linka">
+              <div class="dropdown-menu-content-item">Whatsapp</div>
+            </a>
+            <a href="https://www.youtube.com/@aermyfus" target="_blank" class="linka">
+              <div class="dropdown-menu-content-item">Canal de Youtube</div>
+            </a>
+            <a href="https://www.tiktok.com/@aermyfus" target="_blank" class="linka">
+              <div class="dropdown-menu-content-item">TikTok</div>
+            </a>
+            <a href="https://www.facebook.com/aermyfusretro" target="_blank" class="linka">
+              <div class="dropdown-menu-content-item">Facebook</div>
+            </a>
+          </div>
+        </div>
+      </div>
+
+     <div class="header-full-container-new-version-left-menu-item">
+  <a routerLink="/tienda" class="menu-direct-link">
+    <span>Tienda</span>
+  </a>
+  <div class="header-full-container-new-version-left-menu-item-direct"></div>
+</div>
+
+
+
+
+    </div>
+  </div>
+
+  <div class="header-full-container-new-version-right">
+    <div class="header-full-container-new-version-right-item ng-star-inserted">
+      <div class="icon-shopping"></div>
+    </div>
+
+    <a *ngIf="!isLoggedIn" routerLink="/login" class="header-full-container-new-version-right-item ng-star-inserted">
+      <div class="icon-login"></div>
+    </a>
+
+    <div *ngIf="isLoggedIn" class="header-full-container-new-version-left-menu-item header-user-menu">
+      <img src="assets/avatar/avatar.png" alt="Avatar" class="user-avatar-header">
+      <div class="dropdown-menu">
+        <div class="dropdown-menu-top"></div>
+        <div class="dropdown-menu-content user-dropdown-content">
+          <div class="user-profile-header">
+            <img src="assets/avatar/avatar.png" alt="Avatar" class="user-avatar-dropdown">
+            <div class="user-info">
+              <div class="user-name">{{ currentUser?.apodo }}#{{ currentUser?.id }}</div>
+              <div class="user-subscription">{{ getSubscriptionStatus() }}</div>
+            </div>
+          </div>
+          <div class="user-ogrinas-section">
+            <img src="assets/ogrina.svg" alt="Ogrinas" class="ogrinas-icon">
+            <div class="ogrinas-info">
+              <div class="ogrinas-amount">Ogrinas: {{ currentUser?.ogrinas }}</div>
+              <a routerLink="/shop" class="ogrinas-buy-link">Comprar Ogrinas</a>
+            </div>
+          </div>
+          <a routerLink="/profile" class="linka">
+            <div class="dropdown-menu-content-item">Gestión de cuenta</div>
+          </a>
+          <button (click)="logout()" class="linka logout-link">
+            <div class="dropdown-menu-content-item">Desconexión</div>
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <button 
+  routerLink="/download"
+  class="play-header-button ng-star-inserted">
+  Jugar
+</button>
+
+  </div>
+</div>

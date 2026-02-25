@@ -1,0 +1,97 @@
+<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+
+<div class="auth-container">
+    <div class="auth-card">
+
+        <div class="auth-logo">
+            <img src="/assets/logo.png" alt="Logo">
+        </div>
+
+        <h4 class="auth-title">CONECTARSE</h4>
+
+        <!-- Mensajes de error y éxito -->
+        <div *ngIf="errorMessage" class="alert alert-error">
+            <span class="material-icons">error</span>
+            {{ errorMessage }}
+        </div>
+
+        <div *ngIf="successMessage" class="alert alert-success">
+            <span class="material-icons">check_circle</span>
+            {{ successMessage }}
+        </div>
+
+        <form [formGroup]="loginForm" (ngSubmit)="onLogin()">
+            <div class="auth-fields">
+
+                <!-- Usuario -->
+                <div class="auth-field">
+                    <span class="auth-label">Usuario <b>*</b></span>
+                    <input 
+                        type="text" 
+                        class="auth-input" 
+                        placeholder="Cuenta" 
+                        autocomplete="off"
+                        formControlName="username"
+                        (blur)="onBlurUser()"
+                        [class.invalid]="userTouched && !!getUsernameError()"
+                        [disabled]="isLoading"
+                    />
+                    <span class="error-message" *ngIf="userTouched && getUsernameError()">
+                        {{ getUsernameError() }}
+                    </span>
+                </div>
+
+                <!-- Contraseña -->
+                <div class="auth-field">
+                    <span class="auth-label">Contraseña <b>*</b></span>
+
+                    <div class="password-wrapper">
+                        <input 
+                            [type]="showPassword ? 'text' : 'password'" 
+                            class="auth-input" 
+                            placeholder="Contraseña"
+                            formControlName="password"
+                            (blur)="onBlurPass()"
+                            [class.invalid]="passTouched && !!getPasswordError()"
+                            [disabled]="isLoading"
+                        />
+
+                        <button 
+                            type="button" 
+                            class="password-toggle" 
+                            (click)="togglePassword()"
+                            [disabled]="isLoading"
+                        >
+                            <span class="material-icons">
+                                {{ showPassword ? 'visibility' : 'visibility_off' }}
+                            </span>
+                        </button>
+                    </div>
+                    <span class="error-message" *ngIf="passTouched && getPasswordError()">
+                        {{ getPasswordError() }}
+                    </span>
+                </div>
+
+            </div>
+
+            <button 
+                type="submit" 
+                class="auth-button"
+                [disabled]="!isFormValid() || isLoading"
+            >
+                <span *ngIf="!isLoading">CONECTARSE</span>
+                <span *ngIf="isLoading" class="spinner-wrapper">
+                    <mat-spinner diameter="20"></mat-spinner>
+                    Conectando...
+                </span>
+            </button>
+        </form>
+
+        <div class="auth-links">
+            <span>¿No tienes una cuenta?</span>
+            <a (click)="goToRegister()" class="link">Crea una cuenta</a>
+            <a href="#" class="link">¿No puedes conectarte?</a>
+        </div>
+
+    </div>
+</div>

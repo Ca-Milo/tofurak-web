@@ -1,0 +1,233 @@
+@use "../../variables.scss";
+
+/* =====================================================
+   CONTENEDOR GENERAL — bg2 ES EL FONDO DE TODA LA PÁGINA
+   ===================================================== */
+.full-body-download {
+  min-height: 100vh;
+
+  /* espacio real para el header fijo */
+  padding-top: 100px;
+  padding-bottom: 80px;
+
+  /* 🔥 FONDO ÚNICO */
+  background: url("/assets/download/bg2.jpg") center 0% / 320% no-repeat;
+
+  /* para que el contenido no quede pegado */
+  position: relative;
+}
+
+/* oscurecido suave para legibilidad */
+.full-body-download::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.45);
+  z-index: 0;
+}
+
+/* todo el contenido por encima del overlay */
+.full-body-download > * {
+  position: relative;
+  z-index: 1;
+}
+
+/* =====================================================
+   HEADER
+   ===================================================== */
+.download-header {
+  text-align: center;
+  margin-bottom: 50px;
+}
+
+.download-title {
+  display: inline-flex;
+  align-items: center;
+  gap: 15px;
+
+  background: rgba(0, 0, 0, 0.6);
+  padding: 15px 35px;
+  border: 1px solid #000;
+}
+
+.download-title span {
+  font-family: "Bebas Neue", cursive;
+  font-size: 42px;
+  color: #f6eed6;
+  text-transform: uppercase;
+}
+
+.download-title img {
+  width: 42px;
+  height: 42px;
+}
+
+/* =====================================================
+   BLOQUE DESCARGAS
+   ===================================================== */
+.download-main {
+  max-width: 1400px;
+  margin: 0 auto;
+}
+
+/* =====================================================
+   BOTONES
+   ===================================================== */
+.download-buttons {
+  display: flex;
+  justify-content: center;
+  gap: 30px;
+  flex-wrap: wrap;
+}
+
+.download-card {
+  width: 300px;
+  padding: 12px 10px;
+  text-align: center;
+  text-decoration: none;
+  cursor: pointer;
+
+  border: 2px solid #000;
+  background: linear-gradient(#f5c625, #e0a400);
+  box-shadow: inset 0 0 0 4px rgba(255, 255, 255, 0.2);
+
+  transition: background 0.15s ease;
+}
+
+.download-card:hover {
+  background: linear-gradient(#ffe27a, #f5c625);
+}
+
+.download-card.recommended {
+  box-shadow:
+    inset 0 0 0 4px rgba(255, 255, 255, 0.2),
+    0 0 25px rgba(245, 198, 37, 0.9);
+}
+
+.card-title {
+  font-family: "Bebas Neue", cursive;
+  font-size: 26px;
+  color: #ffffff;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+
+  text-shadow:
+    0 2px 0 rgba(0, 0, 0, 0.6),
+    0 0 6px rgba(0, 0, 0, 0.4);
+}
+
+.card-subtitle {
+  margin-top: 6px;
+  font-size: 13px;
+  font-weight: bold;
+  color: #151313c7;
+}
+
+.card-version {
+  margin-top: 6px;
+  font-size: 13px;
+  color: #151313c7;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.6);
+}
+
+/* =====================================================
+   LINKS SECUNDARIOS
+   ===================================================== */
+.download-links {
+  margin-top: 30px;
+  text-align: center;
+  color: #fff;
+}
+
+.download-links a {
+  display: block;
+  margin-top: 6px;
+  color: #f5c625;
+  text-decoration: none;
+}
+
+.download-links a:hover {
+  text-decoration: underline;
+}
+
+/* =====================================================
+   HOW TO
+   ===================================================== */
+.download-howto {
+  margin-top: 70px;
+  margin-bottom: 40px;
+  text-align: center;
+}
+
+.howto-title {
+  font-family: "Bebas Neue", cursive;
+  font-size: 36px;
+  color: #f5c625;
+  margin-bottom: 30px;
+}
+
+/* 🔥 Mantiene tu layout: flex + wrap (no rompe nada) */
+.howto-videos {
+  display: flex;
+  justify-content: center;
+  gap: 30px;
+  flex-wrap: wrap;
+}
+
+/* wrapper de cada imagen para poder poner overlay */
+.howto-step {
+  position: relative;
+  width: 360px; /* mismo ancho que tenías */
+  border: 2px solid #000;
+  overflow: hidden;
+}
+
+/* evita que la imagen cambie tamaños raros */
+.howto-step img {
+  width: 100%;
+  height: 200px;      /* altura fija tipo banner (ajusta si quieres) */
+  display: block;
+  object-fit: cover;
+}
+
+/* franja negra sólida */
+.howto-overlay {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+
+  height: 30px;                 /* ajusta si quieres más alta */
+  background: rgba(0, 0, 0, 0.9);
+
+  display: flex;
+  align-items: center;          /* centra vertical */
+  justify-content: center;      /* centra horizontal */
+}
+
+/* texto centrado real */
+.howto-text {
+  color: #fff;
+  font-size: 18px;
+  font-weight: 400;
+  margin: 0;
+
+  text-align: center;
+  text-shadow: none;
+}
+
+
+
+/* responsive: en pantallas pequeñas se apilan */
+@media (max-width: 900px) {
+  .howto-step {
+    width: 100%;
+    max-width: 420px;
+  }
+  .howto-step img {
+    height: 190px;
+  }
+  .howto-text {
+    font-size: 20px;
+  }
+}

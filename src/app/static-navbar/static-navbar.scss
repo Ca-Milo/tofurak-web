@@ -1,0 +1,378 @@
+.ak-fixedbar {
+    height: 84px;
+    position: fixed;
+    width: 100%;
+    background: rgba(0, 0, 0, .8);
+    bottom: 0;
+    z-index: 1000
+}
+
+.ak-fixedbar .ak-content-fixedbar {
+    position: relative;
+    width: 100%;
+    top: 0;
+    margin: 0 auto
+}
+
+@media all and (min-width:1200px) {
+    .ak-fixedbar .ak-content-fixedbar {
+        transform: scale(0.8)
+    }
+}
+
+@media all and (min-width:1550px) {
+    .ak-fixedbar .ak-content-fixedbar {
+        transform: scale(1)
+    }
+}
+
+.ak-fixedbar .ak-content-fixedbar .ak-btns {
+    position: relative;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    height: 100%;
+    margin: 0 auto;
+    width: 100%
+}
+
+@media all and (min-width:768px) {
+    .ak-fixedbar .ak-content-fixedbar .ak-btns {
+        width: 575px;
+        left: 138px
+    }
+}
+
+.ak-fixedbar .ak-content-fixedbar .ak-btns .ak-btn-play {
+    background: url("../../assets/btn-play1.png") center center no-repeat transparent;
+    background-size: 95% auto;
+    margin: 0 auto;
+    width: 305px;
+    height: 111px;
+    font-size: 16px;
+    text-align: center;
+    color: #2f2f25;
+    line-height: 25px;
+    padding-top: 0px;
+    top: -12px;
+    transition: all .2s;
+    font-weight: lighter;
+    text-transform: uppercase;
+    position: relative;
+    text-decoration: none;
+    font-family: "Roboto" sans-serif
+}
+
+.ak-fixedbar .ak-content-fixedbar .ak-btns .ak-btn-play span {
+    font-size: 26px;
+    display: block;
+    transition: all .1s;
+    top: 19px;
+    position: relative;
+    padding: 16px;
+    align-items: center;
+    font-family: Arial, Helvetica, sans-serif;
+    font-weight: 650;
+}
+
+.ak-fixedbar .ak-content-fixedbar .ak-btns .ak-btn-play.ak-btn-dl span {
+    top: 11px
+}
+
+.ak-fixedbar .ak-content-fixedbar .ak-btns .ak-btn-play:hover,
+.ak-fixedbar .ak-content-fixedbar .ak-btns .ak-btn-play:focus {
+    background: url("../../assets/btn-play1-over.png") center center no-repeat transparent;
+    background-size: 100%;
+    font-size: 18px;
+    transition: all .2s;
+    line-height: 24px;
+    text-decoration: none;
+    top: -16px
+}
+
+.ak-fixedbar .ak-content-fixedbar .ak-btns .ak-btn-play:hover span,
+.ak-fixedbar .ak-content-fixedbar .ak-btns .ak-btn-play:focus span {
+    font-size: 30px;
+    transition: all .1s
+}
+
+@media all and (min-width:768px) {
+    .ak-fixedbar .ak-content-fixedbar .ak-btns .ak-btn-play {
+        font-weight: 600;
+        display: inline-block;
+        margin: auto
+    }
+}
+
+.ak-fixedbar .ak-content-fixedbar .ak-btns .ak-btn-retro {
+    width: 250px;
+    height: 84px;
+    display: none;
+    margin-left: 12px;
+    vertical-align: middle;
+    transition: all .2s;
+    position: relative;
+    top: -14px;
+    font-size: 15px;
+    color: #f6eed6;
+    line-height: 86px;
+    text-align: center;
+    padding: 0 6px;
+    text-decoration: none;
+    font-family: "Roboto",sans-serif
+
+}
+
+.ak-fixedbar .ak-content-fixedbar .ak-btns .ak-btn-retro:before,
+.ak-fixedbar .ak-content-fixedbar .ak-btns .ak-btn-retro:after {
+    content: " ";
+    display: inline-block;
+    position: relative;
+    width: 20px;
+    height: 20px
+}
+
+.ak-fixedbar .ak-content-fixedbar .ak-btns .ak-btn-retro:before {
+    width: 20px;
+    height: 20px;
+    background: url("../../assets/btn-retro.png") center center no-repeat transparent;
+    vertical-align: middle
+}
+
+.ak-fixedbar .ak-content-fixedbar .ak-btns .ak-btn-retro:after {
+    background: #e2e01f;
+    mask-image: url("../../assets/arrow.svg");
+    mask-size: 20px 20px;
+    mask-position: center;
+    vertical-align: middle;
+    top: -1px;
+    left: 3px
+}
+
+.ak-fixedbar .ak-content-fixedbar .ak-btns .ak-btn-retro span {
+    color: #e2e01f
+}
+
+.ak-fixedbar .ak-content-fixedbar .ak-btns .ak-btn-retro:hover,
+.ak-fixedbar .ak-content-fixedbar .ak-btns .ak-btn-retro:focus {
+    background-color: #212121;
+    text-decoration: none
+}
+
+@media all and (min-width:992px) {
+    .ak-fixedbar .ak-content-fixedbar .ak-btns .ak-btn-retro {
+        display: inline-block
+    }
+}
+
+.ak-fixedbar .ak-content-fixedbar .ak-block-video {
+    right: -10%;
+    background: #191410;
+    padding: 10px;
+    position: absolute;
+    transition: all .2s;
+    top: -160px;
+  
+    &.ak-open {
+      top: 0;
+    }
+  
+    @media all and (min-width: 1200px) {
+      display: block;
+    }
+  
+    @media all and (min-width: 1550px) {
+      right: 5%;
+    }
+  
+    .ak-btn-reduce {
+      background: url("../../assets/btn-reduce.png") center center no-repeat transparent;
+      position: absolute;
+      right: 0;
+      top: 0;
+      display: block;
+      width: 33px;
+      height: 26px;
+      color: #282720;
+      transition: all .2s;
+      transform: rotate(0deg);
+  
+      &:after {
+        background: url("../../assets/btn-reduce-over.png") center center no-repeat #373737;
+        content: " ";
+        opacity: 0;
+        display: block;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        transition: all .2s;
+      }
+  
+      &:hover {
+        text-decoration: none;
+  
+        &:after {
+          opacity: 1;
+        }
+      }
+  
+      &.ak-open {
+        transform: rotate(180deg);
+      }
+    }
+  
+    .ak-text {
+      margin-bottom: 6px;
+  
+      .ak-title {
+        color: #f6eed6;
+        font-size: 16px;
+        font-family: "Roboto",sans-serif;
+      }
+  
+      .ak-baseline {
+        color: #f5c625;
+        font-size: 18px;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        width: 100%;
+        text-transform: uppercase;
+        font-family: "Roboto",sans-serif;
+      }
+    }
+  
+    .ak-btn-video {
+      background: url("../../assets/thumb.jpg") center center no-repeat transparent;
+      background-size: cover;
+      display: block;
+      width: 315px;
+      height: 176px;
+      box-shadow: inset 0 0 0 3px rgba(255, 255, 255, .2);
+      position: relative;
+      transition: all .2s;
+  
+      &:after {
+        content: " ";
+        display: block;
+        background: url("../../assets/play.png") 0 0 no-repeat transparent;
+        width: 145px;
+        height: 145px;
+        position: absolute;
+        left: 50%;
+        top: 50%;
+        margin: -72px 0 0 -72px;
+      }
+  
+      &:hover {
+        filter: brightness(1.3);
+        background-size: 102%;
+        transition: all .2s;
+      }
+    }
+  }
+
+.es .ak-fixedbar .ak-content-fixedbar .ak-btns .ak-btn-retro,
+.pt .ak-fixedbar .ak-content-fixedbar .ak-btns .ak-btn-retro {
+    font-size: 16px
+}
+
+@keyframes bounce {
+    0% {
+        transform: translateY(-3px);
+        opacity: 1
+    }
+
+    100% {
+        transform: translateY(3px);
+        opacity: 0
+    }
+}
+
+.ak-modal-video {
+    background: transparent;
+    overflow: hidden
+}
+
+.ak-modal-video .ui-dialog-titlebar {
+    background: none;
+    min-height: 20px
+}
+
+.ak-modal-video .ui-dialog-titlebar span {
+    display: none
+}
+
+.ak-modal-video .ui-dialog-titlebar .ui-dialog-titlebar-close {
+    background-color: transparent
+}
+
+.ak-modal-video .ak-modal {
+    position: relative;
+    padding-bottom: 56.25%;
+    height: 0;
+    overflow: hidden;
+    margin-top: 30px
+}
+
+.ak-modal-video .ak-modal iframe {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%
+}
+
+.ui-widget-overlay {
+    opacity: .8
+}
+
+.ak-scroll {
+    background: url("../../assets/btn-scroll.png") center top no-repeat transparent;
+    display: inline-block;
+    position: fixed;
+    z-index: 10000;
+    height: 53px;
+    width: 34px;
+    bottom: 28px;
+    left: 42%;
+    margin-left: -220px;
+    opacity: 1;
+    transition: all .2s ease-in-out
+  }
+  
+  .ak-scroll.ak-hidden {
+    opacity: 0;
+    transition: all .2s ease-in-out
+  }
+  
+  .ak-scroll:hover {
+    text-decoration: none
+  }
+  
+  .ak-scroll:before {
+    content: "SCROLL";
+    display: block;
+    position: absolute;
+    top: 50px;
+    width: 54px;
+    left: -15px;
+    font-size: 18px;
+    color: #f6eed6;
+    font-family: "Roboto",sans-serif   ;
+    font-weight: bold
+  }
+  
+  .ak-scroll:after {
+    content: " ";
+    display: block;
+    background: url("../../assets/btn-scroll-arrow.png") center top no-repeat transparent;
+    width: 21px;
+    height: 19px;
+    position: relative;
+    margin: 26px 0 0 7px;
+    animation: bounce 1s infinite
+  }
+  

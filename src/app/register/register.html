@@ -1,0 +1,161 @@
+<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+
+<div class="auth-container">
+  <div class="auth-card">
+
+    <div class="auth-logo">
+      <img src="/assets/logo.png" alt="Logo">
+    </div>
+
+    <h4 class="auth-title">CREAR CUENTA</h4>
+
+    <!-- Mensajes -->
+    <div *ngIf="errorMessage" class="alert alert-error">
+      <span class="material-icons">error</span>
+      {{ errorMessage }}
+    </div>
+
+    <div *ngIf="successMessage" class="alert alert-success">
+      <span class="material-icons">check_circle</span>
+      {{ successMessage }}
+    </div>
+
+    <form [formGroup]="registerForm" (ngSubmit)="onRegister()">
+      <div class="auth-fields">
+
+        <!-- Cuenta -->
+        <div class="auth-field">
+          <span class="auth-label">Cuenta <b>*</b></span>
+          <input class="auth-input" type="text" placeholder="Cuenta" formControlName="username">
+        </div>
+
+        <!-- Nombre -->
+        <div class="auth-field">
+          <span class="auth-label">Nombre <b>*</b></span>
+          <input class="auth-input" type="text" placeholder="Nombre" formControlName="name">
+        </div>
+
+        <!-- Apellido -->
+        <div class="auth-field">
+          <span class="auth-label">Apellido <b>*</b></span>
+          <input class="auth-input" type="text" placeholder="Apellido" formControlName="lastname">
+        </div>
+
+        <!-- Apodo -->
+        <div class="auth-field">
+          <span class="auth-label">Apodo <b>*</b></span>
+          <input class="auth-input" type="text" placeholder="Apodo" formControlName="nickname">
+        </div>
+
+        <!-- Email --> 
+        <div class="auth-field">
+          <span class="auth-label">Correo electrónico <b>*</b></span>
+          <input class="auth-input" type="email" placeholder="Correo electrónico" formControlName="email">
+        </div>
+
+        <!-- Password -->
+        <div class="auth-field">
+          <span class="auth-label">Contraseña <b>*</b></span>
+          <div class="password-wrapper">
+            <input
+              [type]="showPassword ? 'text' : 'password'"
+              class="auth-input"
+              placeholder="Contraseña"
+              formControlName="password"
+            />
+            <button type="button" class="password-toggle" (click)="togglePassword()">
+              <span class="material-icons">
+                {{ showPassword ? 'visibility' : 'visibility_off' }}
+              </span>
+            </button>
+          </div>
+        </div>
+
+        <!-- Confirm -->
+        <div class="auth-field">
+          <span class="auth-label">Confirmar contraseña <b>*</b></span>
+          <div class="password-wrapper">
+            <input
+              [type]="showPassword ? 'text' : 'password'"
+              class="auth-input"
+              placeholder="Confirmar contraseña"
+              formControlName="confirmPassword"
+            />
+            <button type="button" class="password-toggle" (click)="togglePassword()">
+              <span class="material-icons">
+                {{ showPassword ? 'visibility' : 'visibility_off' }}
+              </span>
+            </button>
+          </div>
+        </div>
+
+        <!-- Pregunta secreta -->
+        <div class="auth-field">
+          <span class="auth-label">Pregunta secreta <b>*</b></span>
+          <input class="auth-input" type="text" placeholder="Pregunta secreta" formControlName="secretQuestion">
+        </div>
+
+        <!-- Respuesta secreta -->
+        <div class="auth-field">
+          <span class="auth-label">Respuesta secreta <b>*</b></span>
+          <input class="auth-input" type="text" placeholder="Respuesta secreta" formControlName="secretAnswer">
+        </div>
+
+        <!-- Fecha nacimiento -->
+        <div class="auth-field">
+          <span class="auth-label">Fecha de nacimiento <b>*</b></span>
+          <div style="display:flex; gap:10px;">
+            <select class="auth-input" formControlName="day">
+              <option value="">Día</option>
+              <option *ngFor="let d of days" [value]="d">{{d}}</option>
+            </select>
+
+            <select class="auth-input" formControlName="month">
+              <option value="">Mes</option>
+              <option *ngFor="let m of months" [value]="m">{{m}}</option>
+            </select>
+
+            <select class="auth-input" formControlName="year">
+              <option value="">Año</option>
+              <option *ngFor="let y of years" [value]="y">{{y}}</option>
+            </select>
+          </div>
+        </div>
+
+        <!-- Cantidad cuentas -->
+        <div class="auth-field">
+          <span class="auth-label">Cantidad de cuentas</span>
+          <select class="auth-input" formControlName="accounts">
+            <option value="1">1 cuenta</option>
+            <option value="2">2 cuentas</option>
+            <option value="3">3 cuentas</option>
+            <option value="4">4 cuentas</option>
+            <option value="5">5 cuentas</option>
+            <option value="6">6 cuentas</option>
+            <option value="7">7 cuentas</option>
+            <option value="8">8 cuentas</option>
+          </select>
+        </div>
+
+      </div>
+
+      <button
+        type="submit"
+        class="auth-button"
+        [disabled]="!isFormValid() || isLoading"
+      >
+        <span *ngIf="!isLoading">CREAR CUENTA</span>
+        <span *ngIf="isLoading" class="spinner-wrapper">
+          <mat-spinner diameter="20"></mat-spinner>
+          Creando...
+        </span>
+      </button>
+    </form>
+
+    <div class="auth-links">
+      <span>¿Ya tienes cuenta?</span>
+      <a class="link" (click)="goToLogin()">Conectarse</a>
+    </div>
+
+  </div>
+</div>

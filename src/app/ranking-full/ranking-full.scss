@@ -1,0 +1,183 @@
+.full-body {
+  min-height: 100vh;
+  padding-top: 110px;
+  background-image: url("/assets/home-backgrounds/bg-keyart-desk5.jpg");
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  padding-bottom: 40px;
+}
+
+.ranking-shell {
+  width: min(1120px, calc(100% - 24px));
+  margin: 0 auto;
+}
+
+.ranking-card {
+  background: rgba(255, 255, 255, 0.2);
+  padding: 12px;
+  border-radius: 8px;
+}
+
+.rank-title {
+  min-height: 66px;
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  background: #97a800;
+  border-bottom: 1px solid #6f780d;
+  padding: 10px 16px;
+  color: #fff;
+  text-shadow: 0 2px 2px #888;
+}
+
+.rank-badge {
+  width: 56px;
+  height: 56px;
+  object-fit: contain;
+  display: block;
+  filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.35));
+}
+
+.rank-title h1 {
+  margin: 0;
+  font-size: 34px;
+  line-height: 34px;
+  text-transform: uppercase;
+}
+
+.rank-title p {
+  margin: 4px 0 0;
+  font-family: Roboto, sans-serif;
+  font-size: 14px;
+  color: #f6f6f6;
+  text-shadow: none;
+}
+
+.rank-tabs {
+  display: flex;
+  gap: 8px;
+  padding: 12px 0;
+}
+
+.rank-tabs button {
+  border: 1px solid #867553;
+  background: #2f2317;
+  color: #f0ebdf;
+  font-family: Roboto, sans-serif;
+  font-size: 13px;
+  font-weight: 800;
+  letter-spacing: 0.8px;
+  text-transform: uppercase;
+  border-radius: 6px;
+  padding: 10px 16px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.rank-tabs button:hover {
+  background: #453325;
+}
+
+.rank-tabs button.active {
+  background: #a5a288;
+  color: #362712;
+  border-color: #a5a288;
+}
+
+.rank-states {
+  background: rgba(48, 34, 23, 0.9);
+  border: 1px solid #4f3b2a;
+  color: #fff;
+  padding: 12px;
+  border-radius: 6px;
+  margin-bottom: 10px;
+  font-family: Roboto, sans-serif;
+}
+
+.rank-states .error {
+  color: #ff8c8c;
+}
+
+.rank-table-wrap {
+  overflow: auto;
+}
+
+.rank-table {
+  width: 100%;
+  min-width: 760px;
+  border-collapse: separate;
+  border-spacing: 0;
+  font-family: Roboto, sans-serif;
+}
+
+.rank-table thead th {
+  background: #a5a288;
+  color: #362712;
+  text-align: left;
+  font-size: 13px;
+  font-weight: 800;
+  padding: 12px 10px;
+  text-transform: uppercase;
+}
+
+.rank-table tbody td {
+  background: #f3f2ed;
+  color: #362712;
+  padding: 10px;
+  border-bottom: 1px solid #b1ac9c;
+  font-size: 14px;
+}
+
+.rank-table tbody tr:nth-child(even) td {
+  background: #ece9e1;
+}
+
+.rank-table tbody tr.top-row td {
+  background: #302217;
+  color: #fff;
+}
+
+.name-cell {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.name-cell img {
+  width: 32px;
+  height: 32px;
+  border-radius: 6px;
+  object-fit: cover;
+}
+
+.empty-state {
+  background: #f3f2ed;
+  color: #4a3929;
+  font-family: Roboto, sans-serif;
+  font-size: 14px;
+  padding: 14px;
+  border: 1px solid #b1ac9c;
+  border-radius: 4px;
+}
+
+@media (max-width: 768px) {
+  .rank-title h1 {
+    font-size: 28px;
+    line-height: 28px;
+  }
+
+  .rank-badge {
+    width: 48px;
+    height: 48px;
+  }
+
+  .rank-tabs {
+    flex-wrap: wrap;
+  }
+
+  .rank-tabs button {
+    flex: 1 1 calc(33.333% - 8px);
+    min-width: 110px;
+  }
+}

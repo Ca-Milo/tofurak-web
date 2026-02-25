@@ -1,0 +1,138 @@
+<app-header></app-header>
+
+<div class="full-body-profile">
+  <div class="profile-wrap">
+
+    <div class="hero">
+      <h1>Gestión de cuenta</h1>
+
+      <ul class="breadcrump">
+        <li><a routerLink="/">Bienvenido</a></li>
+        <li>Gestión de cuenta</li>
+      </ul>
+    </div>
+
+    <div class="alerts" *ngIf="msgOk || msgErr">
+      <div class="ok" *ngIf="msgOk">{{ msgOk }}</div>
+      <div class="err" *ngIf="msgErr">{{ msgErr }}</div>
+    </div>
+
+    <div class="account-wrapper">
+
+      <!-- DATOS -->
+      <div class="card">
+        <h2>Tus datos</h2>
+        <div class="kv">
+          <b>Cuenta :</b><span>{{ currentUser.cuenta }}</span>
+          <b>E-Mail :</b><span>{{ currentUser.email || '—' }}</span>
+          <b>Apodo :</b><span>{{ currentUser.apodo || '—' }}</span>
+          <b>Abono :</b>
+          <span>
+            <span class="pill" [class.on]="getSubscriptionStatus()==='Abonado'">
+              {{ getSubscriptionStatus() }}
+            </span>
+            <small class="muted"> {{ getSubscriptionExpiryText() }}</small>
+          </span>
+          <b>Última IP :</b><span>{{ currentUser.lastIP || '—' }}</span>
+        </div>
+      </div>
+ 
+      <!-- CAMBIAR CONTRASEÑA -->
+      <div class="card">
+        <h2>Cambiar mi contraseña</h2>
+
+        <form [formGroup]="passwordForm" (ngSubmit)="submitPasswordChange()" class="form-grid" autocomplete="off">
+
+          <div class="full">
+            <label class="small">Pregunta secreta</label>
+            <div class="input dashed">{{ currentUser.question || '—' }}</div>
+          </div>
+
+          <div class="full">
+            <label class="small">Respuesta secreta</label>
+            <input class="input" type="text" formControlName="secretAnswer" placeholder="Escribe tu respuesta exacta">
+          </div>
+
+          <div class="full pwd-wrap">
+            <label class="small">Nueva contraseña</label>
+            <input class="input pwd" [type]="showPwd1 ? 'text' : 'password'" formControlName="newPassword" placeholder="••••••••">
+            <button type="button" class="pwd-toggle" (click)="togglePwd(1)">{{ showPwd1 ? 'Ocultar' : 'Ver' }}</button>
+          </div>
+
+          <div class="full pwd-wrap">
+            <label class="small">Confirmación nueva contraseña</label>
+            <input class="input pwd" [type]="showPwd2 ? 'text' : 'password'" formControlName="newPasswordConfirm" placeholder="Repite la contraseña">
+            <button type="button" class="pwd-toggle" (click)="togglePwd(2)">{{ showPwd2 ? 'Ocultar' : 'Ver' }}</button>
+          </div>
+
+          <div class="full">
+            <button class="btn-primary" type="submit">Guardar nueva contraseña</button>
+          </div>
+
+        </form>
+      </div>
+ 
+      <!-- IPS PERMITIDAS -->
+      <div class="card">
+        <h2>Seguridad: IPs Permitidas</h2>
+
+        <p class="muted" *ngIf="!(currentUser.ips?.length)">No tienes IPs restringidas asignadas.</p>
+ 
+        <table class="ladder-modern" *ngIf="(currentUser.ips?.length ?? 0) > 0">
+          <thead>
+            <tr>
+              <th width="50" class="c">#</th>
+              <th>Dirección IP</th>
+              <th width="120" class="c">Estado</th>
+              <th width="140" class="c">Acción</th>
+            </tr>
+          </thead>
+
+          <tbody>
+            <tr *ngFor="let ip of (currentUser.ips ?? []); let i = index">
+              <td class="c"><span class="rang">{{ i + 1 }}</span></td>
+              <td>
+                {{ ip }}
+              </td>
+              <td class="c"><span class="ok-text">ACTIVA</span></td>
+              <td class="c">
+                <button class="btn-revoke" type="button" (click)="revokeIp(ip)">Revocar</button>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <!-- PERSONAJES --> 
+      <div class="card">
+        <h2>Mis personajes ({{ currentUser.personajes?.length || 0 }})</h2>
+
+        <p class="muted" *ngIf="!(currentUser.personajes?.length)">No hay personajes para mostrar.</p>
+
+        <table class="ladder-modern" *ngIf="(currentUser.personajes?.length ?? 0) > 0">
+          <thead>
+            <tr>
+              <th width="70" class="c">#</th>
+              <th colspan="2">Personaje</th>
+              <th width="110" class="c">Nivel</th>
+            </tr>
+          </thead>
+
+          <tbody>
+            <tr *ngFor="let ch of (currentUser.personajes ?? []); let i = index">
+              <td class="c"><span class="rang">{{ i + 1 }}</span></td>
+              <td class="i">
+                <img [src]="'/assets/clases/' + ch.clase + '_' + ch.sexo + '.png'" alt="class" *ngIf="ch.clase !== undefined && ch.sexo !== undefined">
+              </td>
+              <td class="char">{{ ch.nombre }}</td>
+              <td class="c">{{ ch.nivel }}</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<app-footer></app-footer>

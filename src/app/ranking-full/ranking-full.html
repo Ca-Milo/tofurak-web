@@ -1,0 +1,76 @@
+<app-header></app-header>
+<div class="full-body">
+  <div class="ranking-shell">
+    <section class="ranking-card">
+      <header class="rank-title">
+        <img class="rank-badge" src="/assets/ladder/koliseo.png" alt="Koliseo" />
+        <div>
+          <h1>Ladders</h1>
+          <p>Ranking PvM, PvP y Koliseo en tiempo real</p>
+        </div>
+      </header>
+
+      <div class="rank-tabs">
+        <button
+          type="button"
+          [class.active]="activeTab === 'pvm'"
+          (click)="selectTab('pvm')"
+        >
+          PVM
+        </button>
+        <button
+          type="button"
+          [class.active]="activeTab === 'pvp'"
+          (click)="selectTab('pvp')"
+        >
+          PVP
+        </button>
+        <button
+          type="button"
+          [class.active]="activeTab === 'koliseo'"
+          (click)="selectTab('koliseo')"
+        > 
+          KOLISEO
+        </button>
+      </div>
+
+      <div class="rank-states" *ngIf="isLoading || errorMessage">
+        <p *ngIf="isLoading">Cargando ranking...</p>
+        <p class="error" *ngIf="!isLoading && errorMessage">{{ errorMessage }}</p>
+      </div>
+
+      <div class="rank-table-wrap" *ngIf="!isLoading && !errorMessage">
+        <table class="rank-table" *ngIf="getRows().length > 0; else emptyRows">
+          <thead>
+            <tr>
+              <th *ngFor="let label of getColumnLabels()">{{ label }}</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let row of getRows(); let i = index" [class.top-row]="i === 0">
+              <td>{{ i + 1 }}</td>
+              <td class="name-cell">
+                <img [src]="getClassIcon(row)" [alt]="getClassName(row)" />
+                <span>{{ getName(row) }}</span>
+              </td>
+              <td>{{ getClassName(row) }}</td>
+
+              <td *ngIf="activeTab === 'pvm' || activeTab === 'pvp'">{{ getLevel(row) }}</td>
+              <td *ngIf="activeTab === 'pvm'">{{ getExperience(row) }}</td>
+              <td *ngIf="activeTab === 'pvp'">{{ getWins(row) }}</td>
+
+              <td *ngIf="activeTab === 'koliseo'">{{ getRating(row) }}</td>
+              <td *ngIf="activeTab === 'koliseo'">{{ getWins(row) }}</td>
+              <td *ngIf="activeTab === 'koliseo'">{{ getLosses(row) }}</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <ng-template #emptyRows>
+        <div class="empty-state">No hay datos para mostrar en este ranking.</div>
+      </ng-template>
+    </section>
+  </div>
+</div>
+<app-footer></app-footer>

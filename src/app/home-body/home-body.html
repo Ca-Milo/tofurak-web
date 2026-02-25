@@ -1,0 +1,230 @@
+
+<div class="chonchito-scroll" *ngIf="chonchito" (click)="scrollToTop()"></div>
+<div class="full-body-home">
+  
+  <div class="first-block">
+    
+    <video autoplay muted loop playsinline [muted]="true" class="bg-video-header">
+  <source src="../../assets/home-backgrounds/header.mp4" type="video/mp4">
+</video>
+
+    <div class="ak-block-content-start">
+      
+      <div class="ak-block-text-home-start hero-copy">
+  <p class="hero-line">
+    ¡Comienza una nueva era! tu MMORPG te está
+    esperando para escribir una nueva página de su historia.
+  </p>
+
+  <p class="hero-line hero-line--bold">
+    ¿Listo/a para volver a descubrir AERMYFUS?
+  </p>
+
+  <ng-container *ngIf="onlineCount$ | async as onlineCount">
+    <div class="hero-online" *ngIf="(+onlineCount) > 0">
+      <span class="hero-online__label">USUARIOS CONECTADOS :</span>
+      <span class="hero-online__value">{{ onlineCount }}</span>
+    </div>
+  </ng-container>
+
+  
+  <!-- <a class="hero-cta" routerLink="/register">¡REGISTRATE!</a>
+  
+  -->
+</div>
+ 
+      <div class="//bottom-vote">
+        <a class="btn-vote"></a>
+      </div>
+
+    </div>
+  </div>
+
+  <div class="news-block">
+    <div class="news-block-content">
+      <div class="row">
+        <div class="left-col">
+          <div class="container-main">
+            <div class="list-news">
+              <div class="title-news">
+                Actualidad y Novedades
+                <a target="" class="ak-link-news-retro" href="/news">Mostrar todo</a>
+              </div>
+            </div>
+            <div class="container-news-cols">
+              <div class="row">
+
+                <div class="card-content">
+                  <a class="a-news" href="#" style="
+                      background-image: url(../../assets/news-cards/7.jpg);
+                    ">
+                    <div class="a-text">
+                      <div class="a-infos">INFO</div>
+                      <div class="a-title">
+                        ¡ZEvent 2025 comienza ya!
+                      </div>
+                    </div>
+                  </a>
+                </div>
+
+                <div class="card-content">
+                  <a class="a-news" href="#"
+                    style="
+                      background-image: url(../../assets/news-cards/8.jpg);
+                    ">
+                    <div class="a-text">
+                      <div class="a-infos">SHOP</div>
+                      <div class="a-title">
+                        Por los ojazos de un pekebilax...
+                      </div>
+                    </div>
+                  </a>
+                </div>
+
+              </div>
+
+              <div class="row">
+
+                <div class="card-content">
+                  <a class="a-news" href="#" style="
+                      background-image: url(../../assets/news-cards/9.jpg);
+                    ">
+                    <div class="a-text">
+                      <div class="a-infos">INFO</div>
+                      <div class="a-title">¡Un AnkamaLive dedicado al e-sport y...</div>
+                    </div>
+                  </a>
+                </div>
+
+                <div class="card-content">
+                  <a class="a-news" href="#" style="
+                      background-image: url(../../assets/news-cards/10.jpg);
+                    ">
+                    <div class="a-text">
+                      <div class="a-infos">INFO</div>
+                      <div class="a-title">
+                        ZEvent 2025: apoyemos una buena causa...
+                      </div>
+                    </div>
+                  </a>
+                </div>
+
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="right-col">
+          <div class="ak-text">
+            <br />
+            <div class="ak-title"><!--{{global.serverName}}-->AERMYFUS, UNA AVENTURA <br>SIN PRESCEDENTES!</div>
+            <div class="ak-baseline">
+              Encuentra la experiencia de juego<br>
+              más cercana al DOFUS original, ¡con<br />
+              nuevo contenido y actualizaciones.<br>
+              Y lo mejor, totalmente gratis!
+            </div>
+            <a class="btn-osatopia" href="/download">
+              ¡JUGAR AHORA!
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+
+  <div class="retro-carousel-section">
+    <div class="retro-carousel-row">
+      <div class="retro-carousel-track">
+        <img src="../../assets/carrusel/retro1.webp" alt="Retro 1"
+          class="retro-carousel-img">
+        <img src="../../assets/carrusel/retro2.webp" alt="Retro 2"
+          class="retro-carousel-img">
+        <img src="../../assets/carrusel/retro3.webp" alt="Retro 3" class="retro-carousel-img">
+        <img src="../../assets/carrusel/retro4.webp" alt="Retro 4" class="retro-carousel-img">
+        <img src="../../assets/carrusel/retro5.webp" alt="Retro 5" class="retro-carousel-img">
+        <img src="../../assets/carrusel/retro1.webp" alt="Retro 1" class="retro-carousel-img">
+        <img src="../../assets/carrusel/retro2.webp" alt="Retro 2" class="retro-carousel-img">
+        <img src="../../assets/carrusel/retro3.webp" alt="Retro 3" class="retro-carousel-img">
+        <img src="../../assets/carrusel/retro4.webp" alt="Retro 4" class="retro-carousel-img">
+        <img src="../../assets/carrusel/retro5.webp" alt="Retro 5" class="retro-carousel-img">
+      </div>
+    </div>
+    <div class="retro-carousel-row">
+      <div class="retro-carousel-track">
+        <img src="../../assets/carrusel/retro6.webp" alt="Retro 6" class="retro-carousel-img">
+        <img src="../../assets/carrusel/retro7.webp" alt="Retro 7" class="retro-carousel-img">
+        <img src="../../assets/carrusel/retro8.webp" alt="Retro 8" class="retro-carousel-img">
+        <img src="../../assets/carrusel/retro9.webp" alt="Retro 9" class="retro-carousel-img">
+        <img src="../../assets/carrusel/retro10.webp" alt="Retro 10" class="retro-carousel-img">
+        <img src="../../assets/carrusel/retro6.webp" alt="Retro 6" class="retro-carousel-img">
+        <img src="../../assets/carrusel/retro7.webp" alt="Retro 7" class="retro-carousel-img">
+        <img src="../../assets/carrusel/retro8.webp" alt="Retro 8" class="retro-carousel-img">
+        <img src="../../assets/carrusel/retro9.webp" alt="Retro 9" class="retro-carousel-img">
+        <img src="../../assets/carrusel/retro10.webp" alt="Retro 10" class="retro-carousel-img">
+      </div>
+    </div>
+  </div>
+
+
+  <div class="block-shop">
+    <div class="block-shop-content">
+      <div class="row">
+        <div class="left-col">
+          <div class="list-news">
+            <div class="title-news">
+              TIENDA
+              <a target="" class="ak-link-news-retro" href="https://www.aermyfus.com/tienda">Mostrar todo</a>
+            </div>
+          </div>
+          <div class="slider-content">
+            <app-slider [shopFus]="false"></app-slider>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="block-launcher">
+    <div class="ak-block-content">
+      <div class="ak-title-block">el {{global.serverName}} launcher</div>
+      <div class="row">
+        <div class="col-md-7">
+          <div class="text-center">
+            <img class="img-responsive ak-img-launcher" src="/assets/launcher.jpg" alt="" />
+          </div>
+        </div>
+        <div class="col-md-5">
+          <div class="ak-text">
+            <p>
+              El {{global.serverName}} Launcher es un portal multijuego que agrupa todos
+              nuestros títulos para PC y desde el que podrás acceder a los
+              universos de {{global.serverName}} con un clic. ¡Pero eso no es todo!
+            </p>
+            <br>
+            <ul>
+              <li>Simplifica tus descargas e instalaciones de actualizaciones.</li>
+              <li>Mantente informado sobre las últimas novedades.</li>
+              <li>Mantén pendiente de nuestros videos de eventos y guías.</li>
+              <li>Conecta todas tus cuentas con un solo click.</li>
+            </ul>
+            <br>
+            <p>
+              ¿Listo para cruzar el portal y vivir aventuras krósmicas únicas?
+            </p>
+            <br><br>
+            <a class="btn btn-lg btn-primary ak-btn-launcher" href="/download">descargar {{global.serverName}}
+              launcher</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="ak-block-social">
+    <div class="ak-block-content">
+      <span>Seguir a {{global.serverName}}</span>
+      <a class="ak-fb" target="_blank" href="https://www.facebook.com/Retro.Force.Games/"></a>
+      <a class="ak-tw" target="" href="#"></a>
+      <a class="ak-yt" target="_blank" href="https://www.youtube.com/@RetroForceGames"></a>
+    </div>
+  </div>
+</div>

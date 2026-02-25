@@ -1,0 +1,267 @@
+@use "../../variables.scss" as *;
+
+.footer {
+  padding: 1.2rem 0;
+  z-index: 100;
+  overflow: hidden;
+  background-color: rgb(0, 0, 0);
+
+  .ak-footer-content {
+    max-width: 1170px;
+    margin: 0 auto;
+
+    .ak-block1 {
+      display: block;
+      padding-bottom: 1rem;
+      border-bottom: 1px solid #838383;
+      display: table;
+      color: #000;
+      display: flex;
+      justify-content: space-between;
+
+      a {
+        &:hover {
+          color: #aab700 !important;
+        }
+      }
+
+      .ak-block-download {
+        text-align: center;
+        padding-top: 30px;
+        width: 23%;
+
+        .btn-primary {
+          font-family: 'Bebas Neue', cursive !important;
+          display: inline-block;
+          background: #2881b9;
+          box-shadow: 0 0 0 3px #f8db58 inset;
+          border: 1px solid #1f5d93;
+          text-decoration: none;
+          border-radius: 0px;
+          margin-top: 24px;
+          padding: 16px 48px;
+          text-shadow: none;
+          position: relative;
+          z-index: 2;
+          color: #fff;
+          text-transform: uppercase;
+          font-size: 23px;
+
+          &:hover {
+            text-decoration: none;
+            color: #2881b9 !important;
+            box-shadow: 0 0 0 3px #2881b9 inset;
+            background-color: #bfd500;
+            -webkit-transition: all 0.3s ease;
+            transition: all 0.3s ease;
+            border-color: #204d74;
+          }
+        }
+
+        .ak-problem {
+          font-size: 13px;
+          margin-top: 15px;
+          display: block;
+          color: #838383;
+          text-decoration: none;
+          font-family: "Roboto", sans-serif;
+        }
+
+        .ak-social-network {
+          text-align: center;
+          margin-top: 22px;
+          padding-right: 0;
+          padding-top: 10px;
+
+          .fb,
+          .tw,
+          .yo {
+            background-image: url(../../assets/social/picto_social.png);
+            display: inline-block;
+            height: 36px;
+            width: 36px;
+            background-repeat: no-repeat;
+          }
+
+          .fb {
+            background-position: 0 0;
+
+            &:hover {
+              background-position: 0 -36px;
+            }
+          }
+
+          .tw {
+            background-position: -38px 0;
+
+            &:hover {
+              background-position: -38px -36px;
+            }
+          }
+
+          .yo {
+            background-position: -75px 0;
+
+            &:hover {
+              background-position: -75px -36px;
+            }
+          }
+        }
+      }
+
+      .ak-block-links {
+        display: flex;
+        gap: 30px;
+        width: 70%;
+
+        .clearfix {
+          float: left;
+          position: relative;
+          min-height: 1px;
+          padding-left: 6px;
+          padding-right: 6px;
+          display: flex;
+          gap: 30px;
+
+          .col-xs-6 {
+            position: relative;
+            min-height: 1px;
+            padding-left: 6px;
+            padding-right: 6px;
+
+            .ak-list {
+              display: flex;
+              flex-direction: column;
+
+              a {
+                text-decoration: none;
+                display: flex;
+                /* 👈 antes block */
+                align-items: center;
+                /* 👈 centra arriba/abajo */
+                text-align: left;
+                font-size: 12px;
+                text-transform: uppercase;
+                font-family: "Roboto", sans-serif;
+                color: #838383;
+                height: 18px;
+              }
+
+              .ak-link-title {
+                font-family: "Bebas Neue", cursive;
+                text-transform: uppercase;
+                display: inline-block;
+                color: #dedede;
+                border-bottom: 1px solid #dedede;
+                font-size: 19px;
+                padding-bottom: 0.3rem;
+              }
+            }
+          }
+        }
+      }
+    }
+
+    .ak_legal {
+      .col12 {
+        text-align: center;
+        font-size: 11px;
+        padding-top: 3px;
+
+        .ak-legal {
+          &:first-child {
+            text-align: center;
+          }
+
+          .row {
+            display: flex;
+            align-items: center;
+
+            .col-sm-1 {
+              font-size: 11px;
+              padding-top: 3px;
+              text-align: center;
+              width: 8.3333333333%;
+              float: left;
+              position: relative;
+              min-height: 1px;
+              padding-left: 6px;
+              padding-right: 6px;
+
+              .ak-logo-ankama {
+                vertical-align: middle;
+                background-repeat: no-repeat;
+                background-position: center center;
+                background-size: contain;
+                background-image: url(../../assets/logo.png);
+                width: 120px;
+                height: 70px;
+                display: inline-block;
+                position: relative;
+                margin: 0;
+              }
+            }
+
+            .col-sm-7 {
+              width: 100%;
+              position: relative;
+              min-height: 1px;
+              padding-left: 6px;
+              padding-right: 6px;
+
+              a {
+                text-decoration: none;
+                color: #838383;
+
+                &:hover {
+                  color: #fff;
+                }
+              }
+
+              p {
+                text-align: center;
+                margin-top: 22px;
+                font-size: 11px;
+                padding: 0;
+                font-family: "Roboto", sans-serif;
+                color: #838383;
+                padding-left: 12px;
+              }
+            }
+
+            .col-sm-4 {
+              width: 33.3333333333%;
+              float: left;
+              position: relative;
+              min-height: 1px;
+              padding-left: 6px;
+              padding-right: 6px;
+              padding-top: 3px;
+              font-size: 11px;
+
+              .prevention {
+                display: inline-block;
+                vertical-align: middle;
+                width: 200px;
+                background-image: url(../../assets/picto_prevention.png);
+                height: 52px;
+                background-repeat: no-repeat;
+                background-position: center center;
+                background-size: contain;
+              }
+            }
+          }
+        }
+      }
+
+      &::before {
+        content: " ";
+        display: table;
+      }
+    }
+  }
+}
+
+.ultimo-footer {
+  background-color: rgb(0, 0, 0);
+}
