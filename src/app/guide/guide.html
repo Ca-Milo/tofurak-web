@@ -1,0 +1,66 @@
+<app-header></app-header>
+<div class="full-news-container">
+  <div class="container-news-main">
+    <div class="news-bg-list-container">
+      <div class="ak-title-container">
+        <h1>
+          <a class="ak-icon-big ak-news"></a>
+          GUIAS
+        </h1>
+      </div>
+      <div class="containerServerNews">
+        <div class="serarch-container">
+          <span>Selecciona una categoría</span>
+          <div class="input-container">
+            <mat-form-field class="field-input-container" appearance="outline">
+              <mat-select [(ngModel)]="selection" (selectionChange)="selectChange()" placeholder="Todas" class="input-txt">
+                <mat-option [value]="null">Todas</mat-option>
+                <mat-option *ngFor="let cat of categories" [value]="cat">
+                  {{ cat.nombre }}
+                </mat-option>
+              </mat-select>
+            </mat-form-field>
+          </div>
+        </div>
+      </div>
+      <div class="container-news-cards">
+        <div class="card-news" [ngClass]="{'card-news-big':guide.big == 1}" *ngFor="let guide of serverGuides">
+          <div class="contenedor-guias">
+            <div class="img-card-new" (click)="goGuide(guide)">
+              <img class="img-responsive-news" [src]="guide.imagen" />
+            </div>
+            <div class="container-body-news">
+              <div class="title-container">
+                <a class="img-container">
+                  <img class="img-news-icon" src="../../assets/logo.png" />
+                </a>
+                <span (click)="goGuide(guide)"
+                  >{{guide.titulo}}
+                  <p>Publicado el {{guide.date}}</p>
+                </span>
+              </div>
+              <div class="description-container">
+                <p>
+                  {{guide.descripcion}}
+                </p>
+              </div>
+            </div>
+            <div class="ak-ellipsis-text"></div>
+            <div class="ak-bottom">
+              <div class="ak-bottom-infos pull-left">
+                <span style="margin-right: 5px; font-weight: bold;">Categoria:</span>
+                <span>{{guide.categoria}}</span>
+              </div>
+              <div class="pull-right">
+                <a class="ak-more" (click)="goGuide(guide)"></a>
+              </div>
+            </div>
+          </div>
+        </div>
+
+
+      </div>
+    </div>
+  </div>
+  <app-footer></app-footer>
+</div>

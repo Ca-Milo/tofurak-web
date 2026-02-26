@@ -12,6 +12,11 @@ import { RankingFull } from './ranking-full/ranking-full';
 import { Tienda } from './tienda/tienda';
 import { ProfileComponent } from './profile/profile';
 import { authGuard } from './guards/auth.guard';
+import { Guide } from './guide/guide';
+import { GuideComplete } from './guide-complete/guide-complete';
+
+
+
 
 export const routes: Routes = [
   { path: '', component: BodyFull, data: { animation: 'HomePage' } },
@@ -62,6 +67,16 @@ export const routes: Routes = [
     path: 'register',
     component: Register,
     data: { animation: 'RegisterPage' },
+  },
+  {
+    path: 'guide',
+    component: Guide,
+    data: { animation: 'GuidePage' },
+  }, 
+  {
+    path: 'guide/:id',
+    component: GuideComplete,
+    data: { animation: 'GuideCompletePage' },
   },
 //   {
 //     path: 'shop',

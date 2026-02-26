@@ -1,0 +1,30 @@
+<app-header></app-header>
+<div class="full-news-container-individual">
+  <div class="container-news-main">
+    <div class="news-bg-list-container">
+      <div class="ak-title-container">
+        <h1>
+          <a class="ak-icon-big ak-news"></a>
+          <div class="info-text-new">
+            <div>{{guia?.titulo}}
+              <p>{{guia?.date}}</p>
+            </div>
+            <div class="button-back" (click)="goBack()"><mat-icon> chevron_left </mat-icon><p>Volver a la lista</p> </div>
+          </div>
+
+        </h1>
+
+      </div>
+      <div class="container-news-cards">
+        <div class="card-news">
+          <div class="contenedor-guias" [innerHTML]="guia?.fullContentHTML">
+
+          </div>
+        </div>
+
+
+      </div>
+    </div>
+  </div>
+  <app-footer></app-footer>
+</div>

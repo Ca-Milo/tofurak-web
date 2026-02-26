@@ -10,6 +10,7 @@ import { NewsComplete } from './news-complete/news-complete';
 // import { GestioCuentaComponent } from './gestion-cuenta/gestion-cuenta.component';
 // import { ShopsFullComponent } from './shop-full/shops-full.component';
 import { RankingFull } from './ranking-full/ranking-full';
+import { Guide } from './guide/guide';
 
 
 const routes: Routes = [
@@ -43,6 +44,16 @@ const routes: Routes = [
     path: 'register',
     component: Register,
     data: { animation: 'RegisterPage' },
+  },
+  {
+    path: 'guide',
+    component: Guide,
+    data: { animation: 'GuidePage' },
+  },
+  {
+    path: 'guide',
+    component: Guide,
+    data: { animation: 'GuidePage' },
   },
 //   {
 //     path: 'shop',

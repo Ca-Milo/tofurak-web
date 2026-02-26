@@ -1,1 +1,42 @@
-<p>news works!</p>
+<app-header></app-header>
+<div class="full-news-container">
+  <div class="container-news-main">
+    <div class="news-bg-list-container">
+      <div class="ak-title-container">
+        <h1>
+          <a class="ak-icon-big ak-news"></a>
+          NOTICIAS
+        </h1>
+      </div>
+      <div class="container-news-cards">
+        <div class="card-news" [ngClass]="{'card-news-big':news.big == 1}" *ngFor="let news of serverNews">
+          <div class="contenedor-noticias">
+            <div class="img-card-new" (click)="goNew(news)">
+              <img class="img-responsive-news" src={{news.imagen}} />
+            </div>
+            <div class="container-body-news">
+              <div class="title-container">
+                <a class="img-container">
+                  <img class="img-news-icon" src="../../assets/logo.png" />
+                </a>
+                <span (click)="goNew(news)"
+                  >{{news.titulo}}
+                  <p>{{news.date}}</p>
+                </span>
+              </div>
+              <div class="description-container">
+                <p>
+                  {{news.descripcion}}
+                </p>
+              </div>
+            </div>
+            <div class="ak-ellipsis-text"></div>
+          </div>
+        </div>
+
+
+      </div>
+    </div>
+  </div>
+  <app-footer></app-footer>
+</div>

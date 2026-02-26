@@ -1,0 +1,234 @@
+@use "../../variables.scss" as *;
+
+.info-text-new {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  padding-top: 10px;
+
+  p {
+    color: #302217;
+    font-size: 15px;
+    line-height: 15px;
+    font-family: 'Roboto', sans-serif;
+    margin: 0;
+  }
+
+  .button-back {
+    background: rgba(0, 0, 0, .3);
+    display: flex;
+    align-items: center;
+    // height: 20%;
+    cursor: pointer;
+    margin-right: 10px;
+    padding: 0 10px;
+    font-size: 15px;
+    line-height: 15px;
+    padding: 12px;
+
+    p {
+
+      color: #fff;
+      font-family: 'Roboto', sans-serif;
+      margin: 0;
+
+      &:hover {
+        text-decoration: underline;
+      }
+    }
+  }
+}
+
+.full-news-container-individual {
+  background: url(/../../assets/bgNews.jpg) top center no-repeat #302217;
+  color: #333;
+
+  .container-news-main {
+    min-width: 320px;
+    padding: 0;
+    position: relative;
+    margin-top: 0px;
+    padding-top: 0px;
+    min-height: 850px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+
+    .news-bg-list-container {
+      background: none repeat scroll 0 0 rgba(255, 255, 255, 0.3);
+      min-height: 450px;
+      margin-top: 130px;
+      width: 100%;
+      max-width: 1170px;
+      padding: 12px 12px 12px 12px;
+
+      .ak-title-container {
+        h1 {
+          font-weight: 500;
+          line-height: 2;
+          color: #fff;
+          background: #97a800 url(../../assets/h1.png) left top no-repeat;
+          border-bottom-color: #6f780d;
+          text-shadow: 0 2px 2px #888;
+          font-size: 36px;
+          line-height: 36px;
+          padding: 0px;
+          padding-left: 84px;
+          border-bottom: 1px solid;
+          font-family: "Bebas Neue", cursive !important;
+          margin: 0;
+          position: relative;
+          border-radius: 0;
+          min-height: 66px;
+        }
+      }
+    }
+  }
+
+}
+
+.container-body-news {
+  height: 210px;
+  overflow: hidden;
+}
+
+.img-news-icon {
+  width: 53px;
+}
+
+.img-container {
+  padding: 6px;
+}
+
+.container-news-cards {}
+
+.ak-ellipsis-text {
+  display: block;
+  height: 1.5em;
+  margin-bottom: 0;
+  margin-top: -1.5em;
+  position: relative;
+  width: 100%;
+  z-index: 2;
+  background: linear-gradient(to bottom, rgba(248, 248, 248, 0) 0%, #f8f8f8 80%, #f8f8f8 100%);
+}
+
+.card-news-big {
+  width: 100% !important;
+}
+
+.card-news {
+  overflow: hidden;
+  width: 100%;
+  position: relative;
+  min-height: 1px;
+  box-sizing: border-box;
+
+  .contenedor-noticias {
+    background: #f3f2ed;
+    padding: 20px;
+
+
+  }
+
+  .img-card-new {
+    border-bottom: 4px solid #97a800;
+    display: block;
+    position: relative;
+    z-index: 1;
+    cursor: pointer;
+
+    .img-responsive-news {
+      vertical-align: middle;
+      max-width: none;
+      width: 100%;
+    }
+  }
+
+  .title-container {
+    background: #fff;
+    font-size: 26px;
+    font-size: 2.6rem;
+    display: block;
+    font-weight: bold;
+    display: flex;
+    align-items: center;
+    text-transform: uppercase;
+    width: 100%;
+    cursor: pointer;
+    position: relative;
+
+    span {
+      padding: 5px;
+      display: table-cell;
+      font-weight: normal;
+      line-height: 1.2em;
+      position: relative;
+      vertical-align: top;
+      z-index: 2;
+      font-size: 26px;
+
+    }
+
+    &:hover {
+      color: #6f780d;
+    }
+
+    p {
+      font-size: 13px;
+      line-height: 20px;
+      display: block;
+      font-family: "Roboto", sans-serif;
+      padding: 0;
+      text-transform: none;
+      font-weight: 400;
+      margin: 0
+    }
+  }
+
+  .description-container {
+    border-top: 1px dashed #b1ac9c;
+    padding: 12px;
+    position: relative;
+
+    p {
+      font-size: 15px;
+      line-height: 20px;
+      display: block;
+      font-family: "Roboto", sans-serif;
+      padding: 0;
+      text-transform: none;
+      font-weight: 400;
+      margin: 0
+    }
+  }
+}
+
+.containerServerNews {
+  background-color: #f8f8f6;
+  width: 100%;
+
+  .serarch-container {
+    width: 30%;
+    padding: 10px 20px
+  }
+}
+
+.ak-icon-big {
+  display: block;
+  left: 0;
+  position: absolute;
+  text-align: center;
+  top: 0;
+  width: 65px;
+  height: 65px;
+
+}
+
+.ak-news {
+  background-position: 0 -2051px;
+  background-size: 65px auto;
+  background-image: url(../../assets/navBar/sprite.png);
+  background-repeat: no-repeat;
+}

@@ -92,6 +92,7 @@ export interface ErrorResponse {
 })
 export class Hart {
   private apiUrl = API_BASE;
+  private newsUrl = `${this.apiUrl}/auth/news`;
   private tokenKey = 'authToken';
   private userKey = 'currentUser';
 
@@ -258,6 +259,46 @@ export class Hart {
   getCurrentUser(): User | null {
     return this.getStoredUser();
   }
+
+    getNews(): Observable<any> {
+    return this.http.get<any>(this.newsUrl).pipe(
+      catchError(error => this.handleError(error))
+    );
+  }
+
+
+  getNewsById(id: number): Observable<any> {
+    return this.http.get<any>(`${this.newsUrl}/${id}`).pipe(
+      catchError(error => this.handleError(error))
+    );
+  }
+
+  getGuideCategories(): Observable<any> {
+    return this.http.get<any>(`${this.apiUrl}/auth/guides/categories`).pipe(
+      catchError(error => this.handleError(error))
+    );
+  }
+
+  /**
+   * Obtiene las guías, opcionalmente filtradas por categoría
+   */
+  getGuides(categoryId?: number): Observable<any> {
+    const params: any = {};
+    if (categoryId) params.categoria = categoryId;
+    return this.http.get<any>(`${this.apiUrl}/auth/guides`, { params }).pipe(
+      catchError(error => this.handleError(error))
+    );
+  }
+
+  /**
+   * Obtiene una guía por ID
+   */
+  getGuideById(id: number): Observable<any> {
+    return this.http.get<any>(`${this.apiUrl}/auth/guides/${id}`).pipe(
+      catchError(error => this.handleError(error))
+    );
+  }
+
 
   /**
    * Restaura la sesión si existe un token válido
