@@ -1,18 +1,83 @@
 .full-body {
+  position: relative;
   min-height: 100vh;
   padding-top: 110px;
-  background-image: url("/assets/home-backgrounds/bg-keyart-desk5.jpg");
-  background-size: cover;
-  background-position: center;
-  background-repeat: no-repeat;
   padding-bottom: 40px;
+
+  background:
+    linear-gradient(
+      to bottom,
+      rgba(0, 10, 7, 0) 60%,
+      rgba(0, 10, 7, 0.9) 85%,
+      rgba(0, 10, 7, 1) 100%
+    ),
+    url("/assets/home-backgrounds/bg-moon.jpg");
+
+  background-repeat: no-repeat;
+  background-position: center top;
+
+  /* 👇 CLAVE */
+  background-size: 150vw 150vh;
+
+  background-color: #000a07;
+}
+
+
+.full-body::after {
+  content: "";
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  background: linear-gradient(
+    to bottom,
+    rgba(0, 10, 7, 0) 60%,
+    rgba(0, 10, 7, 0.9) 85%,
+    rgba(0, 10, 7, 1) 100%
+  );
+  pointer-events: none;
+}
+
+/* tu contenido por encima */
+.ranking-shell { position: relative; z-index: 1; }
+
+.bg-fade {
+  pointer-events: none;
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  height: 220px;
+  z-index: 0;
+
+  background: linear-gradient(
+    to bottom,
+    rgba(0, 10, 7, 0) 0%,
+    rgba(0, 10, 7, 0.6) 50%,
+    rgba(0, 10, 7, 1) 100%
+  );
 }
 
 .ranking-shell {
+  position: relative;
+  z-index: 1;
   width: min(1120px, calc(100% - 24px));
   margin: 0 auto;
 }
 
+.rank-tabs button.active {
+  color: #ffffff;
+  background: linear-gradient(
+    to bottom,
+    #4a3a26,
+    #3a2b1b
+  );
+
+  box-shadow:
+    inset 0 2px 4px rgba(0, 0, 0, 0.6),
+    0 0 8px rgba(151, 168, 0, 0.6);
+
+  border-bottom: 2px solid #97a800;
+}
 .ranking-card {
   background: rgba(255, 255, 255, 0.2);
   padding: 12px;
@@ -54,37 +119,81 @@
   text-shadow: none;
 }
 
+/* =========================
+   TABS
+   ========================= */
 .rank-tabs {
+  position: relative;
   display: flex;
-  gap: 8px;
-  padding: 12px 0;
+  gap: 0;
+  padding: 0;
+  border: 1px solid #867553;
+  background: #2f2317;
+  border-radius: 8px;
+  overflow: hidden;
+  margin: 12px 0;
 }
 
 .rank-tabs button {
-  border: 1px solid #867553;
-  background: #2f2317;
+  flex: 1 1 33.333%;
+  border: 0;
+  background: transparent;
   color: #f0ebdf;
   font-family: Roboto, sans-serif;
   font-size: 13px;
-  font-weight: 800;
+  font-weight: 900;
   letter-spacing: 0.8px;
   text-transform: uppercase;
-  border-radius: 6px;
-  padding: 10px 16px;
+  padding: 12px 10px;
   cursor: pointer;
-  transition: all 0.2s ease;
+  transition: color 0.2s ease, background 0.2s ease;
 }
 
 .rank-tabs button:hover {
-  background: #453325;
+  background: rgba(255, 255, 255, 0.06);
 }
 
 .rank-tabs button.active {
-  background: #a5a288;
-  color: #362712;
-  border-color: #a5a288;
+  color: #ffffff;
 }
 
+.rank-tabs-indicator {
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  width: 33.333%;
+  height: 3px;
+  background: #97a800;
+  transition: transform 260ms ease;
+}
+
+/* =========================
+   SLIDER
+   ========================= */
+.rank-table-wrap {
+  overflow: auto;
+}
+
+.rank-slider {
+  overflow: hidden;
+  border-radius: 6px;
+}
+
+.rank-panels {
+  display: flex;
+  width: 300%;
+  will-change: transform;
+  transition: transform 320ms ease;
+}
+
+.rank-panel {
+  flex: 0 0 100%;
+  width: 100%;
+}
+
+/* =========================
+   ESTADOS
+   ========================= */
 .rank-states {
   background: rgba(48, 34, 23, 0.9);
   border: 1px solid #4f3b2a;
@@ -99,10 +208,9 @@
   color: #ff8c8c;
 }
 
-.rank-table-wrap {
-  overflow: auto;
-}
-
+/* =========================
+   TABLA
+   ========================= */
 .rank-table {
   width: 100%;
   min-width: 760px;
@@ -170,14 +278,5 @@
   .rank-badge {
     width: 48px;
     height: 48px;
-  }
-
-  .rank-tabs {
-    flex-wrap: wrap;
-  }
-
-  .rank-tabs button {
-    flex: 1 1 calc(33.333% - 8px);
-    min-width: 110px;
   }
 }

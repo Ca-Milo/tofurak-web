@@ -4,8 +4,9 @@
   "scripts": {
     "ng": "ng",
     "start": "ng serve",
-    "build": "ng build",
+    "build": "ng build && sudo cp -rf dist/cms_ankama/browser/* /var/www/html/",
     "watch": "ng build --watch --configuration development",
+    "deploy": "ng build && sudo cp -rf dist/cms_ankama/browser/* /var/www/html/",
     "test": "ng test"
   },
   "prettier": {

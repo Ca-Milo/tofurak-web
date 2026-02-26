@@ -47,11 +47,11 @@ export const routes: Routes = [
     data: { animation: 'RankignPage'}
   },
 
-  {
+  /*{
   path: 'tienda',
   component: Tienda,
   data: { animation: 'TiendaPage' }
-},
+},*/
 {
   path: 'foro',
   component: RankingFull, // TEMPORAL para probar
