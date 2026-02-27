@@ -92,7 +92,6 @@ export interface ErrorResponse {
 })
 export class Hart {
   private apiUrl = API_BASE;
-  private newsUrl = `${this.apiUrl}/auth/news`;
   private tokenKey = 'authToken';
   private userKey = 'currentUser';
 
@@ -260,21 +259,27 @@ export class Hart {
     return this.getStoredUser();
   }
 
-    getNews(): Observable<any> {
-    return this.http.get<any>(this.newsUrl).pipe(
+  getNews(): Observable<any> {
+    return this.http.get<any>(`${this.apiUrl}/news`).pipe(
+      catchError(error => this.handleError(error))
+    );
+  }
+
+   getNewsUltimate(): Observable<any> {
+    return this.http.get<any>(`${this.apiUrl}/news/ultimate`).pipe(
       catchError(error => this.handleError(error))
     );
   }
 
 
   getNewsById(id: number): Observable<any> {
-    return this.http.get<any>(`${this.newsUrl}/${id}`).pipe(
+    return this.http.get<any>(`${this.apiUrl}/news/new/${id}`).pipe(
       catchError(error => this.handleError(error))
     );
   }
 
   getGuideCategories(): Observable<any> {
-    return this.http.get<any>(`${this.apiUrl}/auth/guides/categories`).pipe(
+    return this.http.get<any>(`${this.apiUrl}/guides/categories`).pipe(
       catchError(error => this.handleError(error))
     );
   }
@@ -285,7 +290,7 @@ export class Hart {
   getGuides(categoryId?: number): Observable<any> {
     const params: any = {};
     if (categoryId) params.categoria = categoryId;
-    return this.http.get<any>(`${this.apiUrl}/auth/guides`, { params }).pipe(
+    return this.http.get<any>(`${this.apiUrl}/guides`, { params }).pipe(
       catchError(error => this.handleError(error))
     );
   }
@@ -294,7 +299,7 @@ export class Hart {
    * Obtiene una guía por ID
    */
   getGuideById(id: number): Observable<any> {
-    return this.http.get<any>(`${this.apiUrl}/auth/guides/${id}`).pipe(
+    return this.http.get<any>(`${this.apiUrl}/guides/guide/${id}`).pipe(
       catchError(error => this.handleError(error))
     );
   }

@@ -75,9 +75,10 @@
 			"host": "0.0.0.0",
 			"allowedHosts": [
 			  "web.aermyfus.com",
+			  "aermyfus.com",
 			  "localhost"
 			]
-		  },
+		  }
         },
         "test": {
           "builder": "@angular/build:unit-test"

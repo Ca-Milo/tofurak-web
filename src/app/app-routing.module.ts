@@ -50,28 +50,6 @@ const routes: Routes = [
     component: Guide,
     data: { animation: 'GuidePage' },
   },
-  {
-    path: 'guide',
-    component: Guide,
-    data: { animation: 'GuidePage' },
-  },
-//   {
-//     path: 'shop',
-//     component: ShopsFullComponent,
-//     data: { animation: 'ShopPage' },
-//   },
-
-//   {
-//     path: 'otpvalidation',
-//     component: OtpValidationComponent,
-//     data: { animation: 'OtpValidation' },
-//   },
-//   {
-//     path: 'manage',
-//     component: GestioCuentaComponent,
-//     data: { animation: 'GestionAccount' },
-//   },
-
   { path: '**', redirectTo: '' },
 ];
 @NgModule({

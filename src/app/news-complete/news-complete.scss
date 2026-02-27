@@ -134,15 +134,21 @@
 
   .img-card-new {
     border-bottom: 4px solid #97a800;
-    display: block;
+    display: flex;
+    justify-content: center;
+    align-items: center;
     position: relative;
     z-index: 1;
     cursor: pointer;
 
     .img-responsive-news {
       vertical-align: middle;
-      max-width: none;
-      width: 100%;
+      max-width: 100%;
+      width: auto;
+      height: auto;
+      display: block;
+      margin: 0 auto;
+      object-fit: contain;
     }
   }
 

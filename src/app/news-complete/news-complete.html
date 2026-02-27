@@ -13,10 +13,12 @@
           </div>
 
         </h1>
-
       </div>
       <div class="container-news-cards">
         <div class="card-news">
+          <div class="img-card-new">
+            <img class="img-responsive-news" [src]="noticia.imagen" [alt]="noticia.titulo || 'noticia'" />
+          </div>
           <div class="contenedor-noticias" [innerHTML]="noticia?.fullContentHTML">
 
           </div>

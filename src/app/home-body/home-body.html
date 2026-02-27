@@ -48,68 +48,27 @@
             <div class="list-news">
               <div class="title-news">
                 Actualidad y Novedades
-                <a target="" class="ak-link-news-retro" href="/news">Mostrar todo</a>
+                <a class="ak-link-news-retro" routerLink="/news">Mostrar todo</a>
               </div>
             </div>
             <div class="container-news-cols">
-              <div class="row">
-
-                <div class="card-content">
-                  <a class="a-news" href="#" style="
-                      background-image: url(../../assets/news-cards/7.jpg);
-                    ">
-                    <div class="a-text">
-                      <div class="a-infos">INFO</div>
-                      <div class="a-title">
-                        ¡ZEvent 2025 comienza ya!
-                      </div>
-                    </div>
-                  </a>
+              <ng-container *ngIf="newsRows$ | async as rows">
+                <div class="row" *ngFor="let row of rows">
+                  <div class="card-content" *ngFor="let item of row">
+                    <ng-container *ngIf="item; else placeholder">
+                      <a class="a-news" [routerLink]="['/new', item.id]" [style.background-image]="'url(' + (item.imagen_url || item.imageUrl || '../../assets/news-cards/7.jpg') + ')'">
+                        <div class="a-text">
+                          <div class="a-infos">{{ item.categoria || item.category || 'INFO' }}</div>
+                          <div class="a-title">{{ item.titulo || item.title }}</div> 
+                        </div>
+                      </a>
+                    </ng-container>
+                    <ng-template #placeholder>
+                      <div class="card-content placeholder"></div>
+                    </ng-template>
+                  </div>
                 </div>
-
-                <div class="card-content">
-                  <a class="a-news" href="#"
-                    style="
-                      background-image: url(../../assets/news-cards/8.jpg);
-                    ">
-                    <div class="a-text">
-                      <div class="a-infos">SHOP</div>
-                      <div class="a-title">
-                        Por los ojazos de un pekebilax...
-                      </div>
-                    </div>
-                  </a>
-                </div>
-
-              </div>
-
-              <div class="row">
-
-                <div class="card-content">
-                  <a class="a-news" href="#" style="
-                      background-image: url(../../assets/news-cards/9.jpg);
-                    ">
-                    <div class="a-text">
-                      <div class="a-infos">INFO</div>
-                      <div class="a-title">¡Un AnkamaLive dedicado al e-sport y...</div>
-                    </div>
-                  </a>
-                </div>
-
-                <div class="card-content">
-                  <a class="a-news" href="#" style="
-                      background-image: url(../../assets/news-cards/10.jpg);
-                    ">
-                    <div class="a-text">
-                      <div class="a-infos">INFO</div>
-                      <div class="a-title">
-                        ZEvent 2025: apoyemos una buena causa...
-                      </div>
-                    </div>
-                  </a>
-                </div>
-
-              </div>
+              </ng-container>
             </div>
           </div>
         </div>
@@ -123,7 +82,7 @@
               nuevo contenido y actualizaciones.<br>
               Y lo mejor, totalmente gratis!
             </div>
-            <a class="btn-osatopia" href="/download">
+            <a class="btn-osatopia" routerLink="/download">
               ¡JUGAR AHORA!
             </a>
           </div>

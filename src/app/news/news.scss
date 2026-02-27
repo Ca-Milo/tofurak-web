@@ -49,8 +49,10 @@
 }
 
 .container-body-news {
-    height: 210px;
-    overflow: hidden;
+    /* Allow the body area to grow if content needs space; use min-height
+       to keep the visual compactness but avoid clipped text. */
+    min-height: 210px;
+    overflow: visible;
 }
 
 .img-news-icon {
@@ -61,7 +63,18 @@
     padding: 6px;
 }
 
-.container-news-cards {}
+.container-news-cards {
+    /* Grid/Row-based layout using flex so items keep source order
+       (left-to-right, top-to-bottom). This preserves chronological
+       ordering while allowing responsive columns. */
+    display: flex;
+    flex-wrap: wrap;
+    margin-left: -6px; /* compensate card horizontal padding */
+    margin-right: -6px;
+    align-items: flex-start;
+
+    /* spacing between rows/columns is handled by card padding */
+}
 
 .ak-ellipsis-text {
     display: block;
@@ -76,21 +89,28 @@
 
 .card-news-big {
     width: 100% !important;
+    .img-responsive-news {
+        height: 380px;
+        object-fit: cover;
+    }
 }
 
 .card-news {
-    margin-top: 10px;
-    overflow: hidden;
-    width: 50%;
-    position: relative;
-    min-height: 1px;
+    /* Flex item: preserve document order, then wrap to next row.
+       Use padding as gutter; widths set by media queries below. */
+    display: block;
+    box-sizing: border-box;
     padding-left: 6px;
     padding-right: 6px;
-    float: left;
-    box-sizing: border-box;
+    margin-bottom: 18px;
+    overflow: hidden;
+    position: relative;
+    min-height: 1px;
+
+    /* Default: single column */
+    width: 100%;
 
     .contenedor-noticias {
-
         background: #f3f2ed;
     }
 
@@ -101,11 +121,16 @@
         z-index: 1;
         cursor: pointer;
 
-        .img-responsive-news {
-            vertical-align: middle;
-            max-width: none;
-            width: 100%;
-        }
+            .img-responsive-news {
+                max-width: none;
+                width: 100%;
+                display: block;
+                /* Fixed image height to avoid uneven card heights that leave
+                   large gaps when using flex-wrap. object-fit keeps the crop
+                   looking good. */
+                height: 220px;
+                object-fit: cover;
+            }
     }
 
     .title-container {
@@ -166,6 +191,19 @@
             margin: 0
         }
     }
+}
+
+/* Responsive column widths (preserve order left→right, then next row) */
+@media (min-width: 600px) {
+    .card-news { width: calc(50%); }
+}
+
+@media (min-width: 900px) {
+    .card-news { width: calc(50%); }
+}
+
+@media (min-width: 1200px) {
+    .card-news { width: calc(50%); }
 }
 
 .containerServerNews {
