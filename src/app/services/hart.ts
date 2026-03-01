@@ -48,6 +48,8 @@ export interface RankingEntry {
   rating?: number | string;
   puntos?: number | string;
   xp?: number | string;
+  gradoalas?: number | string;
+  honor?: number | string;
 }
 
 export interface RankingResponse {

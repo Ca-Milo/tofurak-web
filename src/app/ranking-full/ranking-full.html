@@ -53,15 +53,14 @@
                 <img [src]="getClassIcon(row)" [alt]="getClassName(row)" />
                 <span>{{ getName(row) }}</span>
               </td>
-              <td>{{ getClassName(row) }}</td>
-
-              <td *ngIf="activeTab === 'pvm' || activeTab === 'pvp'">{{ getLevel(row) }}</td>
+              <td *ngIf="activeTab === 'pvm'">{{ getLevel(row) }}</td>
               <td *ngIf="activeTab === 'pvm'">{{ getExperience(row) }}</td>
+              <td *ngIf="activeTab === 'pvp'">{{ getGradoAlas(row) }}</td>
+              <td *ngIf="activeTab === 'pvp'">{{ getHonor(row) }}</td>
               <td *ngIf="activeTab === 'pvp'">{{ getWins(row) }}</td>
-
               <td *ngIf="activeTab === 'koliseo'">{{ getRating(row) }}</td>
               <td *ngIf="activeTab === 'koliseo'">{{ getWins(row) }}</td>
-              <td *ngIf="activeTab === 'koliseo'">{{ getLosses(row) }}</td>
+              <td *ngIf="activeTab === 'koliseo' || activeTab === 'pvp'">{{ getLosses(row) }}</td>
             </tr>
           </tbody>
         </table>

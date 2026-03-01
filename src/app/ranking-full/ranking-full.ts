@@ -46,9 +46,9 @@ export class RankingFull implements OnInit {
   }
 
   getColumnLabels(): string[] {
-    if (this.activeTab === 'pvm') return ['#', 'Personaje', 'Clase', 'Nivel', 'Experiencia'];
-    if (this.activeTab === 'pvp') return ['#', 'Personaje', 'Clase', 'Nivel', 'Victorias'];
-    return ['#', 'Personaje', 'Clase', 'Rating', 'Victorias', 'Derrotas'];
+    if (this.activeTab === 'pvm') return ['#', 'Personaje', 'Nivel', 'Experiencia'];
+    if (this.activeTab === 'pvp') return ['#', 'Personaje', 'Grado', 'Honor', 'Victorias', 'Derrotas'];
+    return ['#', 'Personaje', 'Rating', 'Victorias', 'Derrotas'];
   }
 
   getClassName(row: RankingEntry): string {
@@ -95,6 +95,14 @@ export class RankingFull implements OnInit {
     return row.experiencia ?? row.exp ?? row.puntos ?? '—';
   }
 
+  getGradoAlas(row: RankingEntry): number | string {
+    return row.gradoalas?? '—';
+  }
+
+  getHonor(row: RankingEntry): number | string {
+    return row.honor?? '—';
+  }
+
   getWins(row: RankingEntry): number | string {
     return row.victorias ?? row.wins ?? '—';
   }
@@ -104,6 +112,14 @@ export class RankingFull implements OnInit {
   }
 
   getRating(row: RankingEntry): number | string {
+    if(this.activeTab === 'koliseo') {
+      const wins = Number(this.getWins(row)) || 0;
+      const losses = Number(this.getLosses(row)) || 0;
+      const totalGames = wins + losses;
+      if(totalGames === 0) return '—';
+      const winRate = (wins / totalGames) * 100;
+      return `${winRate.toFixed(2)}%`;
+    }
     return row.rating ?? row.puntos ?? '—';
   }
 
