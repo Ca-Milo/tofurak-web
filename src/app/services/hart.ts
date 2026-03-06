@@ -36,11 +36,16 @@ export interface RankingEntry {
   id?: number | string;
   nombre?: string;
   name?: string;
+  gremio?: string;
+  guild?: string;
   clase?: number | string;
   sexo?: number | string;
+  emblema?: string;
   nivel?: number | string;
   experiencia?: number | string;
   exp?: number | string;
+  miembros?: number | string;
+  memberCount?: number | string;
   victorias?: number | string;
   wins?: number | string;
   derrotas?: number | string;
@@ -226,6 +231,15 @@ export class Hart {
    */
   getKoliseoRanking(): Observable<RankingResponse> {
     return this.http.get<RankingResponse>(`${this.apiUrl}/ranking/koliseo`).pipe(
+      catchError(error => this.handleError(error))
+    );
+  }
+
+  /**
+   * Ranking Gremios
+   */
+  getGremiosRanking(): Observable<RankingResponse> {
+    return this.http.get<RankingResponse>(`${this.apiUrl}/ranking/gremios`).pipe(
       catchError(error => this.handleError(error))
     );
   }

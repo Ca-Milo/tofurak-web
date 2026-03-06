@@ -4,6 +4,8 @@ import { Header } from '../header/header';
 import { Footer } from '../footer/footer';
 import { Hart, RankingEntry, RankingResponse } from '../services/hart';
 
+type RankingTab = 'pvm' | 'pvp' | 'koliseo' | 'gremios';
+
 @Component({
   selector: 'app-ranking-full',
   standalone: true,
@@ -12,18 +14,20 @@ import { Hart, RankingEntry, RankingResponse } from '../services/hart';
   styleUrl: './ranking-full.scss',
 })
 export class RankingFull implements OnInit {
-  activeTab: 'pvm' | 'pvp' | 'koliseo' = 'pvm';
+  activeTab: RankingTab = 'pvm';
 
   isLoading = false;
   errorMessage = '';
 
-  rankings: Record<'pvm' | 'pvp' | 'koliseo', RankingEntry[]> = {
+  rankings: Record<RankingTab, RankingEntry[]> = {
     pvm: [],
     pvp: [],
     koliseo: [],
+    gremios: [],
   };
 
-  private loadedTabs = new Set<'pvm' | 'pvp' | 'koliseo'>();
+  private loadedTabs = new Set<RankingTab>();
+  private readonly guildEmblemFallback = '/assets/ladder/gremios.png';
 
   constructor(
     private hartService: Hart,
@@ -34,7 +38,7 @@ export class RankingFull implements OnInit {
     this.loadTabData('pvm');
   }
 
-  selectTab(tab: 'pvm' | 'pvp' | 'koliseo'): void {
+  selectTab(tab: RankingTab): void {
     this.activeTab = tab;
     if (!this.loadedTabs.has(tab)) {
       this.loadTabData(tab);
@@ -48,6 +52,7 @@ export class RankingFull implements OnInit {
   getColumnLabels(): string[] {
     if (this.activeTab === 'pvm') return ['#', 'Personaje', 'Nivel', 'Experiencia'];
     if (this.activeTab === 'pvp') return ['#', 'Personaje', 'Grado', 'Honor', 'Victorias', 'Derrotas'];
+    if (this.activeTab === 'gremios') return ['#', 'Gremio', 'Nivel', 'Experiencia'];
     return ['#', 'Personaje', 'Rating', 'Victorias', 'Derrotas'];
   }
 
@@ -87,6 +92,39 @@ export class RankingFull implements OnInit {
     return row.nombre || row.name || '—';
   }
 
+  getGuildName(row: RankingEntry): string {
+    return row.gremio || row.guild || row.nombre || row.name || '—';
+  }
+
+  getGuildLevel(row: RankingEntry): number | string {
+    return row.nivel ?? '—';
+  }
+
+  getGuildMembers(row: RankingEntry): number | string {
+    return row.miembros ?? row.memberCount ?? '—';
+  }
+
+  getGuildEmblemUrl(row: RankingEntry): string {
+    /*const raw = (row.emblema ?? '').toString().trim();
+
+    if (!raw) return this.guildEmblemFallback;
+    if (raw.startsWith('http://') || raw.startsWith('https://') || raw.startsWith('/assets/')) {
+      return raw;
+    }
+
+    return this.guildEmblemFallback;*/
+    return '';
+  }
+
+  getGuildEmblemAlt(row: RankingEntry): string {
+    /*const raw = (row.emblema ?? '').toString().trim();
+    const parsed = this.parseGuildEmblem(raw);
+
+    if (!parsed) return 'Emblema de gremio';
+    return `Emblema ${parsed.forma}, color símbolo ${parsed.colorSimbolo}, fondo ${parsed.fondo}, color fondo ${parsed.colorFondo}`;*/
+    return '';
+  }
+
   getLevel(row: RankingEntry): number | string {
     return row.nivel ?? '—';
   }
@@ -123,7 +161,7 @@ export class RankingFull implements OnInit {
     return row.rating ?? row.puntos ?? '—';
   }
 
-  private loadTabData(tab: 'pvm' | 'pvp' | 'koliseo'): void {
+  private loadTabData(tab: RankingTab): void {
     this.isLoading = true;
     this.errorMessage = '';
 
@@ -132,7 +170,9 @@ export class RankingFull implements OnInit {
         ? this.hartService.getPvmRanking()
         : tab === 'pvp'
           ? this.hartService.getPvpRanking()
-          : this.hartService.getKoliseoRanking();
+          : tab === 'koliseo'
+            ? this.hartService.getKoliseoRanking()
+            : this.hartService.getGremiosRanking();
 
     request$.subscribe({
       next: (response: RankingResponse) => {
@@ -168,6 +208,39 @@ export class RankingFull implements OnInit {
 
   private refreshView(): void {
     queueMicrotask(() => this.cdr.detectChanges());
+  }
+
+  private parseGuildEmblem(raw: string): {
+    forma: string;
+    colorSimbolo: string;
+    fondo: string;
+    colorFondo: string;
+  } | null {
+    if (!raw || !raw.startsWith('(') || !raw.endsWith(')')) {
+      return null;
+    }
+
+    const values = raw.slice(1, -1).split(',').map((item) => item.trim());
+    if (values.length !== 4) {
+      return null;
+    }
+
+    return {
+      forma: values[0],
+      colorSimbolo: this.parseColorToken(values[1]),
+      fondo: values[2],
+      colorFondo: this.parseColorToken(values[3]),
+    };
+  }
+
+  private parseColorToken(token: string): string {
+    const parsed = Number.parseInt(token, 36);
+    if (Number.isNaN(parsed)) {
+      return token;
+    }
+
+    const hex = (parsed & 0xffffff).toString(16).padStart(6, '0');
+    return `#${hex}`;
   }
 
 }

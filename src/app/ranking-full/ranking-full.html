@@ -32,6 +32,13 @@
         > 
           KOLISEO
         </button>
+        <button
+          type="button"
+          [class.active]="activeTab === 'gremios'"
+          (click)="selectTab('gremios')"
+        >
+          GREMIOS
+        </button>
       </div>
 
       <div class="rank-states" *ngIf="isLoading || errorMessage">
@@ -50,8 +57,13 @@
             <tr *ngFor="let row of getRows(); let i = index" [class.top-row]="i === 0">
               <td>{{ i + 1 }}</td>
               <td class="name-cell">
-                <img [src]="getClassIcon(row)" [alt]="getClassName(row)" />
-                <span>{{ getName(row) }}</span>
+                <img
+                  *ngIf="activeTab !== 'gremios'"
+                  [src]="getClassIcon(row)"
+                  [alt]="getClassName(row)"
+                  [title]="getClassName(row)"
+                />                
+                <span>{{ activeTab === 'gremios' ? getGuildName(row) : getName(row) }}</span>
               </td>
               <td *ngIf="activeTab === 'pvm'">{{ getLevel(row) }}</td>
               <td *ngIf="activeTab === 'pvm'">{{ getExperience(row) }}</td>
@@ -60,6 +72,8 @@
               <td *ngIf="activeTab === 'pvp'">{{ getWins(row) }}</td>
               <td *ngIf="activeTab === 'koliseo'">{{ getRating(row) }}</td>
               <td *ngIf="activeTab === 'koliseo'">{{ getWins(row) }}</td>
+              <td *ngIf="activeTab === 'gremios'">{{ getGuildLevel(row) }}</td>
+              <td *ngIf="activeTab === 'gremios'">{{ getExperience(row) }}</td>
               <td *ngIf="activeTab === 'koliseo' || activeTab === 'pvp'">{{ getLosses(row) }}</td>
             </tr>
           </tbody>
