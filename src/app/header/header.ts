@@ -1,5 +1,5 @@
 import { RouterModule } from '@angular/router';
-import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Component, OnInit, OnDestroy, HostListener } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Hart, User } from '../services/hart';
 import { Subject } from 'rxjs';
@@ -18,6 +18,13 @@ export class Header implements OnInit, OnDestroy {
 
   isLoggedIn = false;
   currentUser: User | null = null;
+  isMobileMenuOpen = false;
+  mobileSections: Record<string, boolean> = {
+    juego: false,
+    actualidad: false,
+    utilidades: false,
+    redes: false,
+  };
   private destroy$ = new Subject<void>();
 
   constructor(private hart: Hart) {}
@@ -76,5 +83,41 @@ export class Header implements OnInit, OnDestroy {
     this.isLoggedIn = false;
     this.currentUser = null;
     window.location.href = '/';
+  }
+
+  toggleMobileMenu(): void {
+    this.isMobileMenuOpen = !this.isMobileMenuOpen;
+    if (!this.isMobileMenuOpen) {
+      this.resetMobileSections();
+    }
+  }
+
+  closeMobileMenu(): void {
+    this.isMobileMenuOpen = false;
+    this.resetMobileSections();
+  }
+
+  toggleMobileSection(section: string): void {
+    this.mobileSections[section] = !this.mobileSections[section];
+  }
+
+  isMobileSectionOpen(section: string): boolean {
+    return !!this.mobileSections[section];
+  }
+
+  @HostListener('window:resize')
+  onWindowResize(): void {
+    if (window.innerWidth > 1024 && this.isMobileMenuOpen) {
+      this.closeMobileMenu();
+    }
+  }
+
+  private resetMobileSections(): void {
+    this.mobileSections = {
+      juego: false,
+      actualidad: false,
+      utilidades: false,
+      redes: false,
+    };
   }
 }

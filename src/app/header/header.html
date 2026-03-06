@@ -161,5 +161,102 @@
   Jugar
 </button>
 
+    <button
+      type="button"
+      class="burger-menu-button"
+      (click)="toggleMobileMenu()"
+      aria-label="Abrir menu"
+      [attr.aria-expanded]="isMobileMenuOpen"
+    >
+      <div class="burger-menu-button-icon"></div>
+    </button>
+
+  </div>
+</div>
+
+<div class="mobile-menu-backdrop" [class.open]="isMobileMenuOpen" (click)="closeMobileMenu()"></div>
+
+<div class="full-header-menu-mobile" [class.open]="isMobileMenuOpen">
+  <div class="full-header-menu-mobile-header">
+    <button type="button" class="full-header-menu-mobile-header-close" (click)="closeMobileMenu()" aria-label="Cerrar menu"></button>
+
+    <div class="full-header-menu-mobile-header-logo">
+      <a routerLink="/" (click)="closeMobileMenu()">
+        <img src="assets/logo.png" alt="">
+      </a>
+    </div>
+  </div>
+
+  <div class="full-header-menu-mobile-body">
+    <div class="fatheritemMobile">
+      <button type="button" class="full-header-menu-mobile-body-list-item" (click)="toggleMobileSection('juego')">
+        <span>Juego</span>
+        <span>{{ isMobileSectionOpen('juego') ? '-' : '+' }}</span>
+      </button>
+      <div class="dropdown-menu" [class.active]="isMobileSectionOpen('juego')">
+        <div class="dropdown-menu-content">
+          <a routerLink="/" (click)="closeMobileMenu()"><div class="dropdown-menu-content-item">Descubrir</div></a>
+          <a routerLink="/ranking" (click)="closeMobileMenu()"><div class="dropdown-menu-content-item">Clasificaciones</div></a>
+          <a routerLink="/register" (click)="closeMobileMenu()"><div class="dropdown-menu-content-item">Registro</div></a>
+          <a routerLink="/download" (click)="closeMobileMenu()"><div class="dropdown-menu-content-item">Descarga el juego</div></a>
+        </div>
+      </div>
+    </div>
+
+    <div class="fatheritemMobile">
+      <button type="button" class="full-header-menu-mobile-body-list-item" (click)="toggleMobileSection('actualidad')">
+        <span>Actualidad</span>
+        <span>{{ isMobileSectionOpen('actualidad') ? '-' : '+' }}</span>
+      </button>
+      <div class="dropdown-menu" [class.active]="isMobileSectionOpen('actualidad')">
+        <div class="dropdown-menu-content">
+          <a routerLink="/news" (click)="closeMobileMenu()"><div class="dropdown-menu-content-item">Todas las noticias</div></a>
+          <a routerLink="/guide" (click)="closeMobileMenu()"><div class="dropdown-menu-content-item">Guias</div></a>
+        </div>
+      </div>
+    </div>
+
+    <div class="fatheritemMobile">
+      <button type="button" class="full-header-menu-mobile-body-list-item" (click)="toggleMobileSection('utilidades')">
+        <span>Utilidades</span>
+        <span>{{ isMobileSectionOpen('utilidades') ? '-' : '+' }}</span>
+      </button>
+      <div class="dropdown-menu" [class.active]="isMobileSectionOpen('utilidades')">
+        <div class="dropdown-menu-content">
+          <a href="https://retro.dofuscreator.com/" target="_blank" (click)="closeMobileMenu()"><div class="dropdown-menu-content-item">Diseña tu set</div></a>
+          <a href="https://solomonk.fr/es/" target="_blank" (click)="closeMobileMenu()"><div class="dropdown-menu-content-item">Enciclopedia Retro</div></a>
+          <a href="https://dofusdb.fr/es" target="_blank" (click)="closeMobileMenu()"><div class="dropdown-menu-content-item">Enciclopedia Frigost</div></a>
+        </div>
+      </div>
+    </div>
+
+    <div class="fatheritemMobile">
+      <button type="button" class="full-header-menu-mobile-body-list-item" (click)="toggleMobileSection('redes')">
+        <span>Redes</span>
+        <span>{{ isMobileSectionOpen('redes') ? '-' : '+' }}</span>
+      </button>
+      <div class="dropdown-menu" [class.active]="isMobileSectionOpen('redes')">
+        <div class="dropdown-menu-content">
+          <a href="https://chat.whatsapp.com/GP7GydWP3VX58O9d5rBecX" target="_blank" (click)="closeMobileMenu()"><div class="dropdown-menu-content-item">Whatsapp</div></a>
+          <a href="https://www.youtube.com/@aermyfus" target="_blank" (click)="closeMobileMenu()"><div class="dropdown-menu-content-item">Canal de Youtube</div></a>
+          <a href="https://www.tiktok.com/@aermyfus" target="_blank" (click)="closeMobileMenu()"><div class="dropdown-menu-content-item">TikTok</div></a>
+          <a href="https://www.facebook.com/aermyfusretro" target="_blank" (click)="closeMobileMenu()"><div class="dropdown-menu-content-item">Facebook</div></a>
+        </div>
+      </div>
+    </div>
+
+    <a routerLink="/tienda" class="full-header-menu-mobile-body-list-item" (click)="closeMobileMenu()">Tienda</a>
+
+    <a *ngIf="!isLoggedIn" routerLink="/login" class="full-header-menu-mobile-body-list-item" (click)="closeMobileMenu()">Iniciar sesion</a>
+    <a *ngIf="isLoggedIn" routerLink="/profile" class="full-header-menu-mobile-body-list-item" (click)="closeMobileMenu()">Mi perfil</a>
+    <button *ngIf="isLoggedIn" type="button" class="full-header-menu-mobile-body-list-item" (click)="logout(); closeMobileMenu()">Cerrar sesion</button>
+
+    <button
+      routerLink="/download"
+      (click)="closeMobileMenu()"
+      class="play-header-button"
+    >
+      Jugar
+    </button>
   </div>
 </div>
