@@ -28,10 +28,7 @@ export class Register implements OnDestroy, OnInit {
   errorMessage = '';
   successMessage = '';
 
-  userTouched = false;
-  emailTouched = false;
-  passTouched = false;
-  confirmTouched = false;
+
 
   // IP pública del usuario
   userIpv4 = '';
@@ -71,71 +68,70 @@ export class Register implements OnDestroy, OnInit {
   }
 
   private initForm(): void {
+    const currentYear = new Date().getFullYear();
     this.registerForm = this.formBuilder.group({
-      username: ['', [Validators.required, Validators.minLength(3)]],
-      name: ['', [Validators.required]],
-      lastname: ['', [Validators.required]],
-      nickname: ['', [Validators.required]],
+      username: ['', [Validators.required, Validators.minLength(4), Validators.maxLength(30), Validators.pattern(/^[a-zA-Z0-9]+$/)]],
+      name: ['', [Validators.required, Validators.minLength(2), Validators.maxLength(100)]],
+      lastname: ['', [Validators.required, Validators.minLength(2), Validators.maxLength(100)]],
+      nickname: ['', [Validators.required, Validators.minLength(3), Validators.maxLength(30), Validators.pattern(/^[a-zA-Z0-9]+$/)]],
       email: ['', [Validators.required, Validators.email]],
-      password: ['', [Validators.required, Validators.minLength(6)]],
+      password: ['', [Validators.required, Validators.minLength(6), Validators.maxLength(50)]],
       confirmPassword: ['', [Validators.required]],
-      secretQuestion: ['', [Validators.required]],
-      secretAnswer: ['', [Validators.required]],
-      day: ['', [Validators.required]],
-      month: ['', [Validators.required]],
-      year: ['', [Validators.required]],
-      accounts: ['1', [Validators.required]],
+      secretQuestion: ['', [Validators.required, Validators.minLength(5), Validators.maxLength(255)]],
+      secretAnswer: ['', [Validators.required, Validators.minLength(5), Validators.maxLength(255)]],
+      day: ['', [Validators.required, Validators.min(1), Validators.max(31)]],
+      month: ['', [Validators.required, Validators.min(1), Validators.max(12)]],
+      year: ['', [Validators.required, Validators.min(1900), Validators.max(currentYear)]],
+      accounts: ['1', [Validators.required, Validators.min(1), Validators.max(100)]],
+    }, {
+      validators: this.passwordMatchValidator
     });
+  }
+
+  passwordMatchValidator(form: FormGroup) {
+    const password = form.get('password');
+    const confirmPassword = form.get('confirmPassword');
+    if (password && confirmPassword && password.value !== confirmPassword.value) {
+      confirmPassword.setErrors({ passwordMismatch: true });
+    } else {
+      confirmPassword?.setErrors(null);
+    }
+    return null;
   }
 
   togglePassword(): void {
     this.showPassword = !this.showPassword;
   }
 
-  onBlurUser() { this.userTouched = true; }
-  onBlurEmail() { this.emailTouched = true; }
-  onBlurPass() { this.passTouched = true; }
-  onBlurConfirm() { this.confirmTouched = true; }
-
-  getUsernameError() {
-    const c = this.registerForm.get('username');
-    if (c?.errors?.['required']) return 'El usuario es requerido';
-    if (c?.errors?.['minlength']) return 'Mínimo 3 caracteres';
-    return '';
+  onBlur(field: string): void {
+    this.registerForm.get(field)?.markAsTouched();
   }
 
-  getEmailError() {
-    const c = this.registerForm.get('email');
-    if (c?.errors?.['required']) return 'El email es requerido';
-    if (c?.errors?.['email']) return 'Email inválido';
-    return '';
-  }
-
-  getPasswordError() {
-    const c = this.registerForm.get('password');
-    if (c?.errors?.['required']) return 'La contraseña es requerida';
-    if (c?.errors?.['minlength']) return 'Mínimo 6 caracteres';
-    return '';
-  }
-
-  getConfirmError() {
-    const v = this.registerForm.value;
-    if (v.password && v.confirmPassword && v.password !== v.confirmPassword) {
-      return 'Las contraseñas no coinciden';
+  getError(field: string): string {
+    const control = this.registerForm.get(field);
+    if (control?.touched && control.errors) {
+      if (control.errors['required']) return 'Este campo es requerido';
+      if (control.errors['minlength']) return `Mínimo ${control.errors['minlength'].requiredLength} caracteres`;
+      if (control.errors['maxlength']) return `Máximo ${control.errors['maxlength'].requiredLength} caracteres`;
+      if (control.errors['pattern']) return 'Solo letras y números sin espacios';
+      if (control.errors['email']) return 'Email inválido';
+      if (control.errors['min']) return `El valor debe ser mayor o igual a ${control.errors['min'].min}`;
+      if (control.errors['max']) return `El valor debe ser menor o igual a ${control.errors['max'].max}`;
+      if (control.errors['passwordMismatch']) return 'Las contraseñas no coinciden';
     }
     return '';
   }
-
+ 
   isFormValid(): boolean {
-    return this.registerForm.valid && !this.getConfirmError();
+    return this.registerForm.valid;
   }
 
   onRegister(): void {
     this.errorMessage = '';
     this.successMessage = '';
 
-    if (!this.isFormValid()) {
-      this.errorMessage = 'Completa todos los campos correctamente';
+    if (this.registerForm.invalid) {
+      this.registerForm.markAllAsTouched();
       return;
     }
 
@@ -143,7 +139,6 @@ export class Register implements OnDestroy, OnInit {
 
     const v = this.registerForm.value;
 
-    // Enviar todos los campos del formulario al backend en un solo payload
     const payload = {
       username: v.username,
       name: v.name,
@@ -154,12 +149,10 @@ export class Register implements OnDestroy, OnInit {
       confirmPassword: v.confirmPassword,
       secretQuestion: v.secretQuestion,
       secretAnswer: v.secretAnswer,
-      // Convertir a number cuando aplique
       day: v.day ? Number(v.day) : undefined,
       month: v.month ? Number(v.month) : undefined,
       year: v.year ? Number(v.year) : undefined,
       accounts: v.accounts ? Number(v.accounts) : undefined,
-      // Añadir la IP pública del cliente
       ipv4: this.userIpv4,
     }; 
  
@@ -170,8 +163,8 @@ export class Register implements OnDestroy, OnInit {
         this.isLoading = false;
         
         let accountsHtml = '';
-        const password = this.registerForm.value.password; // Get password from form
-        const accounts = res && res.data && res.data.allAccounts ? res.data.allAccounts : [];
+        const password = this.registerForm.value.password;
+        const accounts = res?.data?.allAccounts || [];
 
         if (accounts.length > 0) {
             accountsHtml = accounts.map((acc: any) => `<p><b>Usuario:</b> ${acc.cuenta} - <b>Contraseña:</b> ${password}</p>`).join('');
@@ -204,7 +197,7 @@ export class Register implements OnDestroy, OnInit {
       },
       error: (err) => {
         this.isLoading = false;
-        this.errorMessage = err.message || err?.error?.errors?.[0] || err?.error?.message|| 'Error al registrar';
+        this.errorMessage = err.error.errors[0] || 'Error al registrar';
         this.cdr.detectChanges();
         console.error('Error al registrar:', err);
       }
