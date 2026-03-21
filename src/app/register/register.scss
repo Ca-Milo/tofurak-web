@@ -214,3 +214,47 @@
 .auth-links .link:hover {
     color: #e84229;
 }
+
+// Custom SweetAlert2 styles
+::ng-deep {
+  .custom-swal-popup {
+    background: #0f0d19 !important;
+    border-radius: 15px !important;
+    color: #fff !important;
+  }
+
+  .custom-swal-title {
+    color: #fff !important;
+    font-size: 1.5rem !important;
+  }
+
+  .custom-swal-html-container {
+    color: #ddd !important;
+    font-size: 1rem !important;
+    line-height: 1.5;
+  }
+
+  .custom-swal-confirm-button {
+    background-color: #c62836 !important;
+    color: #fff !important;
+    border: none !important;
+    border-radius: 5px !important;
+    padding: 10px 20px !important;
+    font-size: 1rem !important;
+    transition: background-color 0.3s;
+
+    &:hover {
+      background-color: #a1262f !important;
+    }
+  }
+  
+  .swal2-icon.swal2-success [class^=swal2-success-line][class$=long] {
+    background-color: #c62836 !important;
+  }
+  .swal2-icon.swal2-success [class^=swal2-success-line][class$=tip] {
+    background-color: #c62836 !important;
+  }
+  .swal2-icon.swal2-success .swal2-success-ring {
+    border-color: #c62836 !important;
+  }
+}

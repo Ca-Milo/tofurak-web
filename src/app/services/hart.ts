@@ -209,6 +209,15 @@ export class Hart {
   }
 
   /**
+   * Solicita la recuperación de contraseña para un email
+   */
+  recoverPassword(email: string): Observable<{success: boolean, message: string}> {
+    return this.http.post<{success: boolean, message: string}>(`/pagos/recuperar`, { email }).pipe(
+      catchError(error => this.handleError(error))
+    );
+  }
+
+  /**
    * Ranking PvM
    */
   getPvmRanking(): Observable<RankingResponse> {

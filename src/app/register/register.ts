@@ -7,6 +7,7 @@ import { Hart } from '../services/hart';
 import { IpService } from '../services/ip.service';
 import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
+import Swal from 'sweetalert2';
 
 @Component({
   selector: 'app-register',
@@ -165,16 +166,45 @@ export class Register implements OnDestroy, OnInit {
     this.hart.register(payload)
     .pipe(takeUntil(this.destroy$))
     .subscribe({
-      next: () => {
+      next: (res: any) => {
         this.isLoading = false;
-        this.successMessage = 'Cuenta creada correctamente';
-        setTimeout(() => {
-          this.router.navigate(['/login']);
-        }, 1500);
+        
+        let accountsHtml = '';
+        const password = this.registerForm.value.password; // Get password from form
+        const accounts = res && res.data && res.data.allAccounts ? res.data.allAccounts : [];
+
+        if (accounts.length > 0) {
+            accountsHtml = accounts.map((acc: any) => `<p><b>Usuario:</b> ${acc.cuenta} - <b>Contraseña:</b> ${password}</p>`).join('');
+        } else {
+            accountsHtml = '<p>¡Registro exitoso! Ya puedes iniciar sesión.</p>';
+        } 
+
+        Swal.fire({
+          title: res.message || '¡Cuenta(s) creada(s)!',
+          html: `
+            <div style="text-align: left; margin-top: 20px;">
+              ${accountsHtml}
+            </div>
+          `,
+          icon: 'success',
+          confirmButtonText: 'Iniciar Sesión',
+          background: '#0f0d19',
+          customClass: {
+            popup: 'custom-swal-popup',
+            title: 'custom-swal-title',
+            htmlContainer: 'custom-swal-html-container',
+            confirmButton: 'custom-swal-confirm-button'
+          },
+          heightAuto: false
+        }).then((result) => {
+          if (result.isConfirmed) {
+            this.router.navigate(['/login']);
+          }
+        });
       },
       error: (err) => {
         this.isLoading = false;
-        this.errorMessage = err.message || err?.error?.message || 'Error al registrar';
+        this.errorMessage = err.message || err?.error?.errors?.[0] || err?.error?.message|| 'Error al registrar';
         this.cdr.detectChanges();
         console.error('Error al registrar:', err);
       }

@@ -11,6 +11,7 @@ import { Hart } from '../services/hart';
 import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 import { Router } from '@angular/router';
+import Swal from 'sweetalert2';
 
 @Component({
   selector: 'app-login',
@@ -39,6 +40,7 @@ export class Login implements OnInit, OnDestroy {
   passTouched = false;
 
   loginForm!: FormGroup;
+  
   private destroy$ = new Subject<void>();
 
   constructor(
@@ -180,4 +182,61 @@ export class Login implements OnInit, OnDestroy {
     this.router.navigate(['/register']);
   }
 
+  async openPasswordRecovery() {
+    const { value: email } = await Swal.fire({
+      title: 'Recuperar Cuenta',
+      input: 'email',
+      inputLabel: 'Ingresa tu correo electrónico y te enviaremos tus cuentas asociadas.',
+      inputPlaceholder: 'ejemplo@hotmail.com',
+      showCancelButton: true,
+      confirmButtonText: 'Enviar',
+      cancelButtonText: 'Cancelar',
+      background: '#fff',
+      color: '#333',
+      confirmButtonColor: '#ff7b00',
+      customClass: {
+        popup: 'swal-ankama-box',
+        confirmButton: 'swal-ankama-btn',
+        input: 'swal2-input'
+      },
+      showLoaderOnConfirm: true,
+      preConfirm: (emailValue) => {
+        if (!emailValue) {
+          Swal.showValidationMessage('El correo electrónico es obligatorio');
+          return;
+        }
+        return this.hart.recoverPassword(emailValue)
+          .pipe(takeUntil(this.destroy$))
+          .toPromise()
+          .catch(error => {
+            Swal.showValidationMessage(`Request failed: ${error.message}`);
+          });
+      },
+      allowOutsideClick: () => !Swal.isLoading()
+    });
+
+    if (email) {
+      if (email.success) {
+        Swal.fire({
+          title: '¡CORREO ENVIADO!',
+          text: 'Revisa tu bandeja de entrada (y spam).',
+          icon: 'success',
+          confirmButtonColor: '#ff7b00',
+          background: '#fff',
+          color: '#333',
+          customClass: { popup: 'swal-ankama-box', confirmButton: 'swal-ankama-btn' }
+        });
+      } else {
+        Swal.fire({
+          title: 'ERROR',
+          text: email.message || 'No se encontró el correo.',
+          icon: 'error',
+          confirmButtonColor: '#ff7b00',
+          background: '#fff',
+          color: '#333',
+          customClass: { popup: 'swal-ankama-box', confirmButton: 'swal-ankama-btn' }
+        });
+      }
+    }
+  }
 }
