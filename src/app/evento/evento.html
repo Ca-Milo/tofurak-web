@@ -38,8 +38,15 @@
             </tr>
           </thead>
           <tbody>
-            <tr *ngFor="let row of getRows(); let i = index" [class.top-row]="i === 0">
-              <td>{{ i + 1 }}</td>
+            <tr
+              *ngFor="let row of getRows(); let i = index"
+              [ngClass]="{
+                'podium-gold': i === 0,
+                'podium-silver': i === 1,
+                'podium-bronze': i === 2
+              }"
+            >
+              <td class="position-cell">{{ i + 1 }}</td>
               <td class="name-cell">
                 <img
                   [src]="getClassIcon(row)"

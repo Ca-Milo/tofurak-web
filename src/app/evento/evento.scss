@@ -169,9 +169,38 @@
   background: #ece9e1;
 }
 
-.rank-table tbody tr.top-row td {
-  background: #302217;
-  color: #fff;
+.rank-table tbody tr.podium-gold td {
+  background: linear-gradient(180deg, #fff6cc 0%, #f7d666 100%);
+  color: #3a2a0d;
+  font-weight: 700;
+}
+
+.rank-table tbody tr.podium-silver td {
+  background: linear-gradient(180deg, #fbfcff 0%, #d7dee8 100%);
+  color: #1f2a35;
+  font-weight: 700;
+}
+
+.rank-table tbody tr.podium-bronze td {
+  background: linear-gradient(180deg, #f8e1cc 0%, #d59a67 100%);
+  color: #3a2314;
+  font-weight: 700;
+}
+
+.position-cell {
+  font-weight: 900;
+}
+
+.rank-table tbody tr.podium-gold .position-cell::before {
+  content: 'TOP1 ';
+}
+
+.rank-table tbody tr.podium-silver .position-cell::before {
+  content: 'TOP2 ';
+}
+
+.rank-table tbody tr.podium-bronze .position-cell::before {
+  content: 'TOP3 ';
 }
 
 .name-cell {
