@@ -9,6 +9,7 @@ import { NewsComplete } from './news-complete/news-complete';
 // import { GestioCuentaComponent } from './gestion-cuenta/gestion-cuenta.component';
 // import { ShopsFullComponent } from './shop-full/shops-full.component';
 import { RankingFull } from './ranking-full/ranking-full';
+import { Evento } from './evento/evento';
 import { Tienda } from './tienda/tienda';
 import { ProfileComponent } from './profile/profile';
 import { authGuard } from './guards/auth.guard';
@@ -50,6 +51,11 @@ export const routes: Routes = [
     path: 'ranking',
     component: RankingFull,
     data: { animation: 'RankignPage'}
+  },
+  {
+    path: 'evento',
+    component: Evento,
+    data: { animation: 'EventoPage'}
   },
 
   /*{

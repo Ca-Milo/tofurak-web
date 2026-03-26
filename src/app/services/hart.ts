@@ -254,6 +254,15 @@ export class Hart {
   }
 
   /**
+   * Ranking por evento de mobs con parametros dinamicos
+   */
+  getMobRanking(mobId: number, start: number, end: number): Observable<RankingResponse> {
+    return this.http.get<RankingResponse>(`${this.apiUrl}/ranking/mob/${mobId}/${start}/${end}`).pipe(
+      catchError(error => this.handleError(error))
+    );
+  }
+
+  /**
    * Cierra la sesión del usuario
    */
   logout(): void {

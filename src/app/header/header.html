@@ -105,6 +105,13 @@
       </div>
 
      <div class="header-full-container-new-version-left-menu-item">
+    <a routerLink="/evento" class="menu-direct-link">
+    <span>Evento</span>
+  </a>
+  <div class="header-full-container-new-version-left-menu-item-direct"></div>
+</div>
+
+     <div class="header-full-container-new-version-left-menu-item">
     <a href="/tienda" class="menu-direct-link">
     <span>Tienda</span>
   </a>
@@ -246,6 +253,7 @@
       </div>
     </div>
 
+    <a routerLink="/evento" class="full-header-menu-mobile-body-list-item" (click)="closeMobileMenu()">Evento</a>
     <a routerLink="/tienda" class="full-header-menu-mobile-body-list-item" (click)="closeMobileMenu()">Tienda</a>
 
     <a *ngIf="!isLoggedIn" routerLink="/login" class="full-header-menu-mobile-body-list-item" (click)="closeMobileMenu()">Iniciar sesion</a>

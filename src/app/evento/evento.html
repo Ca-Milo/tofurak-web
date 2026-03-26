@@ -1,0 +1,65 @@
+<app-header></app-header>
+<div class="full-body">
+  <div class="ranking-shell">
+    <section class="ranking-card">
+      <header class="rank-title">
+        <img class="rank-badge" src="/assets/ladder/koliseo.png" alt="Evento" />
+        <div>
+          <h1>Evento</h1>
+          <p>Ranking de mobs por rangos configurables</p>
+        </div>
+      </header>
+
+      <div class="rank-tabs">
+        <button
+          *ngFor="let tab of tabs"
+          type="button"
+          [class.active]="activeTabId === tab.id"
+          (click)="selectTab(tab.id)"
+        >
+          {{ getTabLabel(tab) }}
+        </button>
+      </div>
+
+      <div class="rank-states" *ngIf="isLoading || errorMessage">
+        <p *ngIf="isLoading">Cargando evento...</p>
+        <p class="error" *ngIf="!isLoading && errorMessage">{{ errorMessage }}</p>
+      </div>
+
+      <div class="rank-table-wrap" *ngIf="!isLoading && !errorMessage">
+        <table class="rank-table" *ngIf="getRows().length > 0; else emptyRows">
+          <thead>
+            <tr>
+              <th>#</th>
+              <th>Personaje</th>
+              <th>Nivel</th>
+              <th>Mob</th>
+              <th>Victorias</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let row of getRows(); let i = index" [class.top-row]="i === 0">
+              <td>{{ i + 1 }}</td>
+              <td class="name-cell">
+                <img
+                  [src]="getClassIcon(row)"
+                  [alt]="getClassName(row)"
+                  [title]="getClassName(row)"
+                />
+                <span>{{ getName(row) }}</span>
+              </td>
+              <td>{{ getLevel(row) }}</td>
+              <td>{{ getMobName(row) }}</td>
+              <td>{{ getWins(row) }}</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <ng-template #emptyRows>
+        <div class="empty-state">No hay datos para mostrar en este evento.</div>
+      </ng-template>
+    </section>
+  </div>
+</div>
+<app-footer></app-footer>

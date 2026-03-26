@@ -1,0 +1,210 @@
+.full-body {
+  position: relative;
+  min-height: 100vh;
+  padding-top: 110px;
+  padding-bottom: 40px;
+
+  background:
+    linear-gradient(
+      to bottom,
+      rgba(0, 10, 7, 0) 60%,
+      rgba(0, 10, 7, 0.9) 85%,
+      rgba(0, 10, 7, 1) 100%
+    ),
+    url('/assets/home-backgrounds/bg-moon.jpg');
+
+  background-repeat: no-repeat;
+  background-position: center top;
+  background-size: 200vw 200vh;
+  background-color: #000a07;
+}
+
+.full-body::after {
+  content: '';
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  background: linear-gradient(
+    to bottom,
+    rgba(0, 10, 7, 0) 60%,
+    rgba(0, 10, 7, 0.9) 85%,
+    rgba(0, 10, 7, 1) 100%
+  );
+  pointer-events: none;
+}
+
+.ranking-shell {
+  position: relative;
+  z-index: 1;
+  width: min(1120px, calc(100% - 24px));
+  margin: 0 auto;
+}
+
+.ranking-card {
+  background: rgba(255, 255, 255, 0.2);
+  padding: 12px;
+  border-radius: 8px;
+}
+
+.rank-title {
+  min-height: 66px;
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  background: #97a800;
+  border-bottom: 1px solid #6f780d;
+  padding: 10px 16px;
+  color: #fff;
+  text-shadow: 0 2px 2px #888;
+}
+
+.rank-badge {
+  width: 56px;
+  height: 56px;
+  object-fit: contain;
+  display: block;
+  filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.35));
+}
+
+.rank-title h1 {
+  margin: 0;
+  font-size: 34px;
+  line-height: 34px;
+  text-transform: uppercase;
+}
+
+.rank-title p {
+  margin: 4px 0 0;
+  font-family: Roboto, sans-serif;
+  font-size: 14px;
+  color: #f6f6f6;
+  text-shadow: none;
+}
+
+.rank-tabs {
+  position: relative;
+  display: flex;
+  gap: 0;
+  padding: 0;
+  border: 1px solid #867553;
+  background: #2f2317;
+  border-radius: 8px;
+  overflow: hidden;
+  margin: 12px 0;
+}
+
+.rank-tabs button {
+  flex: 1 1 50%;
+  border: 0;
+  background: transparent;
+  color: #f0ebdf;
+  font-family: Roboto, sans-serif;
+  font-size: 13px;
+  font-weight: 900;
+  letter-spacing: 0.8px;
+  text-transform: uppercase;
+  padding: 12px 10px;
+  cursor: pointer;
+  transition: color 0.2s ease, background 0.2s ease;
+}
+
+.rank-tabs button:hover {
+  background: rgba(255, 255, 255, 0.06);
+}
+
+.rank-tabs button.active {
+  color: #ffffff;
+  background: linear-gradient(to bottom, #4a3a26, #3a2b1b);
+  box-shadow:
+    inset 0 2px 4px rgba(0, 0, 0, 0.6),
+    0 0 8px rgba(151, 168, 0, 0.6);
+  border-bottom: 2px solid #97a800;
+}
+
+.rank-states {
+  background: rgba(48, 34, 23, 0.9);
+  border: 1px solid #4f3b2a;
+  color: #fff;
+  padding: 12px;
+  border-radius: 6px;
+  margin-bottom: 10px;
+  font-family: Roboto, sans-serif;
+}
+
+.rank-states .error {
+  color: #ff8c8c;
+}
+
+.rank-table-wrap {
+  overflow: auto;
+}
+
+.rank-table {
+  width: 100%;
+  min-width: 760px;
+  border-collapse: separate;
+  border-spacing: 0;
+  font-family: Roboto, sans-serif;
+}
+
+.rank-table thead th {
+  background: #a5a288;
+  color: #362712;
+  text-align: left;
+  font-size: 13px;
+  font-weight: 800;
+  padding: 12px 10px;
+  text-transform: uppercase;
+}
+
+.rank-table tbody td {
+  background: #f3f2ed;
+  color: #362712;
+  padding: 10px;
+  border-bottom: 1px solid #b1ac9c;
+  font-size: 14px;
+}
+
+.rank-table tbody tr:nth-child(even) td {
+  background: #ece9e1;
+}
+
+.rank-table tbody tr.top-row td {
+  background: #302217;
+  color: #fff;
+}
+
+.name-cell {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.name-cell img {
+  width: 32px;
+  height: 32px;
+  border-radius: 6px;
+  object-fit: cover;
+}
+
+.empty-state {
+  background: #f3f2ed;
+  color: #4a3929;
+  font-family: Roboto, sans-serif;
+  font-size: 14px;
+  padding: 14px;
+  border: 1px solid #b1ac9c;
+  border-radius: 4px;
+}
+
+@media (max-width: 768px) {
+  .rank-title h1 {
+    font-size: 28px;
+    line-height: 28px;
+  }
+
+  .rank-badge {
+    width: 48px;
+    height: 48px;
+  }
+}

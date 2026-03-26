@@ -125,7 +125,7 @@ export class RankingFull implements OnInit {
     return '';
   }
 
-  getLevel(row: RankingEntry): number | string {
+  getLevel(row: RankingEntry): number | string { 
     return row.nivel ?? '—';
   }
 
