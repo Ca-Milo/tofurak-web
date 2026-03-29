@@ -121,6 +121,43 @@
   border-bottom: 2px solid #97a800;
 }
 
+.rank-filters {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin: 0 0 12px;
+}
+
+.rank-filters button {
+  border: 1px solid #6f780d;
+  background: rgba(47, 35, 23, 0.92);
+  color: #f0ebdf;
+  font-family: Roboto, sans-serif;
+  font-size: 13px;
+  font-weight: 700;
+  padding: 10px 14px;
+  border-radius: 999px;
+  cursor: pointer;
+  transition: background 0.2s ease, color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.rank-filters button:hover {
+  background: rgba(74, 58, 38, 0.98);
+}
+
+.rank-filters button.active {
+  background: linear-gradient(to bottom, #97a800, #6f780d);
+  color: #fff;
+  box-shadow: 0 0 10px rgba(151, 168, 0, 0.35);
+}
+
+.rank-filter-caption {
+  margin: 0 0 12px;
+  color: #efe7d2;
+  font-family: Roboto, sans-serif;
+  font-size: 13px;
+}
+
 .rank-states {
   background: rgba(48, 34, 23, 0.9);
   border: 1px solid #4f3b2a;

@@ -21,6 +21,10 @@
         </button>
       </div>
 
+      <p class="rank-filter-caption" *ngIf="!isLoading && !errorMessage">
+        Orden aplicado: {{ getAppliedOrderLabel() }}
+      </p>
+
       <div class="rank-states" *ngIf="isLoading || errorMessage">
         <p *ngIf="isLoading">Cargando evento...</p>
         <p class="error" *ngIf="!isLoading && errorMessage">{{ errorMessage }}</p>
@@ -34,7 +38,10 @@
               <th>Personaje</th>
               <th>Nivel</th>
               <th>Mob</th>
-              <th>Victorias</th>
+              <th *ngIf="showVictoriesColumns()">Victorias</th>
+              <th *ngIf="showVictoriesColumns()">Ultima muerte</th>
+              <th *ngIf="showBestTimeColumns()">Mejor tiempo</th>
+              <th *ngIf="showBestTimeColumns()">Fecha record</th>
             </tr>
           </thead>
           <tbody>
@@ -57,7 +64,10 @@
               </td>
               <td>{{ getLevel(row) }}</td>
               <td>{{ getMobName(row) }}</td>
-              <td>{{ getWins(row) }}</td>
+              <td *ngIf="showVictoriesColumns()">{{ getWins(row) }}</td>
+              <td *ngIf="showVictoriesColumns()">{{ getLastKill(row) }}</td>
+              <td *ngIf="showBestTimeColumns()">{{ getBestTime(row) }}</td>
+              <td *ngIf="showBestTimeColumns()">{{ getBestTimeDate(row) }}</td>
             </tr>
           </tbody>
         </table>

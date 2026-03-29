@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
 import { Observable, BehaviorSubject } from 'rxjs';
 import { tap, catchError } from 'rxjs/operators';
 import { throwError } from 'rxjs';
@@ -55,12 +55,20 @@ export interface RankingEntry {
   xp?: number | string;
   gradoalas?: number | string;
   honor?: number | string;
+  mobs?: string;
+  primeraMuerte?: string;
+  ultimaMuerte?: string;
+  mejor_tiempo_ms?: number | string;
+  fecha_mejor_tiempo?: string;
 }
+
+export type MobRankingOrderBy = 'victorias' | 'mejorTiempo';
 
 export interface RankingResponse {
   success?: boolean;
   message?: string;
   data?: RankingEntry[];
+  orderBy?: MobRankingOrderBy;
 }
  
  
@@ -256,8 +264,15 @@ export class Hart {
   /**
    * Ranking por evento de mobs con parametros dinamicos
    */
-  getMobRanking(mobId: number, start: number, end: number): Observable<RankingResponse> {
-    return this.http.get<RankingResponse>(`${this.apiUrl}/ranking/mob/${mobId}/${start}/${end}`).pipe(
+  getMobRanking(
+    mobId: number,
+    start: number,
+    end: number,
+    orderBy: MobRankingOrderBy = 'victorias',
+  ): Observable<RankingResponse> {
+    const params = new HttpParams().set('orderBy', orderBy);
+
+    return this.http.get<RankingResponse>(`${this.apiUrl}/ranking/mob/${mobId}/${start}/${end}`, { params }).pipe(
       catchError(error => this.handleError(error))
     );
   }
