@@ -918,3 +918,16 @@
 
 .first-block::before { pointer-events: none; }
 .hero-cta { position: relative; z-index: 10; cursor: pointer; }
+
+.hero-image-block {
+  width: 100%;
+  height: 100vh; /* 👈 clave */
+  min-height: 700px; /* opcional para no quedar enano */
+  
+  background-image: url('../../assets/home-backgrounds/header.webp');
+  background-size: cover;
+  background-position: center bottom; /* 👈 importante */
+  background-repeat: no-repeat;
+  border-bottom: 4px solid #000;
+}
+

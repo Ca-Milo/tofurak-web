@@ -59,8 +59,8 @@
 }
 
 .rank-badge {
-  width: 56px;
-  height: 56px;
+  width: 72px;
+  height: 72px;
   object-fit: contain;
   display: block;
   filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.35));
@@ -236,4 +236,10 @@
     width: 48px;
     height: 48px;
   }
+}
+
+.rank-table tbody tr.podium-gold .position-cell::before,
+.rank-table tbody tr.podium-silver .position-cell::before,
+.rank-table tbody tr.podium-bronze .position-cell::before {
+  content: 'TOP ';
 }

@@ -52,7 +52,7 @@
     height: 111px;
     font-size: 16px;
     text-align: center;
-    color: #2f2f25;
+    color: #ffffffd3;
     line-height: 25px;
     padding-top: 0px;
     top: -12px;
@@ -167,12 +167,12 @@
 }
 
 .ak-fixedbar .ak-content-fixedbar .ak-block-video {
-    right: -10%;
+    right: 0;
     background: #191410;
     padding: 10px;
     position: absolute;
     transition: all .2s;
-    top: -160px;
+    top: -120px;
     display: none;
   
     &.ak-open {
@@ -246,11 +246,11 @@
     }
   
     .ak-btn-video {
-      background: url("../../assets/thumb.jpg") center center no-repeat transparent;
+      background: url("../../assets/thumb.webp") center center no-repeat transparent;
       background-size: cover;
       display: block;
-      width: 315px;
-      height: 176px;
+      width: 220px;
+      height: 120px;
       box-shadow: inset 0 0 0 3px rgba(255, 255, 255, .2);
       position: relative;
       transition: all .2s;
@@ -376,4 +376,6 @@
     margin: 26px 0 0 7px;
     animation: bounce 1s infinite
   }
+  
+
   

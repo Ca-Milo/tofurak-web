@@ -9,6 +9,7 @@ interface EventoTabConfig {
   mobId: number;
   start: number;
   end: number;
+  label: string;
 }
 
 @Component({
@@ -20,9 +21,21 @@ interface EventoTabConfig {
 })
 export class Evento implements OnInit {
   readonly tabs: EventoTabConfig[] = [
-    { id: 'rangoInicial', mobId: 940, start: 1, end: 169 },
-    { id: 'rangoFinal', mobId: 1072, start: 170, end: 200 },
-  ];
+  {
+    id: 'rangoInicial',
+    mobId: 940,
+    start: 1,
+    end: 169,
+    label: 'Rata blanca lvl 1-169',
+  },
+  {
+    id: 'rangoFinal',
+    mobId: 1072,
+    start: 170,
+    end: 200,
+    label: 'Tynril lvl 170-200',
+  },
+];
 
   activeTabId = this.tabs[0].id;
 
@@ -57,8 +70,8 @@ export class Evento implements OnInit {
   }
 
   getTabLabel(tab: EventoTabConfig): string {
-    return `${tab.start} - ${tab.end}`;
-  }
+  return tab.label;
+}
 
   getClassName(row: RankingEntry): string {
     const classId = Number(row.clase);
