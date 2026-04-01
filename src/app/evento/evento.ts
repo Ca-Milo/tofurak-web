@@ -25,22 +25,7 @@ export class Evento implements OnInit {
   // Configuración de las pestañas del evento
   // Cada pestaña representa un rango de niveles y un mob específico, con un criterio de ordenamiento (victorias o mejor tiempo)
   readonly tabs: EventoTabConfig[] = [
-  {
-    id: 'rangoInicial',
-    mobId: 940,
-    start: 1,
-    end: 169,
-    label: 'Rata blanca lvl 1-169',
-    orderBy: 'victorias',
-  },
-  {
-    id: 'rangoFinal',
-    mobId: 1072,
-    start: 170,
-    end: 200,
-    label: 'Tynril lvl 170-200',
-    orderBy: 'victorias',
-  },
+ 
   {
     id: 'rangoFinalTiempo',
     mobId: 854,
