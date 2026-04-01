@@ -121,30 +121,32 @@
                 </div>
             </div>
 
-            @if (compositionItems && compositionItems.length > 0) {
+            @if (compositionItems && compositionItems.length > 1) {
             <div class="section-title">
                 <div class="title-block"></div>
                 COMPOSICIÓN
             </div>
 
              <div class="composition-content">
-                <div class="choice-items">
-                    @for (item of compositionItems; track item.id) {
-                    <div class="new_choice-item">
-                        <div class="custom-tooltip">
-                            <strong>{{ item.nombre }}</strong>
-                            @if (item.descripcion && item.descripcion !== '') {
-                                <div class="tooltip-desc">{{ item.descripcion }}</div>
-                            }
-                        </div>
-                        <div class="img-container">
-                            <img class="img-fluid" [src]="item.url_imagen" [alt]="item.nombre">
-                        </div>
-                        <div class="item-label">{{ item.nombre }}</div>
-                    </div>
+    <div class="choice-items">
+        @for (item of compositionItems; track item.id; let i = $index) {
+            @if (i !== 0) {
+            <div class="new_choice-item">
+                <div class="custom-tooltip">
+                    <strong [innerHTML]="item.nombre"></strong>
+                    @if (item.descripcion && item.descripcion !== '') {
+                        <div class="tooltip-desc">{{ item.descripcion }}</div>
                     }
                 </div>
+                <div class="img-container">
+                    <img class="img-fluid" [src]="item.url_imagen" [alt]="item.nombre">
+                </div>
+                <div class="item-label" [innerHTML]="item.nombre"></div>
             </div>
+            }
+        }
+    </div>
+</div>
             }
 
             @if (product.descripcion) {

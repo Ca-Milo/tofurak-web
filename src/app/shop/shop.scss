@@ -9,7 +9,7 @@
 .hero-display {
     height: 400px;
     background-size: cover;
-    background-position: center;
+    background-position: top center;
     transition: background-image 0.6s ease-in-out;
     background-color: #000;
     position: relative;
@@ -379,6 +379,7 @@ body {
 @media (min-width: 1800px) {
     .hero-display {
         height: 460px;
+        background-position: top center;
     }
 
     .products-grid {
