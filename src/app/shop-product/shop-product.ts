@@ -61,8 +61,11 @@ export class ShopProductComponent implements OnInit {
           id: this.product.id,
           nombre: this.product.nombre,
           imagen: this.product.imagen,
-          cop: this.getDiscountedPrice(this.product.cop, this.product.descuento),
-          usd: this.getDiscountedPrice(this.product.usd, this.product.descuento),
+          cop: this.getDiscountedCopPrice(this.product.cop, this.product.descuento),
+          usd: this.getDiscountedUsdPrice(this.product.usd, this.product.descuento),
+          originalCop: this.product.cop,
+          originalUsd: this.product.usd,
+          descuento: this.product.descuento,
         },
         this.selectedQuantity,
       );
@@ -88,13 +91,39 @@ export class ShopProductComponent implements OnInit {
     return imagen.startsWith('http') ? imagen : `assets/shop/items/${imagen}`;
   }
 
-  getDiscountedPrice(price: number, discount: number): number {
+  getDiscountedCopPrice(price: number, discount: number): number {
     if (!discount || discount <= 0) return price;
     return Math.round(price * (1 - discount / 100));
   }
 
+  getDiscountedUsdPrice(price: number, discount: number): number {
+    if (!discount || discount <= 0) return price;
+    return Number((price * (1 - discount / 100)).toFixed(2));
+  }
+
   getOgrinasBadgeText(ogrinas: number): string {
     return `+${ogrinas} ogrinas extra`;
+  }
+
+  getFormattedDescription(description?: string): string {
+    if (!description) return '';
+
+    if (/<[a-z][\s\S]*>/i.test(description)) {
+      return description;
+    }
+
+    const escaped = description
+      .replace(/&/g, '&amp;')
+      .replace(/</g, '&lt;')
+      .replace(/>/g, '&gt;')
+      .replace(/\t/g, '&nbsp;&nbsp;&nbsp;&nbsp;');
+
+    return escaped
+      .replace(/\r\n/g, '\n')
+      .replace(/\r/g, '\n')
+      .split(/\n{2,}/)
+      .map(block => `<p>${block.replace(/\n/g, '<br>')}</p>`)
+      .join('');
   }
 
   private loadProduct(id: number): void {

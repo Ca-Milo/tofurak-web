@@ -7,6 +7,9 @@ export interface CartItem {
   imagen: string;
   cop: number;
   usd: number;
+  originalCop?: number;
+  originalUsd?: number;
+  descuento?: number;
   quantity: number;
 }
 
@@ -72,9 +75,46 @@ export class CartService {
 
   private loadCart(): CartItem[] {
     try {
-      return JSON.parse(localStorage.getItem(this.cartKey) || '[]');
+      const rawItems = JSON.parse(localStorage.getItem(this.cartKey) || '[]');
+      if (!Array.isArray(rawItems)) {
+        return [];
+      }
+
+      return rawItems.map((item: any) => {
+        const discount = item?.descuento != null ? Number(item.descuento) : undefined;
+        const originalCop = item?.originalCop != null ? Number(item.originalCop) : undefined;
+        const originalUsd = item?.originalUsd != null ? Number(item.originalUsd) : undefined;
+
+        return {
+          id: Number(item?.id ?? 0),
+          nombre: String(item?.nombre ?? ''),
+          imagen: String(item?.imagen ?? ''),
+          cop:
+            originalCop != null && discount != null
+              ? this.getDiscountedCopPrice(originalCop, discount)
+              : Number(item?.cop ?? 0),
+          usd:
+            originalUsd != null && discount != null
+              ? this.getDiscountedUsdPrice(originalUsd, discount)
+              : Number(item?.usd ?? 0),
+          originalCop,
+          originalUsd,
+          descuento: discount,
+          quantity: Math.max(1, Number(item?.quantity ?? 1)),
+        };
+      });
     } catch {
       return [];
     }
+  }
+
+  private getDiscountedCopPrice(price: number, discount: number): number {
+    if (!discount || discount <= 0) return price;
+    return Math.round(price * (1 - discount / 100));
+  }
+
+  private getDiscountedUsdPrice(price: number, discount: number): number {
+    if (!discount || discount <= 0) return price;
+    return Number((price * (1 - discount / 100)).toFixed(2));
   }
 }

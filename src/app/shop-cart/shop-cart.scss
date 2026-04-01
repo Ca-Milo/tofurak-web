@@ -178,6 +178,14 @@
     font-size: 0.95rem;
 }
 
+.item-price-old {
+    font-family: 'roboto-regular';
+    font-size: 0.8rem;
+    color: #777;
+    text-decoration: line-through;
+    margin-bottom: 4px;
+}
+
 .summary-section {
     flex: 1;
     background-color: #e6e6e6;

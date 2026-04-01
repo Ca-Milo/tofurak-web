@@ -41,7 +41,16 @@
               </button>
             </div>
             <div class="item-price">
-              <strong>COP {{ (item.cop || 0) * item.quantity | number }} o ${{ (item.usd || 0) * item.quantity | number }} USD</strong>
+              @if (hasDiscount(item)) {
+              <div class="item-price-old">
+                COP {{ (item.originalCop || 0) * item.quantity | number:'1.0-0' }}
+                o ${{ (item.originalUsd || 0) * item.quantity | number:'1.2-2' }} USD
+              </div>
+              }
+              <strong>
+                COP {{ (item.cop || 0) * item.quantity | number:'1.0-0' }}
+                o ${{ (item.usd || 0) * item.quantity | number:'1.2-2' }} USD
+              </strong>
             </div>
           </div>
           <div class="spacer" style="height: 50px;"></div>
@@ -60,11 +69,11 @@
         <div class="summary-details">
           <div class="summary-row">
             <span>Subtotal</span>
-            <span class="val">COP {{ totals.cop | number }} o ${{ totals.usd | number }} USD</span>
+            <span class="val">COP {{ totals.cop | number:'1.0-0' }} o ${{ totals.usd | number:'1.2-2' }} USD</span>
           </div>
           <div class="summary-row total">
             <span>Importe total <small>(IVA incluido)</small></span>
-            <span class="val">COP {{ totals.cop | number }} o ${{ totals.usd | number }}</span>
+            <span class="val">COP {{ totals.cop | number:'1.0-0' }} o ${{ totals.usd | number:'1.2-2' }} USD</span>
           </div>
         </div>
         <p class="creator-text">

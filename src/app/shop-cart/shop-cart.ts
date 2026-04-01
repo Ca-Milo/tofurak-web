@@ -58,4 +58,8 @@ export class ShopCart implements OnInit, OnDestroy {
     if (!imagen) return '';
     return imagen.startsWith('http') ? imagen : `assets/shop/items/${imagen}`;
   }
+
+  hasDiscount(item: CartItem): boolean {
+    return !!item.descuento && item.descuento > 0;
+  }
 }

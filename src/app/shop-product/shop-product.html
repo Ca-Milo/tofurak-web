@@ -79,14 +79,14 @@
                             @if (product.descuento > 0) {
                             <span class="price-old-amount">COP{{ product.cop | number:'1.0-0' }}</span>
                             <span class="price-separator">o</span>
-                            <span class="price-old-amount">${{ product.usd | number:'1.0-0' }} USD</span>
-                            <span class="price-amount">COP{{ getDiscountedPrice(product.cop, product.descuento) | number:'1.0-0' }}</span>
+                            <span class="price-old-amount">${{ product.usd | number:'1.2-2' }} USD</span>
+                            <span class="price-amount">COP{{ getDiscountedCopPrice(product.cop, product.descuento) | number:'1.0-0' }}</span>
                             <span class="price-separator">o</span>
-                            <span class="price-amount">${{ getDiscountedPrice(product.usd, product.descuento) | number:'1.0-0' }} USD</span>
+                            <span class="price-amount">${{ getDiscountedUsdPrice(product.usd, product.descuento) | number:'1.2-2' }} USD</span>
                             } @else {
                             <span class="price-amount">COP{{ product.cop | number:'1.0-0' }}</span>
                             <span class="price-separator">o</span>
-                            <span class="price-amount">${{ product.usd | number:'1.0-0' }} USD</span>
+                            <span class="price-amount">${{ product.usd | number:'1.2-2' }} USD</span>
                             }
                         </div>
                     </div>
@@ -153,7 +153,7 @@
                 DETALLES
             </div>
             <div class="details-content">
-                <div [innerHTML]="product.descripcion"></div>
+                <div [innerHTML]="getFormattedDescription(product.descripcion)"></div>
             </div>
             }
             } @else if (isLoading) {
