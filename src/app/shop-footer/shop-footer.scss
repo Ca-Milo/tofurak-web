@@ -1,0 +1,53 @@
+.footer-container {
+    position: relative;
+    width: 100%;
+    max-width: 1920px;
+    margin: 0 auto;
+    background-color: #ffffff;
+    padding: 40px 0 15px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.footer-bg-polygone {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: #1a1a1a;
+    z-index: 1;
+    clip-path: polygon(0 20%, 100% 0, 100% 100%, 0% 100%);
+    -webkit-clip-path: polygon(0 20%, 100% 0, 100% 100%, 0% 100%);
+}
+
+.footer-content {
+    font-family: 'roboto-light';
+    position: relative;
+    z-index: 2;
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    color: #ffffff;
+    font-size: 14px;
+}
+
+.ankama-logo {
+    height: 60px;
+    width: auto;
+}
+
+.separator {
+    color: #444;
+}
+
+.copy-text a {
+    color: #ffffff;
+    font-weight: bold;
+    text-decoration: none;
+}
+
+.copy-text a:hover {
+    color: #e94e2d;
+}

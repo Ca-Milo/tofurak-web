@@ -1,0 +1,12 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(npx ng:*)",
+      "Bash(node_modules/.bin/ng build:*)",
+      "Bash(sudo node_modules/.bin/ng build)",
+      "Bash(sudo which:*)",
+      "Bash(sudo node:*)",
+      "Read(//root/.nvm/versions/**)"
+    ]
+  }
+}

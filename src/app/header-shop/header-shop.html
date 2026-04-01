@@ -1,0 +1,71 @@
+<header class="shop-header">
+    <div class="header-logo">
+        <a href="/">
+            <img src="../../assets/logo.png" alt="Logo Trefus">
+        </a>
+    </div>
+
+    <div class="header-search-container">
+        <div class="search-wrapper">
+            <div class="search-select">Aermyfus Shop</div>
+            <div class="search-input-box">
+                <input type="text" placeholder="Buscar" autocomplete="off">
+                <button class="search-btn">
+                    <img src="../../assets/shop/search.svg" alt="Buscar">
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <div class="header-right-actions">
+        <div class="cart-container" tabindex="0" routerLink="/shop-cart">
+            <div class="cart-icon"></div>
+            <span class="quantity-badge" *ngIf="totalItems > 0">{{ totalItems }}</span>
+        </div>
+
+        @if (isLoggedIn && user) {
+        <div class="user-logged-container">
+            <div class="user-logged-wrapper" (click)="toggleMenu()">
+                <div class="user-info-details">
+                    <span class="user-nickname">{{ user.apodo || 'Usuario' }}#{{ user.id }}</span>
+                    <div class="user-ogrinas-row">
+                        <span class="user-ogrinas-amount">{{ user.ogrinas | number }}</span>
+                        <img src="../../assets/shop/ogrina.svg" class="ogrinas-svg" alt="G">
+                    </div>
+                </div>
+                <div class="user-avatar-container">
+                    <img src="../../assets/avatar/avatar.png" alt="Usuario" class="user-avatar">
+                </div>
+            </div>
+
+            @if (isMenuOpen) {
+            <div class="user-dropdown-menu">
+                <a href="/manage" class="dropdown-item">
+                    <span class="item-icon icon-user"></span>
+                    <span class="item-text">Gestión de cuenta</span>
+                </a>
+
+                <a href="#" class="dropdown-item">
+                    <span class="item-icon icon-history"></span>
+                    <span class="item-text">Historial de mis pedidos</span>
+                </a>
+
+                <a (click)="logout()" class="dropdown-item">
+                    <span class="item-icon icon-logout"></span>
+                    <span class="item-text">Desconexión</span>
+                </a>
+            </div>
+            }
+        </div>
+        } @else {
+        <a href="/login" class="user-login-wrapper">
+            <span class="login-text">Conectarse</span>
+            <img src="../../assets/shop/account.svg" alt="Usuario" class="user-icon">
+        </a>
+        }
+
+        <!-- <div class="lang-selector">
+            <img src="https://flagcdn.com/w20/es.png" alt="ES">
+        </div> -->
+    </div>
+</header>

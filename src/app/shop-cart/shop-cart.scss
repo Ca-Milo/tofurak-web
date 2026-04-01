@@ -1,0 +1,359 @@
+:host {
+    display: block;
+    font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+    color: #333;
+}
+
+.checkout-wrapper {
+    width: 100%;
+    min-height: calc(100vh - 68px);
+    background-color: #ffffff;
+    margin: 0;
+    border-radius: 0;
+}
+
+.main-container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 40px 20px;
+}
+
+.content-columns {
+    display: flex;
+    gap: 20px;
+}
+
+.cart-section {
+    flex: 1.9;
+    background-color: #e6e6e6;
+    padding: 25px;
+    border-radius: 35px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+    height: 500px;
+    display: flex;
+    flex-direction: column;
+}
+
+.section-title {
+    font-family: 'geomanist-regular';
+    font-size: 1.5rem;
+    margin-bottom: 20px;
+    color: #444;
+    font-weight: 400;
+}
+
+.cart-items-list {
+    flex: 1;
+    overflow-y: auto;
+    padding-right: 15px;
+}
+
+.cart-items-list::-webkit-scrollbar {
+    width: 5px;
+}
+.cart-items-list::-webkit-scrollbar-thumb {
+    background: #888;
+    border-radius: 10px;
+}
+
+.cart-item {
+    background-color: #ffffff;
+    border-radius: 20px;
+    padding: 15px;
+    display: flex;
+    align-items: center;
+    margin-bottom: 12px;
+}
+
+.item-image img {
+    width: 65px;
+    height: 65px;
+    border-radius: 8px;
+    object-fit: cover;
+    margin-right: 15px;
+}
+
+.item-details {
+    font-family: 'roboto-regular';
+    font-size: 1rem;
+    flex: 1;
+    font-weight: 400;
+}
+
+.item-controls {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap:5px;
+}
+
+.quantity-pill {
+    display: flex;
+    align-items: center;
+    background-color: #f2f2f2;
+    border-radius: 25px;
+    padding: 2px 8px;
+    border: 1px solid #ddd;
+}
+
+.btn-qty {
+    background: none;
+    border: none;
+    width: 30px;
+    height: 30px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #666;
+    border-radius: 50%;
+    transition: background-color 0.3s ease;
+    border-radius: 50% !important;
+    transition: background-color 0.3s ease;
+}
+
+.btn-qty:hover {
+    background-color: #000;
+    background-color: #000 !important;
+}
+
+.btn-qty:disabled {
+    opacity: 0.3;
+    cursor: not-allowed;
+    background-color: transparent !important;
+    pointer-events: none;
+}
+
+.qty-svg {
+    width: 15px;
+    height: 15px;
+    filter: brightness(0);
+    opacity: 1;
+    transition: opacity 0.2s, filter 0.2s;
+    transition: filter 0.1s ease; 
+}
+
+.btn-qty:hover .qty-svg { 
+    opacity: 1;
+    filter: invert(1);
+    filter: brightness(0) invert(1);
+}
+
+.qty-value {
+    width: 30px;
+    border: none;
+    background: transparent;
+    text-align: center;
+    font-weight: 600;
+    font-size: 1rem;
+    color: #000;
+    outline: none;
+    -moz-appearance: textfield;
+}
+
+.qty-input::-webkit-inner-spin-button,
+.qty-input::-webkit-outer-spin-button { -webkit-appearance: none; margin: 0; }
+
+.btn-delete {
+    background: none;
+    border: none;
+    cursor: pointer;
+}
+
+.delete-svg {
+    width: 20px;
+    height: 20px;
+    filter: brightness(0);
+    opacity: 0.5;
+    transition: opacity 0.2s;
+}
+
+.delete-svg:hover { opacity: 1; }
+
+.item-price {
+    font-family: 'roboto-bold';
+    flex: 1;
+    text-align: right;
+    font-size: 0.95rem;
+}
+
+.summary-section {
+    flex: 1;
+    background-color: #e6e6e6;
+    padding: 25px;
+    border-radius: 35px;
+    align-self: flex-start;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+    height: 500px;
+}
+
+.summary-title {
+    font-family: 'geomanist-regular';
+    font-weight : 500;
+    font-size: 1.5rem;
+    color: #41403d;
+    margin-bottom: 15px;
+}
+
+.summary-title small {
+    font-size: 0.8rem;
+    font-weight : 100;
+}
+
+.user-badge {
+    background-color: #f2f2f2;
+    padding: 6px 12px;
+    border-radius: 20px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 20px;
+    min-width: 150px;
+}
+
+.avatar {
+    width: 24px;
+    height: 24px;
+    background-color: #000;
+    border-radius: 50%;
+    margin-right: 10px;
+}
+
+.username {
+    font-size: 0.85rem;
+}
+
+.summary-row {
+    display: flex;
+    justify-content: space-between;
+    font-size: 0.85rem;
+    margin-bottom: 10px;
+    color: #555;
+}
+
+.summary-row.total {
+    margin-top: 15px;
+    font-size: 1rem;
+    font-weight: bold;
+    color: #222;
+}
+
+.creator-text {
+    font-size: 0.75rem;
+    color: #777;
+    line-height: 1.4;
+    margin: 20px 0 10px 0;
+}
+
+.creator-input {
+    width: 100%;
+    padding: 10px 15px;
+    border-radius: 25px;
+    border: 1px solid #ccc;
+    background-color: #f9f9f9;
+    font-size: 0.85rem;
+    box-sizing: border-box;
+}
+
+.footer-order-wrapper {
+    background-color: #ffffff;
+    width: 100%;
+    padding: 0 20px 40px 20px;
+    box-sizing: border-box;
+}
+
+.footer-bar {
+    max-width: 1200px;
+    margin: 0 auto;
+    background-color: #d7d7d7;
+    padding: 20px 25px;
+    display: flex;
+    justify-content: flex-end;
+    border-radius: 10px 10px 40px 40px;
+    margin-top: 20px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+}
+
+.btn-order {
+    background-color: #e94e2d;
+    color: white;
+    border: none;
+    padding: 12px 60px;
+    border-radius: 30px;
+    font-weight: bold;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: background 0.2s;
+}
+
+.btn-order:hover {
+    background-color: #d13f23;
+}
+
+.cart-empty {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    min-height: calc(100vh - 68px);
+    padding: 40px 20px;
+    background-color: #ffffff;
+    width: 100%;
+    max-width: none !important;
+    margin: 0 !important;
+    box-sizing: border-box;
+}
+
+.title-payment {
+    font-family: 'geomanist-regular';
+    font-size: 1.5rem;
+    color: #000000;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    margin-bottom: 30px;
+}
+
+.cart-empty img {
+    max-width: 320px;
+    height: auto;
+    margin-bottom: 40px;
+    opacity: 0.9;
+}
+
+.btn-secondary {
+    background-color: #e84229;
+    color: #ffffff;
+    border: 1px solid transparent;
+    padding: 13px 58px;
+    border-radius: 50px;
+    font-family: 'roboto-regular';
+    font-size: 1.2rem;
+    text-transform: uppercase;
+    text-decoration: none;
+    display: inline-block;
+    transition: background-color 0.2s ease, transform 0.1s ease;
+}
+
+.btn-secondary:hover {
+    background-color: #ffffff;
+    color: #e84229;
+    border-color: #e84229;
+    transform: none;
+}
+
+.btn-secondary:active {
+    transform: translateY(1px);
+}
+
+.text-center {
+    text-align: center;
+}
+
+.mt-5 {
+    margin-top: 3rem;
+}
+
+.p-5 {
+    padding: 1rem;
+}

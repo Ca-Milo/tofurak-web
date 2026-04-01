@@ -1,0 +1,109 @@
+<app-header-shop></app-header-shop>
+
+<div class="main-slider-container">
+    <div class="hero-display" [style.background-image]="getSlideBg()" (click)="goToSlideProduct()">
+        @if (slides[activeIndex].title) {
+        <div class="banner-content">
+            <h1 class="banner-title">{{ slides[activeIndex].title }}</h1>
+            <p class="banner-subtitle">{{ slides[activeIndex].text }}</p>
+        </div>
+        }
+    </div>
+    <div class="thumbnail-selector">
+        <div class="thumbs-wrapper">
+            @for (slide of slides; track slide.thumb; let i = $index) {
+            <div class="thumb-item" [class.active]="i === activeIndex" (click)="setSlide(i)">
+                <img [src]="getBannerImgUrl(slide.thumb)" class="thumb-img">
+                <div class="progress-track">
+                    @if (i === activeIndex) {
+                    <div class="active-progress"></div>
+                    }
+                </div>
+            </div>
+            }
+        </div>
+    </div>
+</div>
+
+<div class="content-page">
+    <div class="d-flex">
+        <div class="col">
+            <div class="title title-block">
+                DOFUS Retro
+            </div>
+        </div>
+        <div class="col d-none d-lg-block">
+            <div class="sort-form form-shop">
+                <form method="get">
+                    <label class="form-label required" for="sorts">Ordenar por</label>
+                    <sortable-select>
+                        <select name="sorts" class="js-sortable-select form-select" [(ngModel)]="selectedSort"
+                            (change)="onSortChange()">
+                            <option value="RELEVANCE">Relevancia</option>
+                            <option value="COP_PRICE_ASC">Precios en COP crecientes</option>
+                            <option value="COP_PRICE_DESC">Precios en COP decrecientes</option>
+                            <option value="USD_PRICE_ASC">Precios en USD crecientes</option>
+                            <option value="USD_PRICE_DESC">Precios en USD decrecientes</option>
+                        </select>
+                    </sortable-select>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <div class="shop-container">
+        <aside class="sidebar">
+            <h2 class="total-articles">{{ products.length }} ARTÍCULOS</h2>
+            <ul class="categories-list">
+                <li [class.active]="selectedCategoryId === null" (click)="loadProducts(null)">TODO</li>
+                @for (cat of categories; track cat.id) {
+                <li [class.active]="selectedCategoryId === cat.id" (click)="loadProducts(cat.id)">
+                    {{ cat.nombre }}
+                </li>
+                }
+            </ul>
+        </aside>
+        <main class="products-grid">
+            @for (prod of products; track prod.id) {
+            <div class="product-card" (click)="goToProduct(prod.id)">
+                @if (prod.nuevo || prod.ogrinas > 0) {
+                <div class="product-badges-left">
+                    @if (prod.nuevo) {
+                    <div class="new-label">¡NUEVO!</div>
+                    }
+                    @if (prod.ogrinas > 0) {
+                    <div class="ogrinas-label">{{ getOgrinasBadgeText(prod.ogrinas) }}</div>
+                    }
+                </div>
+                }
+                @if (prod.descuento > 0) {
+                <div class="discount-label">-{{ prod.descuento }}%</div>
+                }
+                <div class="product-image">
+                    <img [src]="getImgUrl(prod.imagen)" [alt]="prod.nombre">
+                </div>
+                <div class="product-info">
+                    <img src="../../assets/shop/dofus-retro.svg" class="egg-icon" alt="icon">
+                    <span class="product-name">{{ prod.nombre }}</span>
+                </div>
+                <div class="product-price">
+                    @if (prod.descuento > 0) {
+                    <div class="price-old">
+                        COP{{ prod.cop | number:'1.0-0' }} o ${{ prod.usd | number:'1.2-2' }} USD
+                    </div>
+                    <div class="price-current">
+                        COP{{ getDiscountedCopPrice(prod.cop, prod.descuento) | number:'1.0-0' }} o
+                        ${{ getDiscountedUsdPrice(prod.usd, prod.descuento) | number:'1.2-2' }} USD
+                    </div>
+                    } @else {
+                    <div class="price-current">
+                        COP{{ prod.cop | number:'1.0-0' }} o ${{ prod.usd | number:'1.2-2' }} USD
+                    </div>
+                    }
+                </div>
+            </div>
+            }
+        </main>
+    </div>
+</div>
+<app-shop-footer></app-shop-footer>

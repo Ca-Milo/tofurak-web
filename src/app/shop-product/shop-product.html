@@ -1,0 +1,168 @@
+<app-header-shop></app-header-shop>
+
+@if (showNotification && product) {
+<div class="cart-notification">
+  <div class="notification-header">
+    <img src="assets/shop/cart.svg" class="cart-icon-notif" alt="Cesta">
+    <h2>{{ isLimitReached ? 'NO SE PUEDE AÑADIR.' : 'ARTÍCULO AÑADIDO A LA CESTA.' }}</h2>
+  </div>
+
+  <div class="notification-body">
+    <div class="product-info-notif">
+      <img [src]="getImgUrl(product.imagen)" [alt]="product.nombre" class="product-thumb">
+      <div class="product-details-notif">
+        <span class="product-name-notif">{{ product.nombre }}</span>
+        @if (isLimitReached) {
+          <p class="limit-error-msg">Se ha alcanzado la cantidad máxima autorizada para este artículo.</p>
+        }
+      </div>
+    </div>
+
+    <div class="notification-actions">
+      <button class="btn-link-notif" (click)="showNotification = false">Seguir comprando</button>
+      <button class="btn-primary-notif" (click)="goToCart()">
+        <img src="assets/shop/cart.svg" class="cart-icon-white" alt="Cesta"> VER MI CESTA.
+      </button>
+    </div>
+  </div>
+</div>
+}
+
+<div class="content-page">
+    <div class="d-flex">
+        <div class="col">
+            <div class="title title-block">Detalles del Producto</div>
+        </div>
+    </div>
+
+    <div class="shop-container">
+        <aside class="sidebar">
+            <h2 class="total-articles">CATEGORÍAS</h2>
+            <ul class="categories-list">
+                <li (click)="goToCategory(null)">TODO</li>
+                @for (cat of categories; track cat.id) {
+                <li (click)="goToCategory(cat.id)">
+                    {{ cat.nombre }}
+                </li>
+                }
+            </ul>
+        </aside>
+
+        <main class="product-detail-view">
+            @if (product) {
+            <div class="product-header">
+                <div class="product-main-image">
+                    <img [src]="getImgUrl(product.imagen)" [alt]="product.nombre">
+                    @if (product.descuento > 0) {
+                    }
+                    @if (product.ogrinas > 0) {
+                    <div class="ogrinas-badge">{{ getOgrinasBadgeText(product.ogrinas) }}</div>
+                    }
+                </div>
+                <div class="product-buy-panel">
+                    <div class="title-section">
+                        <img src="../../assets/shop/dofus-retro.svg" class="game-icon" alt="Dofus Retro">
+                        <h1>{{ product.nombre }}</h1>
+                    </div>
+                    <div class="quantity-price">
+                        <div class="quantity-selector">
+                            <label class="required">Cantidad: </label>
+                            <select class="js-sortable-select" [(ngModel)]="selectedQuantity">
+                                <option [ngValue]="1">1</option>
+                                <option [ngValue]="2">2</option>
+                                <option [ngValue]="3">3</option>
+                                <option [ngValue]="4">4</option>
+                                <option [ngValue]="5">5</option>
+                            </select>
+                        </div>
+                        <div class="price-display">
+                            @if (product.descuento > 0) {
+                            <span class="price-old-amount">COP{{ product.cop | number:'1.0-0' }}</span>
+                            <span class="price-separator">o</span>
+                            <span class="price-old-amount">${{ product.usd | number:'1.0-0' }} USD</span>
+                            <span class="price-amount">COP{{ getDiscountedPrice(product.cop, product.descuento) | number:'1.0-0' }}</span>
+                            <span class="price-separator">o</span>
+                            <span class="price-amount">${{ getDiscountedPrice(product.usd, product.descuento) | number:'1.0-0' }} USD</span>
+                            } @else {
+                            <span class="price-amount">COP{{ product.cop | number:'1.0-0' }}</span>
+                            <span class="price-separator">o</span>
+                            <span class="price-amount">${{ product.usd | number:'1.0-0' }} USD</span>
+                            }
+                        </div>
+                    </div>
+
+                    <div class="action-buttons">
+                        <button class="btn-cart" (click)="addToCart()">
+                            <img src="assets/shop/cart.svg" alt="Cesta" class="button-icon"> <span>AÑADIR A LA
+                                CESTA.</span>
+                        </button>
+                        <button class="btn-direct">
+                            <img src="assets/shop/fast-cart.svg" alt="Compra Directa" class="button-icon"> <span>COMPRA
+                                DIRECTA</span>
+                        </button>
+                    </div>
+
+                    @if (product.descripcion) {
+                    <a (click)="scrollToDetails()" class="view-details">Ver todos los detalles</a>
+                    }
+
+                    <div class="info-box info-blue">
+                        <span class="box-label">Información</span>
+                        <p>Este articulo puede estar sujeto a cambios sin previo aviso.<br>
+                            La precios, o cantidad de articulos de cada paquete podría ser modificada,
+                            asi mismo como la disponibilidad.</p>
+                    </div>
+
+                    <div class="info-box info-green">
+                        <span class="box-label">¡Código de creador!</span>
+                        <p>Al comprar este producto, tienes la oportunidad de apoyar a un creador de contenido afiliado.
+                        </p>
+                    </div>
+                </div>
+            </div>
+
+            @if (compositionItems && compositionItems.length > 0) {
+            <div class="section-title">
+                <div class="title-block"></div>
+                COMPOSICIÓN
+            </div>
+
+             <div class="composition-content">
+                <div class="choice-items">
+                    @for (item of compositionItems; track item.id) {
+                    <div class="new_choice-item">
+                        <div class="custom-tooltip">
+                            <strong>{{ item.nombre }}</strong>
+                            @if (item.descripcion && item.descripcion !== '') {
+                                <div class="tooltip-desc">{{ item.descripcion }}</div>
+                            }
+                        </div>
+                        <div class="img-container">
+                            <img class="img-fluid" [src]="item.url_imagen" [alt]="item.nombre">
+                        </div>
+                        <div class="item-label">{{ item.nombre }}</div>
+                    </div>
+                    }
+                </div>
+            </div>
+            }
+
+            @if (product.descripcion) {
+            <div class="section-title" id="detailsSection">
+                <div class="title-block"></div>
+                DETALLES
+            </div>
+            <div class="details-content">
+                <div [innerHTML]="product.descripcion"></div>
+            </div>
+            }
+            } @else if (isLoading) {
+            <div class="loading-message">Cargando producto...</div>
+            } @else {
+            <div class="error-message">No se pudo encontrar el producto.</div>
+            }
+        </main>
+    </div>
+</div>
+
+<app-shop-footer></app-shop-footer>

@@ -15,6 +15,9 @@ import { ProfileComponent } from './profile/profile';
 import { authGuard } from './guards/auth.guard';
 import { Guide } from './guide/guide';
 import { GuideComplete } from './guide-complete/guide-complete';
+import { Shop } from './shop/shop';
+import { ShopCart } from './shop-cart/shop-cart';
+import { ShopProductComponent } from './shop-product/shop-product';
 
 
 
@@ -58,6 +61,21 @@ export const routes: Routes = [
     data: { animation: 'EventoPage'}
   },
 
+  {
+  path: 'shop',
+  component: Shop,
+  data: { animation: 'ShopPage' }
+},
+{
+  path: 'shop-cart',
+  component: ShopCart,
+  data: { animation: 'ShopCartPage' }
+},
+{
+  path: 'shop-product/:id',
+  component: ShopProductComponent,
+  data: { animation: 'ShopProductPage' }
+},
   /*{
   path: 'tienda',
   component: Tienda,
