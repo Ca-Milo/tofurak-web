@@ -9,8 +9,14 @@
         <div class="search-wrapper">
             <div class="search-select">Aermyfus Shop</div>
             <div class="search-input-box">
-                <input type="text" placeholder="Buscar" autocomplete="off">
-                <button class="search-btn">
+                <input
+                    #searchInput
+                    type="text"
+                    placeholder="Buscar productos"
+                    autocomplete="off"
+                    [value]="searchTerm"
+                    (keyup.enter)="submitSearch(searchInput.value)">
+                <button class="search-btn" type="button" (click)="submitSearch(searchInput.value)">
                     <img src="../../assets/shop/search.svg" alt="Buscar">
                 </button>
             </div>

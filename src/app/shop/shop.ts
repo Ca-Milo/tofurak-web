@@ -1,7 +1,9 @@
-import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
+import { ChangeDetectorRef, Component, OnDestroy, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
+import { Subject } from 'rxjs';
+import { takeUntil } from 'rxjs/operators';
 import { HeaderShop } from '../header-shop/header-shop';
 import { ShopFooter } from '../shop-footer/shop-footer';
 import { ShopService, ShopProduct, ShopCategory, ShopBanner } from '../services/shop.service';
@@ -14,17 +16,21 @@ import { SortableSelect } from './sortable-select';
   templateUrl: './shop.html',
   styleUrl: './shop.scss',
 })
-export class Shop implements OnInit {
+export class Shop implements OnInit, OnDestroy {
   slides: ShopBanner[] = [
   ];
  
   activeIndex = 0;
   private slideTimer: any;
 
+  allProducts: ShopProduct[] = [];
   products: ShopProduct[] = [];
   categories: ShopCategory[] = [];
   selectedCategoryId: number | null = null;
   selectedSort = 'RELEVANCE';
+  searchTerm = '';
+
+  private destroy$ = new Subject<void>();
 
   constructor(
     private shopService: ShopService,
@@ -36,11 +42,23 @@ export class Shop implements OnInit {
   ngOnInit(): void {
     this.loadBanners();
     this.loadCategories();
-    const rawCategoryId = this.route.snapshot.queryParamMap.get('categoria');
-    const parsedCategoryId = rawCategoryId !== null ? Number(rawCategoryId) : NaN;
-    this.selectedCategoryId = Number.isNaN(parsedCategoryId) ? null : parsedCategoryId;
-    this.loadProducts(this.selectedCategoryId);
+    this.route.queryParamMap.pipe(takeUntil(this.destroy$)).subscribe(params => {
+      const rawCategoryId = params.get('categoria');
+      const parsedCategoryId = rawCategoryId !== null ? Number(rawCategoryId) : NaN;
+      this.selectedCategoryId = Number.isNaN(parsedCategoryId) ? null : parsedCategoryId;
+      this.searchTerm = (params.get('buscar') ?? '').trim().toLowerCase();
+      if (this.allProducts.length > 0) {
+        this.applyProductFilters();
+      }
+    });
+    this.loadProducts();
     this.startSlider();
+  }
+
+  ngOnDestroy(): void {
+    this.destroy$.next();
+    this.destroy$.complete();
+    clearInterval(this.slideTimer);
   }
 
   getSlideBg(): string {
@@ -66,16 +84,26 @@ export class Shop implements OnInit {
       : `assets/shop/${path}`;
   }
 
-  loadProducts(categoryId: number | null): void {
-    this.selectedCategoryId = categoryId;
-    this.shopService.getProducts(categoryId, this.selectedSort).subscribe({
+  loadProducts(categoryId?: number | null): void {
+    if (categoryId !== undefined) {
+      this.selectedCategoryId = categoryId;
+    }
+
+    if (this.allProducts.length > 0) {
+      this.applyProductFilters();
+      return;
+    }
+
+    this.shopService.getProducts().subscribe({
       next: data => {
         console.log('[Shop] products:', data);
-        this.products = data;
+        this.allProducts = data;
+        this.applyProductFilters();
         this.refreshView();
       },
       error: err => {
         console.error('[Shop] products error:', err);
+        this.allProducts = [];
         this.products = [];
         this.refreshView();
       },
@@ -83,7 +111,7 @@ export class Shop implements OnInit {
   }
 
   onSortChange(): void {
-    this.loadProducts(this.selectedCategoryId);
+    this.applyProductFilters();
   }
 
   goToProduct(id: number): void {
@@ -145,10 +173,79 @@ export class Shop implements OnInit {
     queueMicrotask(() => this.cdr.detectChanges());
   }
 
+  private applyProductFilters(): void {
+    const filteredProducts = this.allProducts.filter(product =>
+      this.matchesSelectedCategory(product) && this.matchesSearchTerm(product),
+    );
+
+    this.products = this.sortProducts(filteredProducts, this.selectedSort);
+    this.refreshView();
+  }
+
+  private matchesSelectedCategory(product: ShopProduct): boolean {
+    if (this.selectedCategoryId === null) {
+      return true;
+    }
+
+    const selectedCategory = this.categories.find(category => category.id === this.selectedCategoryId);
+    const normalizedProductCategory = String(product.categoria ?? '').trim().toLowerCase();
+    const normalizedSelectedCategoryName = String(selectedCategory?.nombre ?? '').trim().toLowerCase();
+
+    return (
+      product.categoriaId === this.selectedCategoryId ||
+      product.categoria === this.selectedCategoryId ||
+      normalizedProductCategory === String(this.selectedCategoryId) ||
+      (!!normalizedSelectedCategoryName && normalizedProductCategory === normalizedSelectedCategoryName)
+    );
+  }
+
+  private matchesSearchTerm(product: ShopProduct): boolean {
+    if (!this.searchTerm) {
+      return true;
+    }
+
+    const normalizedName = String(product.nombre ?? '').trim().toLowerCase();
+    return normalizedName.includes(this.searchTerm);
+  }
+
+  private sortProducts(products: ShopProduct[], sort: string): ShopProduct[] {
+    const sortedProducts = [...products];
+
+    switch (sort) {
+      case 'COP_PRICE_ASC':
+        return sortedProducts.sort(
+          (a, b) =>
+            this.getDiscountedCopPrice(a.cop, a.descuento) -
+            this.getDiscountedCopPrice(b.cop, b.descuento),
+        );
+      case 'COP_PRICE_DESC':
+        return sortedProducts.sort(
+          (a, b) =>
+            this.getDiscountedCopPrice(b.cop, b.descuento) -
+            this.getDiscountedCopPrice(a.cop, a.descuento),
+        );
+      case 'USD_PRICE_ASC':
+        return sortedProducts.sort(
+          (a, b) =>
+            this.getDiscountedUsdPrice(a.usd, a.descuento) -
+            this.getDiscountedUsdPrice(b.usd, b.descuento),
+        );
+      case 'USD_PRICE_DESC':
+        return sortedProducts.sort(
+          (a, b) =>
+            this.getDiscountedUsdPrice(b.usd, b.descuento) -
+            this.getDiscountedUsdPrice(a.usd, a.descuento),
+        );
+      default:
+        return sortedProducts;
+    }
+  }
+
   private startSlider(): void {
     if (this.slides.length <= 1) return;
     this.slideTimer = setInterval(() => {
       this.activeIndex = (this.activeIndex + 1) % this.slides.length;
+      this.refreshView();
     }, 5000);
   }
 

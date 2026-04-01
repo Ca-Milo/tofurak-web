@@ -20,6 +20,7 @@ export interface ShopProduct {
   ogrinas: number;
   nuevo: boolean;
   descripcion?: string;
+  categoria?: number | string | null;
   categoriaId?: number | null;
 }
 
@@ -123,6 +124,7 @@ export class ShopService {
       ogrinas: Number(item?.ogrinas ?? item?.ogrines ?? item?.extra_ogrinas ?? 0),
       nuevo: Boolean(item?.nuevo ?? item?.is_new ?? item?.nuevo_producto ?? false),
       descripcion: item?.descripcion ?? item?.description ?? '',
+      categoria: item?.categoria ?? item?.category ?? item?.nombre_categoria ?? null,
       categoriaId: item?.categoriaId ?? item?.categoria_id ?? item?.categoryId ?? item?.category_id ?? null,
     };
   }
