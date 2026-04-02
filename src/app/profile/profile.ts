@@ -1,6 +1,7 @@
 import { Component, OnDestroy, OnInit, ChangeDetectorRef } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ReactiveFormsModule, FormBuilder, Validators, FormGroup } from '@angular/forms';
+import { RouterModule } from '@angular/router';
 import { Header } from '../header/header';
 import { Footer } from '../footer/footer';
 import { Hart, User } from '../services/hart';
@@ -11,7 +12,7 @@ import Swal from 'sweetalert2';
 @Component({
   selector: 'app-profile',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule, Header, Footer],
+  imports: [CommonModule, ReactiveFormsModule, RouterModule, Header, Footer],
   templateUrl: './profile.html',
   styleUrls: ['./profile.scss'],
 })
@@ -26,6 +27,7 @@ export class ProfileComponent implements OnInit, OnDestroy {
   currentUser: User = {
     id: '',
     cuenta: '',
+    rango: 0,
     email: '',
     apodo: '',
     lastIP: '', 
@@ -182,6 +184,10 @@ export class ProfileComponent implements OnInit, OnDestroy {
     }
 
     return `Hasta ${new Date(expiryMs).toLocaleString('es-ES')}`;
+  }
+
+  hasAdminAccess(): boolean {
+    return Number(this.currentUser?.rango ?? 0) >= 2;
   }
 
   private getRemainingSubscriptionMs(): number {

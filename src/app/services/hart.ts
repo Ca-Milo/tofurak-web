@@ -8,6 +8,9 @@ import { API_BASE } from './api.constants';
 export interface User {
   id: string;
   cuenta: string;
+  rango?: number;
+  rank?: number;
+  module?: number | string;
 
   apodo?: string;
   abono?: number;
@@ -129,10 +132,11 @@ export class Hart {
     return this.http.post<AuthResponse>(`${this.apiUrl}/auth/register`, payload).pipe(
       tap(response => {
         if (response.success && response.token) {
+          const normalizedUser = this.normalizeUser(response.data);
           this.saveToken(response.token);
-          this.saveUser(response.data);
+          this.saveUser(normalizedUser);
           this.authStatusSubject.next(true);
-          this.currentUserSubject.next(response.data);
+          this.currentUserSubject.next(normalizedUser);
         }
       }),
       catchError(error => this.handleError(error))
@@ -149,10 +153,11 @@ export class Hart {
     }).pipe(
       tap(response => {
         if (response.success && response.token) {
+          const normalizedUser = this.normalizeUser(response.data);
           this.saveToken(response.token);
-          this.saveUser(response.data);
+          this.saveUser(normalizedUser);
           this.authStatusSubject.next(true);
-          this.currentUserSubject.next(response.data);
+          this.currentUserSubject.next(normalizedUser);
         }
       }),
       catchError(error => this.handleError(error))
@@ -167,8 +172,9 @@ export class Hart {
     return this.http.get<{ success: boolean; data: User }>(`${this.apiUrl}/account/profile`, { headers }).pipe(
       tap((response) => {
         if (response?.success && response?.data) {
-          this.saveUser(response.data);
-          this.currentUserSubject.next(response.data);
+          const normalizedUser = this.normalizeUser(response.data);
+          this.saveUser(normalizedUser);
+          this.currentUserSubject.next(normalizedUser);
           this.authStatusSubject.next(true);
         }
       }),
@@ -188,8 +194,9 @@ export class Hart {
     ).pipe(
       tap((response) => {
         if (response?.success && response?.data) {
-          this.saveUser(response.data);
-          this.currentUserSubject.next(response.data);
+          const normalizedUser = this.normalizeUser(response.data);
+          this.saveUser(normalizedUser);
+          this.currentUserSubject.next(normalizedUser);
         }
       }),
       catchError(error => this.handleError(error))
@@ -208,8 +215,9 @@ export class Hart {
     ).pipe(
       tap((response) => {
         if (response?.success && response?.data) {
-          this.saveUser(response.data);
-          this.currentUserSubject.next(response.data);
+          const normalizedUser = this.normalizeUser(response.data);
+          this.saveUser(normalizedUser);
+          this.currentUserSubject.next(normalizedUser);
         }
       }),
       catchError(error => this.handleError(error))
@@ -377,7 +385,7 @@ export class Hart {
         next: (response) => {
           if (response.success) {
             // Token válido, actualizar datos si cambiaron
-            this.currentUserSubject.next(response.data);
+            this.currentUserSubject.next(this.normalizeUser(response.data));
           } else {
             // Token no válido, cerrar sesión
             this.logout();
@@ -427,7 +435,24 @@ export class Hart {
    */
   private getStoredUser(): User | null {
     const user = localStorage.getItem(this.userKey);
-    return user ? JSON.parse(user) : null;
+    return user ? this.normalizeUser(JSON.parse(user)) : null;
+  }
+
+  private normalizeUser(user: User | null | undefined): User {
+    const normalized = (user ?? {}) as User & {
+      rank?: number | string;
+      rango?: number | string;
+      module?: number | string;
+    };
+    const rankValue = Number(normalized.rango ?? normalized.rank ?? 0);
+    const moduleValue = Number(normalized.module ?? 0);
+
+    return {
+      ...normalized,
+      rango: Number.isNaN(rankValue) ? 0 : rankValue,
+      rank: Number.isNaN(rankValue) ? 0 : rankValue,
+      module: Number.isNaN(moduleValue) ? 0 : moduleValue,
+    };
   }
 
   /**

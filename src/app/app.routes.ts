@@ -19,6 +19,13 @@ import { Shop } from './shop/shop';
 import { ShopCart } from './shop-cart/shop-cart';
 import { ShopProductComponent } from './shop-product/shop-product';
 import { ShopPaymentResult } from './shop-payment-result/shop-payment-result';
+import { ShopOrderHistory } from './shop-order-history/shop-order-history';
+import { AdminLayout } from './admin/admin-layout';
+import { AdminPlaceholder } from './admin/admin-placeholder';
+import { adminGuard } from './guards/admin.guard';
+import { AdminPurchases } from './admin/admin-purchases';
+import { AdminAffiliateLiquidations } from './admin/admin-affiliate-liquidations';
+import { ReferidosComponent } from './referidos/referidos';
 
 
 
@@ -73,6 +80,16 @@ export const routes: Routes = [
   data: { animation: 'ShopCartPage' }
 },
 {
+  path: 'shop-history',
+  component: ShopOrderHistory,
+  data: { animation: 'ShopHistoryPage' }
+},
+{
+  path: 'referidos',
+  component: ReferidosComponent,
+  data: { animation: 'ReferidosPage' }
+},
+{
   path: 'shop-product/:id',
   component: ShopProductComponent,
   data: { animation: 'ShopProductPage' }
@@ -91,6 +108,86 @@ export const routes: Routes = [
   path: 'shop/payment/pending',
   component: ShopPaymentResult,
   data: { animation: 'ShopPaymentPendingPage', status: 'pending' }
+},
+{
+  path: 'admin',
+  component: AdminLayout,
+  canActivate: [adminGuard],
+  children: [
+    {
+      path: '',
+      pathMatch: 'full',
+      redirectTo: 'compras',
+    },
+    {
+      path: 'compras',
+      component: AdminPurchases,
+      data: {
+        animation: 'AdminComprasPage',
+      },
+    },
+    {
+      path: 'codigos',
+      component: AdminPlaceholder,
+      data: {
+        animation: 'AdminCodigosPage',
+        title: 'Codigos & Afiliados',
+        description: 'Modulo listo para migrar la gestion de codigos promocionales y afiliados.',
+      },
+    },
+    {
+      path: 'liquidaciones',
+      component: AdminAffiliateLiquidations,
+      data: {
+        animation: 'AdminLiquidacionesPage',
+      },
+    },
+    {
+      path: 'ventas/diarias',
+      component: AdminPlaceholder,
+      data: {
+        animation: 'AdminVentasDiariasPage',
+        title: 'Ventas Diarias',
+        description: 'Vista preparada para mostrar el consolidado de ventas por dia.',
+      },
+    },
+    {
+      path: 'clientes',
+      component: AdminPlaceholder,
+      data: {
+        animation: 'AdminClientesPage',
+        title: 'Top Clientes',
+        description: 'Este modulo mostrara el ranking y analitica de clientes principales.',
+      },
+    },
+    {
+      path: 'logs/intercambios',
+      component: AdminPlaceholder,
+      data: {
+        animation: 'AdminLogsIntercambiosPage',
+        title: 'Logs Intercambios',
+        description: 'Seccion reservada para los logs nuevos de intercambios.',
+      },
+    },
+    {
+      path: 'intercambios',
+      component: AdminPlaceholder,
+      data: {
+        animation: 'AdminIntercambiosOldPage',
+        title: 'Logs Intercambios (OLD)',
+        description: 'Aqui migramos la version antigua del modulo de intercambios.',
+      },
+    },
+    {
+      path: 'logs',
+      component: AdminPlaceholder,
+      data: {
+        animation: 'AdminLogsPage',
+        title: 'Logs Servidor',
+        description: 'Modulo base para explorar y administrar los logs del servidor.',
+      },
+    },
+  ],
 },
   /*{
   path: 'tienda',

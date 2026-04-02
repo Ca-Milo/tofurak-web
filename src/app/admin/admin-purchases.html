@@ -1,0 +1,123 @@
+<div class="admin-purchases-shell">
+  <div class="dashboard-grid">
+    <div class="stat-card card-total">
+      <div class="stat-icon">#</div>
+      <div class="stat-info">
+        <h4>Ventas Totales</h4>
+        <p>{{ getStatValue('total') | number:'1.0-0' }}</p>
+      </div>
+    </div>
+
+    <div class="stat-card card-mp">
+      <div class="stat-icon">MP</div>
+      <div class="stat-info">
+        <h4>Mercado Pago</h4>
+        <p>{{ getStatValue('mercado_pago') | number:'1.0-0' }}</p>
+      </div>
+    </div>
+
+    <div class="stat-card card-wp">
+      <div class="stat-icon">WM</div>
+      <div class="stat-info">
+        <h4>Wompi</h4>
+        <p>{{ getStatValue('wompi') | number:'1.0-0' }}</p>
+      </div>
+    </div>
+
+    <div class="stat-card card-pp">
+      <div class="stat-icon">PP</div>
+      <div class="stat-info">
+        <h4>PayPal</h4>
+        <p>{{ getStatValue('paypal') | number:'1.0-0' }}</p>
+      </div>
+    </div>
+  </div>
+
+  <form class="search-box" (ngSubmit)="loadPurchases()">
+    <input
+      type="text"
+      name="q"
+      placeholder="Buscar por Nombre de Cuenta o ID..."
+      [(ngModel)]="searchTerm">
+    <button type="submit">Buscar</button>
+    @if (searchTerm.trim()) {
+    <button type="button" class="btn-clear" (click)="clearSearch()">Limpiar</button>
+    }
+  </form>
+
+  @if (loading) {
+  <div class="state-card">
+    <h2>Cargando compras...</h2>
+    <p>Estamos trayendo el panel administrativo.</p>
+  </div>
+  } @else if (errorMessage) {
+  <div class="state-card state-error">
+    <h2>No se pudo cargar</h2>
+    <p>{{ errorMessage }}</p>
+    <button type="button" (click)="loadPurchases()">Reintentar</button>
+  </div>
+  } @else {
+  <div class="history-card">
+    <table class="admin-table">
+      <thead>
+        <tr>
+          <th>Fecha</th>
+          <th>Usuario</th>
+          <th>Pasarela</th>
+          <th>Ref</th>
+          <th>Compra</th>
+          <th>Cupon</th>
+          <th>Total</th>
+          <th>Estado</th>
+        </tr>
+        <tr class="filter-row">
+          <th><input class="column-filter" [ngModel]="columnFilters[0]" (ngModelChange)="updateColumnFilter(0, $event)" [ngModelOptions]="{standalone: true}" placeholder="Filtrar Fecha..."></th>
+          <th><input class="column-filter" [ngModel]="columnFilters[1]" (ngModelChange)="updateColumnFilter(1, $event)" [ngModelOptions]="{standalone: true}" placeholder="Filtrar Usuario..."></th>
+          <th><input class="column-filter" [ngModel]="columnFilters[2]" (ngModelChange)="updateColumnFilter(2, $event)" [ngModelOptions]="{standalone: true}" placeholder="Filtrar Metodo..."></th>
+          <th><input class="column-filter" [ngModel]="columnFilters[3]" (ngModelChange)="updateColumnFilter(3, $event)" [ngModelOptions]="{standalone: true}" placeholder="Filtrar Ref..."></th>
+          <th><input class="column-filter" [ngModel]="columnFilters[4]" (ngModelChange)="updateColumnFilter(4, $event)" [ngModelOptions]="{standalone: true}" placeholder="Filtrar Prod..."></th>
+          <th><input class="column-filter" [ngModel]="columnFilters[5]" (ngModelChange)="updateColumnFilter(5, $event)" [ngModelOptions]="{standalone: true}" placeholder="Filtrar Cupon..."></th>
+          <th><input class="column-filter" [ngModel]="columnFilters[6]" (ngModelChange)="updateColumnFilter(6, $event)" [ngModelOptions]="{standalone: true}" placeholder="Filtrar Total..."></th>
+          <th><input class="column-filter" [ngModel]="columnFilters[7]" (ngModelChange)="updateColumnFilter(7, $event)" [ngModelOptions]="{standalone: true}" placeholder="Filtrar Estado..."></th>
+        </tr>
+      </thead>
+      <tbody>
+        @for (row of visibleRows; track trackByReference($index, row)) {
+        <tr>
+          <td class="nowrap">{{ formatDate(row.createdAt) }}</td>
+          <td>
+            <span class="user-badge">{{ row.userAccount || ('ID: ' + row.userId) }}</span>
+            <div class="user-id">ID: {{ row.userId }}</div>
+          </td>
+          <td class="method-cell">{{ row.method }}</td>
+          <td class="ref-cell">{{ row.reference }}</td>
+          <td>
+            <div class="cart-list">
+              @for (product of row.products; track product.productId + '-' + product.quantity + '-' + product.name) {
+              <div class="cart-item-simple">
+                <span class="qty">{{ product.quantity }}x</span>
+                <span>{{ product.name }}</span>
+              </div>
+              }
+            </div>
+          </td>
+          <td>
+            @if (row.promoCode) {
+            <span class="promo-tag">{{ row.promoCode }}</span>
+            } @else {
+            <span class="promo-empty">----</span>
+            }
+          </td>
+          <td class="nowrap total-cell">{{ formatTotal(row) }}</td>
+          <td><span [class]="getStatusClass(row.status)">{{ row.status }}</span></td>
+        </tr>
+        } @empty {
+        <tr>
+          <td colspan="8" class="empty-row">No hay compras que coincidan con los filtros actuales.</td>
+        </tr>
+        }
+      </tbody>
+    </table>
+  </div>
+  }
+</div>

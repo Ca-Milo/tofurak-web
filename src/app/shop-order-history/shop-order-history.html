@@ -1,0 +1,104 @@
+<app-header-shop></app-header-shop>
+
+<section class="history-page">
+  <div class="history-shell">
+    <div class="history-heading">
+      <div>
+        <p class="eyebrow">Tienda</p>
+        <h1>Historial de pedidos</h1>
+        <p class="subtitle">Consulta tus compras recientes y el detalle de cada pedido.</p>
+      </div>
+
+      <div class="heading-actions">
+        <button type="button" class="refresh-button" (click)="loadOrders()" [disabled]="loading">
+          {{ loading ? 'Actualizando...' : 'Actualizar historial' }}
+        </button>
+        <a routerLink="/shop" class="back-link">Volver a la tienda</a>
+      </div>
+    </div>
+
+    @if (loading) {
+    <div class="history-state-card">
+      <div class="state-icon">...</div>
+      <h2>Cargando historial</h2>
+      <p>Estamos reuniendo tus pedidos.</p>
+    </div>
+    } @else if (errorMessage) {
+    <div class="history-state-card">
+      <div class="state-icon">!</div>
+      <h2>No se pudo cargar</h2>
+      <p>{{ errorMessage }}</p>
+      <button type="button" class="retry-button" (click)="loadOrders()">Reintentar</button>
+    </div>
+    } @else if (orders.length === 0) {
+    <div class="history-state-card">
+      <div class="state-icon">0</div>
+      <h2>Aun no tienes compras registradas</h2>
+      <p>Cuando completes tu primer pedido lo veras aqui.</p>
+    </div>
+    } @else {
+    <div class="history-table-card">
+      <div class="history-toolbar">
+        <span class="results-count">{{ orders.length }} compras exitosas</span>
+      </div>
+
+      <div class="history-table-head">
+        <span>Fecha</span>
+        <span>Metodo</span>
+        <span>Contenido</span>
+        <span>Total pagado</span>
+        <span>Estado</span>
+      </div>
+
+      <div class="history-table-body">
+        @for (order of orders; track trackByReference($index, order)) {
+        <article class="history-row">
+          <div class="history-col date-col">
+            <strong>{{ formatDate(order.createdAt) }}</strong>
+            <span>{{ formatTime(order.createdAt) }}</span>
+          </div>
+
+          <div class="history-col method-col">
+            <div class="method-meta">
+              <div class="method-pill" [class]="getMethodClass(order)">
+                <span class="method-short">{{ getMethodShortLabel(order) }}</span>
+                <span>{{ order.methodLabel }}</span>
+              </div>
+              <div class="reference-chip">
+                <span class="reference-label">Ref</span>
+                <span class="reference-value">{{ order.reference }}</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="history-col items-col">
+            @if (order.products.length > 0) {
+            <div class="items-list">
+              @for (product of order.products; track product.productId + '-' + product.quantity + '-' + product.name) {
+              <div class="item-row">
+                <span class="qty-badge">{{ product.quantity }}x</span>
+                <span class="item-name">{{ product.name }}</span>
+              </div>
+              }
+            </div>
+            } @else {
+            <span class="empty-detail">Sin detalles</span>
+            }
+          </div>
+
+          <div class="history-col total-col">
+            <strong>{{ formatAmount(order) }}</strong>
+          </div>
+
+          <div class="history-col status-col">
+            <span [class]="getStatusClass(order)">{{ order.statusLabel }}</span>
+          </div>
+        </article>
+        }
+      </div>
+    </div>
+    }
+  </div>
+</section>
+
+<app-shop-footer></app-shop-footer>

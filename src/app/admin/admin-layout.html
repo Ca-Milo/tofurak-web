@@ -1,0 +1,41 @@
+<section class="admin-shell">
+  <header class="admin-header">
+    <div class="admin-header-left">
+      <button type="button" class="shop-link" (click)="goBackToShop()">Tienda</button>
+      <span class="admin-badge">ADMIN</span>
+    </div>
+
+    <button
+      type="button"
+      class="mobile-menu-btn"
+      (click)="toggleMobileMenu()"
+      aria-label="Abrir menu admin"
+      [attr.aria-expanded]="isMobileMenuOpen">
+      {{ isMobileMenuOpen ? '×' : '☰' }}
+    </button>
+
+    <nav class="admin-nav" [class.show]="isMobileMenuOpen">
+      @for (item of menuItems; track item.route) {
+      <a
+        [routerLink]="item.route"
+        routerLinkActive="active"
+        class="admin-link"
+        (click)="closeMobileMenu()">
+        {{ item.label }}
+      </a>
+      }
+
+      <div class="mobile-balance">
+        Wompi Disp: <b>{{ wompiDisponibleText }}</b>
+      </div>
+    </nav>
+
+    <div class="user-actions">
+      <span>Wompi Disp: <b>{{ wompiDisponibleText }}</b></span>
+    </div>
+  </header>
+
+  <main class="admin-content">
+    <router-outlet></router-outlet>
+  </main>
+</section>

@@ -17,6 +17,15 @@
       <div class="err" *ngIf="msgErr">{{ msgErr }}</div>
     </div>
 
+    <div class="admin-entry-card" *ngIf="hasAdminAccess()">
+      <div>
+        <span class="admin-entry-kicker">Acceso especial</span>
+        <h2>Panel administrativo</h2>
+        <p>Tienes permisos de administracion. Desde aqui puedes entrar a los modulos de control.</p>
+      </div>
+      <a routerLink="/admin" class="btn-admin-entry">Abrir panel admin</a>
+    </div>
+
     <div class="account-wrapper">
 
       <!-- DATOS -->

@@ -1,0 +1,103 @@
+<div class="liquidations-shell">
+  @if (loading) {
+  <div class="state-card">
+    <h2>Cargando liquidaciones...</h2>
+    <p>Estamos reuniendo los cortes de afiliados.</p>
+  </div>
+  } @else if (errorMessage) {
+  <div class="state-card state-error">
+    <h2>No se pudo cargar</h2>
+    <p>{{ errorMessage }}</p>
+    <button type="button" (click)="loadLiquidations()">Reintentar</button>
+  </div>
+  } @else {
+  <section class="section-block">
+    <div class="section-title danger">
+      <h2>Liquidaciones Pendientes de Pago</h2>
+    </div>
+
+    <div class="table-card">
+      <table class="liquidations-table">
+        <thead>
+          <tr>
+            <th>Codigo Afiliado</th>
+            <th>Corte a Pagar</th>
+            <th>Rango de Ventas</th>
+            <th>Ventas</th>
+            <th>Total Neto</th>
+            <th>Comision (A Transferir)</th>
+            <th>Accion</th>
+          </tr>
+        </thead>
+        <tbody>
+          @for (row of pendingRows; track trackByRow($index, row)) {
+          <tr>
+            <td>
+              <strong class="affiliate-code">{{ row.codigo }}</strong>
+              <div class="affiliate-meta">Cuenta ID: {{ row.cuentaId }} ({{ row.porcentaje }}%)</div>
+            </td>
+            <td><b class="danger-text">{{ row.diaPagoTexto }}</b></td>
+            <td class="muted small">{{ row.rangoTexto }}</td>
+            <td><span class="sales-pill">{{ row.ventasTotal }}</span></td>
+            <td>
+              <div class="cop-line">COP: {{ formatCop(row.netoCop) }}</div>
+              <div class="usd-line">USD: {{ formatUsd(row.netoUsd) }}</div>
+            </td>
+            <td class="commission">{{ formatCop(row.comisionAPagar) }}</td>
+            <td>
+              <button type="button" class="btn-pay" (click)="markAsPaid(row)" [disabled]="isProcessing(row)">
+                {{ isProcessing(row) ? 'Procesando...' : 'Marcar Pagado' }}
+              </button>
+            </td>
+          </tr>
+          } @empty {
+          <tr>
+            <td colspan="7" class="empty-row">No hay cortes pendientes por pagar. Todo esta al dia.</td>
+          </tr>
+          }
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <section class="section-block">
+    <div class="section-title success">
+      <h2>Historial de Pagos Realizados</h2>
+    </div>
+
+    <div class="table-card">
+      <table class="liquidations-table">
+        <thead>
+          <tr>
+            <th>Codigo Afiliado</th>
+            <th>Corte Pagado</th>
+            <th>Rango de Ventas</th>
+            <th>Ventas</th>
+            <th>Comision Pagada</th>
+            <th>Estado</th>
+          </tr>
+        </thead>
+        <tbody>
+          @for (row of paidRows; track trackByRow($index, row)) {
+          <tr class="paid-row">
+            <td>
+              <strong>{{ row.codigo }}</strong>
+              <div class="affiliate-meta">Cuenta ID: {{ row.cuentaId }}</div>
+            </td>
+            <td><b>{{ row.diaPagoTexto }}</b></td>
+            <td class="muted small">{{ row.rangoTexto }}</td>
+            <td>{{ row.ventasTotal }}</td>
+            <td class="paid-amount">{{ formatCop(row.comisionAPagar) }}</td>
+            <td><span class="badge bg-paid">Pagado</span></td>
+          </tr>
+          } @empty {
+          <tr>
+            <td colspan="6" class="empty-row">Aun no se ha registrado ningun pago en el sistema.</td>
+          </tr>
+          }
+        </tbody>
+      </table>
+    </div>
+  </section>
+  }
+</div>

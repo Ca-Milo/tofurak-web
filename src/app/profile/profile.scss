@@ -51,6 +51,51 @@
   grid-template-columns: 1fr;
 }
 
+.admin-entry-card {
+  margin-bottom: 20px;
+  background: linear-gradient(135deg, rgba(255, 177, 0, 0.18), rgba(255, 152, 0, 0.1));
+  border: 1px solid rgba(255, 177, 0, 0.34);
+  border-radius: 16px;
+  padding: 18px 20px;
+  color: #fff6dd;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 20px;
+  box-shadow: 0 10px 24px rgba(0, 0, 0, 0.22);
+
+  h2 {
+    margin: 6px 0 8px;
+    font-size: 22px;
+  }
+
+  p {
+    margin: 0;
+    color: rgba(255, 246, 221, 0.84);
+  }
+}
+
+.admin-entry-kicker {
+  text-transform: uppercase;
+  letter-spacing: 0.16em;
+  font-size: 11px;
+  font-weight: 900;
+  color: #ffd36a;
+}
+
+.btn-admin-entry {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  white-space: nowrap;
+  text-decoration: none;
+  background: #121212;
+  color: #fff;
+  font-weight: 900;
+  border-radius: 999px;
+  padding: 12px 18px;
+}
+
 /* ===== Tarjetas (look PHP) ===== */
 .card {
   background: rgba(23, 26, 29, .92);
@@ -127,8 +172,15 @@
   .full { grid-column: 1 / -1; }
   > * { min-width: 0; }
 
-  @media(max-width:800px){
+@media(max-width:800px){
     grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 800px) {
+  .admin-entry-card {
+    flex-direction: column;
+    align-items: flex-start;
   }
 }
 

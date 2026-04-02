@@ -1,0 +1,204 @@
+<app-header-shop></app-header-shop>
+
+<section class="referidos-page">
+  <div class="referidos-shell">
+    <div class="referidos-hero">
+      <p class="eyebrow">Panel de afiliado</p>
+      <h1>Referidos</h1>
+      <p class="subtitle">
+        Consulta tus codigos activos, ventas netas, liquidaciones y el detalle de compras realizadas con tus referidos.
+      </p>
+      <div class="heading-actions">
+        <button type="button" class="refresh-button" (click)="reload()" [disabled]="loading">
+          {{ loading ? 'Actualizando...' : 'Actualizar panel' }}
+        </button>
+        <a routerLink="/shop" class="back-link">Volver a la tienda</a>
+      </div>
+    </div>
+
+    @if (loading) {
+    <div class="state-card">
+      <div class="state-icon">...</div>
+      <h2>Cargando tu panel</h2>
+      <p>Estamos reuniendo tus ventas, cortes y comisiones.</p>
+    </div>
+    } @else if (errorMessage) {
+    <div class="state-card">
+      <div class="state-icon">!</div>
+      <h2>No se pudo cargar</h2>
+      <p>{{ errorMessage }}</p>
+      <button type="button" class="retry-button" (click)="reload()">Reintentar</button>
+    </div>
+    } @else if (!hasCodes) {
+    <div class="state-card">
+      <div class="state-icon">0</div>
+      <h2>No tienes codigos de afiliado</h2>
+      <p>Actualmente no tienes un codigo de creador activo asignado a esta cuenta.</p>
+    </div>
+    } @else {
+    <div class="codes-card">
+      <div class="codes-copy">
+        <span class="card-kicker">Tus codigos activos</span>
+        <h2>Comparte estos codigos</h2>
+        <p>Tus ganancias se calculan sobre ventas netas, ya descontando comisiones bancarias e impuestos del gateway.</p>
+      </div>
+      <div class="codes-list">
+        @for (code of codes; track trackByCode($index, code)) {
+        <div class="code-badge">
+          <span class="code-ticket">Codigo</span>
+          <strong>{{ code.codigo }}</strong>
+          <span>{{ code.porcentaje }}%</span>
+        </div>
+        }
+      </div>
+    </div>
+
+    <div class="alert-info">
+      Todos los valores mostrados en este panel corresponden a <strong>ventas netas</strong>. El calculo ya descuenta
+      la comision bancaria e impuestos de Wompi, Mercado Pago o PayPal.
+    </div>
+
+    <div class="summary-grid">
+      <article class="summary-card">
+        <span class="meta-label">Ventas del ultimo año</span>
+        <strong>{{ dashboard?.summary?.ventasTotal ?? 0 }}</strong>
+      </article>
+      <article class="summary-card">
+        <span class="meta-label">Neto COP</span>
+        <strong>{{ formatCop(dashboard?.summary?.netoCop ?? 0) }}</strong>
+      </article>
+      <article class="summary-card">
+        <span class="meta-label">Neto USD</span>
+        <strong>{{ formatUsd(dashboard?.summary?.netoUsd ?? 0) }}</strong>
+      </article>
+      <article class="summary-card is-highlight">
+        <span class="meta-label">Comision pendiente</span>
+        <strong>{{ formatCop(dashboard?.summary?.comisionesPendientesCop ?? 0) }}</strong>
+      </article>
+    </div>
+
+    <div class="section-block">
+      <h3 class="section-title">Resumen por fechas de pago</h3>
+
+      @if (liquidations.length === 0) {
+      <div class="state-card is-compact">
+        <div class="state-icon">0</div>
+        <h2>Aun no hay ventas con tus codigos</h2>
+        <p>Empieza a compartirlos para ver tus ganancias aqui.</p>
+      </div>
+      } @else {
+      <div class="liquidations-list">
+        @for (liquidation of liquidations.reverse(); track trackByLiquidation($index, liquidation)) {
+        <article class="liquidation-card">
+          <div class="liquidation-header">
+            <div>
+              <div class="liquidation-title">
+                Pago del {{ liquidation.diaPagoTexto }}
+                <span class="liquidation-code">Cod: {{ liquidation.codigo }}</span>
+              </div>
+              <span class="liquidation-range">Ventas procesadas del {{ liquidation.rangoTexto }}</span>
+            </div>
+            <span class="status-badge" [class]="getStatusClass(liquidation)">
+              {{ liquidation.estado === 'PAGADO' ? 'Liquidado' : 'Pendiente' }}
+            </span>
+          </div>
+
+          <div class="liquidation-stats">
+            <div class="stat-box">
+              <span class="stat-label">Total donaciones</span>
+              <strong>{{ liquidation.ventasTotal }}</strong>
+            </div>
+            <div class="stat-box">
+              <span class="stat-label">Venta neta COP</span>
+              <strong class="text-cop">{{ formatCop(liquidation.netoCop) }}</strong>
+            </div>
+            <div class="stat-box">
+              <span class="stat-label">Venta neta USD</span>
+              <strong class="text-usd">{{ formatUsd(liquidation.netoUsd) }}</strong>
+            </div>
+          </div>
+
+          <div class="commission-box">
+            <div>
+              <span class="stat-label">Ventas netas totales</span>
+              <strong>{{ formatCop(getUnifiedNetEstimate(liquidation)) }} COP</strong>
+            </div>
+            <div class="commission-divider"></div>
+            <div>
+              <span class="stat-label">Tu comision ({{ liquidation.porcentaje }}%)</span>
+              <strong>{{ formatCop(getCommissionEstimate(liquidation)) }} COP</strong>
+            </div>
+          </div>
+        </article>
+        }
+      </div>
+      }
+    </div>
+
+    <div class="section-block">
+      <h3 class="section-title">Detalle de transacciones netas</h3>
+
+      @if (sales.length === 0) {
+      <div class="state-card is-compact">
+        <div class="state-icon">0</div>
+        <h2>No hay compras registradas</h2>
+        <p>Cuando tus codigos generen ventas, las veras aqui con el detalle de productos.</p>
+      </div>
+      } @else {
+      <div class="table-card">
+        <div class="transactions-table-head">
+          <span>Fecha y hora</span>
+          <span>Codigo usado</span>
+          <span>Plataforma</span>
+          <span>Productos</span>
+          <span>Valor neto</span>
+        </div>
+
+        <div class="transactions-table-body">
+          @for (sale of sales; track trackBySale($index, sale)) {
+          <article class="transaction-row">
+            <div class="transaction-col">
+              <strong>{{ formatDateTime(sale.fecha) }}</strong>
+            </div>
+
+            <div class="transaction-col">
+              <span class="promo-badge">{{ sale.promoCode }}</span>
+            </div>
+
+            <div class="transaction-col">
+              <span class="gw-badge" [class]="getGatewayClass(sale.gateway)">{{ sale.gateway }}</span>
+            </div>
+
+            <div class="transaction-col">
+              @if (sale.products.length > 0) {
+              <div class="cart-list">
+                @for (product of sale.products; track product.productId + '-' + product.quantity + '-' + product.title) {
+                <div class="cart-item-simple">
+                  <span class="qty">{{ product.quantity }}x</span>
+                  <span>{{ product.title }}</span>
+                </div>
+                }
+              </div>
+              } @else {
+              <span class="empty-detail">Sin detalles</span>
+              }
+            </div>
+
+            <div class="transaction-col">
+              @if (sale.netoUsd > 0) {
+              <strong class="text-usd">{{ formatUsd(sale.netoUsd) }}</strong>
+              } @else {
+              <strong class="text-cop">{{ formatCop(sale.netoCop) }}</strong>
+              }
+            </div>
+          </article>
+          }
+        </div>
+      </div>
+      }
+    </div>
+    }
+  </div>
+</section>
+
+<app-shop-footer></app-shop-footer>

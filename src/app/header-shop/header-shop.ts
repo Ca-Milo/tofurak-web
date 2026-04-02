@@ -64,4 +64,8 @@ export class HeaderShop implements OnInit, OnDestroy {
       queryParamsHandling: 'merge',
     });
   }
+
+  hasReferralAccess(): boolean {
+    return Number(this.user?.module ?? 0) === 1;
+  }
 }

@@ -51,7 +51,14 @@
                     <span class="item-text">Gestión de cuenta</span>
                 </a>
 
-                <a href="#" class="dropdown-item">
+                @if (hasReferralAccess()) {
+                <a routerLink="/referidos" class="dropdown-item">
+                    <span class="item-icon icon-history"></span>
+                    <span class="item-text">Referidos</span>
+                </a>
+                }
+
+                <a routerLink="/shop-history" class="dropdown-item">
                     <span class="item-icon icon-history"></span>
                     <span class="item-text">Historial de mis pedidos</span>
                 </a>

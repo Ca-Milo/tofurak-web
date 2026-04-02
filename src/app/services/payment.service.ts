@@ -13,6 +13,25 @@ export interface PaymentPayload {
   promoCode?: string;
 }
 
+export interface OrderHistoryItemProduct {
+  productId: number;
+  name: string;
+  quantity: number;
+}
+
+export interface OrderHistoryItem {
+  reference: string;
+  method: 'mercado_pago' | 'paypal' | 'wompi' | string;
+  methodLabel: string;
+  status: string;
+  statusLabel: string;
+  statusTone: 'success' | 'pending' | 'error';
+  createdAt: string;
+  currency: 'COP' | 'USD' | string;
+  total: number;
+  products: OrderHistoryItemProduct[];
+ }
+
 export interface PaymentAvailability {
   wompiPublicKey?: string;
 }
@@ -93,6 +112,12 @@ export class PaymentService {
     });
   }
 
+  getOrderHistory(): Observable<OrderHistoryItem[]> {
+    return this.http
+      .get<ApiEnvelope<any> | any>(`/api/pagos/historial`, { withCredentials: true })
+      .pipe(map(response => this.normalizeOrderHistory(response?.data ?? response)));
+  }
+
   capturePayPalOrder(orderID: string): Observable<any> {
     return this.http.post(
       `${this.baseUrl}/capturar-orden-paypal`,
@@ -140,6 +165,106 @@ export class PaymentService {
       valido: this.toBoolean(raw?.valido),
       message: raw?.message,
     };
+  }
+
+  private normalizeOrderHistory(response: unknown): OrderHistoryItem[] {
+    if (!Array.isArray(response)) {
+      return [];
+    }
+
+    return response.map(item => this.normalizeOrderHistoryItem(item));
+  }
+
+  private normalizeOrderHistoryItem(item: any): OrderHistoryItem {
+    const rawMethod = String(item?.method ?? item?.metodo ?? '').trim();
+    const rawStatus = String(item?.status ?? '').trim();
+    const normalizedMethod = this.normalizePaymentMethod(rawMethod);
+    const normalizedStatus = rawStatus.toUpperCase();
+    const productsSource = Array.isArray(item?.products)
+      ? item.products
+      : Array.isArray(item?.cart)
+        ? item.cart
+        : [];
+
+    return {
+      reference: String(item?.reference ?? item?.ref ?? ''),
+      method: normalizedMethod,
+      methodLabel: this.getMethodLabel(normalizedMethod, rawMethod),
+      status: normalizedStatus,
+      statusLabel: this.getStatusLabel(normalizedStatus),
+      statusTone: this.getStatusTone(normalizedStatus),
+      createdAt: String(item?.createdAt ?? item?.fecha ?? ''),
+      currency: String(item?.currency ?? item?.moneda ?? this.getCurrencyByMethod(normalizedMethod)).toUpperCase(),
+      total: Number(item?.total ?? item?.monto ?? 0),
+      products: productsSource.map((product: any) => ({
+        productId: Number(product?.productId ?? product?.id ?? 0),
+        name: String(product?.name ?? product?.nombre ?? 'Producto'),
+        quantity: Number(product?.quantity ?? product?.cantidad ?? 1),
+      })),
+    };
+  }
+
+  private normalizePaymentMethod(method: string): string {
+    const normalized = method.toLowerCase().replace(/\s+/g, '_');
+    if (normalized === 'mercado_pago' || normalized === 'mercadopago') return 'mercado_pago';
+    if (normalized === 'paypal' || normalized === 'pay_pal') return 'paypal';
+    if (normalized === 'wompi') return 'wompi';
+    return normalized || 'desconocido';
+  }
+
+  private getMethodLabel(method: string, fallback: string): string {
+    switch (method) {
+      case 'mercado_pago':
+        return 'Mercado Pago';
+      case 'paypal':
+        return 'PayPal';
+      case 'wompi':
+        return 'Wompi';
+      default:
+        return fallback || 'Metodo';
+    }
+  }
+
+  private getCurrencyByMethod(method: string): string {
+    return method === 'paypal' ? 'USD' : 'COP';
+  }
+
+  private getStatusLabel(status: string): string {
+    switch (status) {
+      case 'APPROVED':
+      case 'COMPLETED':
+        return 'Exitoso';
+      case 'PENDING':
+      case 'IN_PROCESS':
+      case 'PROCESSING':
+        return 'Pendiente';
+      case 'REJECTED':
+      case 'DECLINED':
+      case 'ERROR':
+      case 'VOIDED':
+      case 'CANCELLED':
+      case 'CANCELED':
+        return 'Rechazado';
+      default:
+        return status || 'Pendiente';
+    }
+  }
+
+  private getStatusTone(status: string): 'success' | 'pending' | 'error' {
+    switch (status) {
+      case 'APPROVED':
+      case 'COMPLETED':
+        return 'success';
+      case 'REJECTED':
+      case 'DECLINED':
+      case 'ERROR':
+      case 'VOIDED':
+      case 'CANCELLED':
+      case 'CANCELED':
+        return 'error';
+      default:
+        return 'pending';
+    }
   }
 
   private toBoolean(value: unknown): boolean {
