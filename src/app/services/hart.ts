@@ -298,7 +298,8 @@ export class Hart {
    * Verifica si el usuario está autenticado
    */
   isAuthenticated(): boolean {
-    return this.hasToken();
+    const token = this.getToken();
+    return !!token && !this.isTokenExpired(token);
   }
 
   /**
@@ -362,6 +363,11 @@ export class Hart {
     const storedUser = this.getStoredUser();
     
     if (token && storedUser) {
+      if (this.isTokenExpired(token)) {
+        this.logout();
+        return;
+      }
+
       // Restaurar usuario desde localStorage inmediatamente
       this.authStatusSubject.next(true);
       this.currentUserSubject.next(storedUser);
@@ -377,7 +383,12 @@ export class Hart {
             this.logout();
           }
         },
-        error: () => {
+        error: (error) => {
+          if (error?.status === 401 || error?.status === 403) {
+            this.logout();
+            return;
+          }
+
           // Error al conectar con el backend, mantener sesión del localStorage
           // No hacer logout - el token puede ser válido pero el servidor no responde
           console.warn('No se pudo verificar el token con el servidor, manteniéndose sesión local');
@@ -424,6 +435,27 @@ export class Hart {
    */
   private hasToken(): boolean {
     return !!localStorage.getItem(this.tokenKey);
+  }
+
+  private isTokenExpired(token: string): boolean {
+    try {
+      const payload = token.split('.')[1];
+      if (!payload) {
+        return true;
+      }
+
+      const normalized = payload.replace(/-/g, '+').replace(/_/g, '/');
+      const decoded = JSON.parse(atob(normalized));
+      const exp = Number(decoded?.exp);
+
+      if (!exp) {
+        return false;
+      }
+
+      return Date.now() >= exp * 1000;
+    } catch {
+      return true;
+    }
   }
 
   /**

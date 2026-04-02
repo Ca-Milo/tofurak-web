@@ -76,16 +76,44 @@
             <span class="val">COP {{ totals.cop | number:'1.0-0' }} o ${{ totals.usd | number:'1.2-2' }} USD</span>
           </div>
         </div>
-        <p class="creator-text">
-          Ingresa su nombre y ayúdalo a seguir creando contenido. ¡Tu compra también impulsa su aventura!
-        </p>
-        <div class="creator-input-wrapper">
-          <input type="text" placeholder="Apoya a tu creador favorito" class="creator-input">
+        <div class="promo-box">
+          <label class="promo-label" for="promoCodeInput">Codigo de regalo</label>
+          <div class="promo-input-group">
+            <input
+              id="promoCodeInput"
+              type="text"
+              class="creator-input"
+              placeholder="Apoya a tu creador favorito"
+              [value]="promoCode"
+              (input)="promoCode = $any($event.target).value"
+            >
+            <button class="btn-apply" type="button" (click)="validarCupon()" [disabled]="loadingCoupon">
+              {{ loadingCoupon ? 'Validando...' : 'Aplicar' }}
+            </button>
+          </div>
+          @if (couponMessage) {
+          <small class="promo-message" [style.color]="couponMessageColor">{{ couponMessage }}</small>
+          }
         </div>
+
+        <div class="payment-buttons">
+          <button *ngIf="canPayWithMercadoPago" class="btn-payment btn-mercado-pago" type="button" (click)="pagarMercadoPago()" [disabled]="payingMercadoPago">
+            {{ payingMercadoPago ? 'Procesando...' : 'Pagar con Mercado Pago' }}
+          </button>
+
+          <button *ngIf="canPayWithWompi" class="btn-payment btn-wompi" type="button" (click)="pagarWompi()" [disabled]="payingWompi">
+            {{ payingWompi ? 'Cargando Wompi...' : 'Pagar con Wompi' }}
+          </button>
+
+          <div id="paypal-button-container" [class.hidden]="!canPayWithPaypal"></div>
+        </div>
+
+        @if (showWompiUnavailableMessage) {
+        <div class="payment-status payment-status-warning">
+          Wompi no esta disponible para esta compra. Puedes continuar con Mercado Pago o PayPal.
+        </div>
+        }
       </aside>
-    </div>
-    <div class="footer-bar">
-      <button class="btn-order" [disabled]="cartItems.length === 0">HACER UN PEDIDO</button>
     </div>
   </div>
 </div>

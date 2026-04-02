@@ -18,6 +18,7 @@ import { GuideComplete } from './guide-complete/guide-complete';
 import { Shop } from './shop/shop';
 import { ShopCart } from './shop-cart/shop-cart';
 import { ShopProductComponent } from './shop-product/shop-product';
+import { ShopPaymentResult } from './shop-payment-result/shop-payment-result';
 
 
 
@@ -75,6 +76,21 @@ export const routes: Routes = [
   path: 'shop-product/:id',
   component: ShopProductComponent,
   data: { animation: 'ShopProductPage' }
+},
+{
+  path: 'shop/payment/approved',
+  component: ShopPaymentResult,
+  data: { animation: 'ShopPaymentApprovedPage', status: 'approved' }
+},
+{
+  path: 'shop/payment/rejected',
+  component: ShopPaymentResult,
+  data: { animation: 'ShopPaymentRejectedPage', status: 'rejected' }
+},
+{
+  path: 'shop/payment/pending',
+  component: ShopPaymentResult,
+  data: { animation: 'ShopPaymentPendingPage', status: 'pending' }
 },
   /*{
   path: 'tienda',

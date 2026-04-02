@@ -1,0 +1,34 @@
+<app-header-shop></app-header-shop>
+
+<section class="payment-result-page">
+  <div class="payment-result-card">
+    <div
+      class="result-icon"
+      [class.approved]="isApproved()"
+      [class.rejected]="!isApproved() && !isPending()"
+    >
+      {{ isApproved() ? '✓' : isPending() ? '…' : '!' }}
+    </div>
+
+    <h1 class="result-title">
+      {{ isApproved() ? 'Pago aprobado' : isPending() ? 'Pago pendiente' : 'Pago rechazado' }}
+    </h1>
+
+    <p class="result-text">
+      {{
+        isApproved()
+          ? 'Tu compra fue procesada correctamente. Si aplica, la acreditacion se reflejara en breve.'
+          : isPending()
+            ? 'Tu pago esta en proceso de confirmacion. Puedes revisar el estado en unos minutos o volver mas tarde.'
+            : 'No fue posible completar el pago. Puedes intentarlo de nuevo o elegir otro metodo.'
+      }}
+    </p>
+
+    <div class="result-actions">
+      <a routerLink="/shop" class="btn-action btn-primary">Ir a la tienda</a>
+      <a routerLink="/shop-cart" class="btn-action btn-secondary">
+        {{ isApproved() ? 'Volver a la cesta' : isPending() ? 'Volver a la cesta' : 'Intentar otra vez' }}
+      </a>
+    </div>
+  </div>
+</section>

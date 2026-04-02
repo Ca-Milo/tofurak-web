@@ -68,6 +68,10 @@ export class CartService {
     this.update(this.items.filter(i => i.id !== id));
   }
 
+  clear(): void {
+    this.update([]);
+  }
+
   private update(items: CartItem[]): void {
     this.cartSubject.next(items);
     localStorage.setItem(this.cartKey, JSON.stringify(items));

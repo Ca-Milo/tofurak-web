@@ -74,6 +74,13 @@ export class ShopProductComponent implements OnInit {
     this.refreshView();
   }
 
+  buyNow(): void {
+    this.addToCart();
+    if (!this.isLimitReached) {
+      this.router.navigate(['/shop-cart']);
+    }
+  }
+
   goToCart(): void {
     this.router.navigate(['/shop-cart']);
   }
