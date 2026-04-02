@@ -451,6 +451,12 @@
     top: 0
 }
 
+.cart-link {
+    position: relative;
+    display: flex;
+    align-items: center;
+}
+
 .header-full-container-new-version-mobile {
     margin: 0 !important;
     border-radius: 0 !important;

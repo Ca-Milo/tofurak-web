@@ -2,6 +2,7 @@ import { RouterModule } from '@angular/router';
 import { Component, OnInit, OnDestroy, HostListener } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Hart, User } from '../services/hart';
+import { CartService } from '../services/cart.service';
 import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 
@@ -18,6 +19,7 @@ export class Header implements OnInit, OnDestroy {
 
   isLoggedIn = false;
   currentUser: User | null = null;
+  totalCartItems = 0;
   isMobileMenuOpen = false;
   mobileSections: Record<string, boolean> = {
     juego: false,
@@ -27,7 +29,10 @@ export class Header implements OnInit, OnDestroy {
   };
   private destroy$ = new Subject<void>();
 
-  constructor(private hart: Hart) {}
+  constructor(
+    private hart: Hart,
+    private cartService: CartService,
+  ) {}
 
   ngOnInit(): void {
     this.checkLoggedIn();
@@ -53,6 +58,12 @@ export class Header implements OnInit, OnDestroy {
           this.currentUser = null;
           this.isLoggedIn = false;
         }
+      });
+
+    this.cartService.cart$
+      .pipe(takeUntil(this.destroy$))
+      .subscribe(() => {
+        this.totalCartItems = this.cartService.totalItems;
       });
   }
 
