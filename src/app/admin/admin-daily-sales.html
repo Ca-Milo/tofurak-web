@@ -1,0 +1,78 @@
+<div class="daily-sales-shell">
+  @if (loading) {
+  <div class="state-card">
+    <h2>Cargando ventas diarias...</h2>
+    <p>Estamos armando el consolidado de los ultimos dias.</p>
+  </div>
+  } @else if (errorMessage) {
+  <div class="state-card state-error">
+    <h2>No se pudo cargar</h2>
+    <p>{{ errorMessage }}</p>
+    <button type="button" (click)="loadDailySales()">Reintentar</button>
+  </div>
+  } @else {
+  <div class="kpi-grid">
+    <div class="kpi-card kpi-total">
+      <div class="kpi-title">Total 30 Dias (Estimado)</div>
+      <div class="kpi-value total">{{ formatCop(sales.totals.granTotalEstimado) }}</div>
+    </div>
+
+    <div class="kpi-card kpi-cop">
+      <div class="kpi-title">Total Wompi + MP (COP)</div>
+      <div class="kpi-value">{{ formatCop(sales.totals.totalPeriodoCop) }}</div>
+    </div>
+
+    <div class="kpi-card kpi-usd">
+      <div class="kpi-title">Total PayPal (USD)</div>
+      <div class="kpi-value">{{ formatUsd(sales.totals.totalPeriodoUsd) }}</div>
+    </div>
+  </div>
+
+  <div class="table-card">
+    <table class="sales-table">
+      <thead>
+        <tr>
+          <th>Fecha</th>
+          <th>Wompi (COP)</th>
+          <th>Mercado Pago (COP)</th>
+          <th>PayPal (USD)</th>
+          <th>Total Dia (Estimado)</th>
+          <th>Ganancia Neta (Aprox)</th>
+          <th>Estado Meta</th>
+        </tr>
+      </thead>
+      <tbody>
+        @for (day of orderedDays; track trackByDay($index, day)) {
+        <tr [class.missed-goal]="day.totalNeto < day.metaDiaria">
+          <td>
+            <span class="date-badge">{{ shortDayLabel(day.dia) }}</span>
+          </td>
+          <td><span class="money-val cop">{{ formatCop(day.totalWompi) }}</span></td>
+          <td><span class="money-val cop">{{ formatCop(day.totalMp) }}</span></td>
+          <td>
+            <span class="money-val usd">{{ formatUsd(day.totalPaypal) }}</span>
+            <span class="money-sub">≈ {{ formatApproxCop(day.totalPaypal * sales.tasaDolar) }}</span>
+          </td>
+          <td><span class="money-val est">{{ formatCop(day.totalEstimado) }}</span></td>
+          <td>
+            <span class="money-val net">{{ formatCop(day.totalNeto) }}</span>
+            <span class="money-sub">Desc. comisiones</span>
+          </td>
+          <td>
+            @if (day.totalNeto >= day.metaDiaria) {
+            <span class="badge-success">Meta Cumplida</span>
+            } @else {
+            <span class="badge-alert">Bajo: {{ formatCop(goalDifference(day)) }} faltantes</span>
+            }
+          </td>
+        </tr>
+        } @empty {
+        <tr>
+          <td colspan="7" class="empty-row">No hay ventas registradas para mostrar.</td>
+        </tr>
+        }
+      </tbody>
+    </table>
+  </div>
+  }
+</div>

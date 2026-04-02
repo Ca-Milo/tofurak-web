@@ -59,6 +59,30 @@ export interface AdminAffiliateLiquidationsResponse {
   pagados: AdminAffiliateLiquidationItem[];
 }
 
+export interface AdminDailySalesDay {
+  dia: string;
+  totalWompi: number;
+  totalMp: number;
+  totalPaypal: number;
+  totalEstimado: number;
+  totalNeto: number;
+  metaDiaria: number;
+}
+
+export interface AdminDailySalesTotals {
+  granTotalEstimado: number;
+  totalPeriodoCop: number;
+  totalPeriodoUsd: number;
+}
+
+export interface AdminDailySalesResponse {
+  wompiDisponible: number;
+  tasaDolar: number;
+  metaDiaria: number;
+  totals: AdminDailySalesTotals;
+  days: AdminDailySalesDay[];
+}
+
 @Injectable({ providedIn: 'root' })
 export class AdminService {
   private readonly wompiDisponibleSubject = new BehaviorSubject<number | null>(null);
@@ -109,6 +133,17 @@ export class AdminService {
     );
   }
 
+  getDailySales(): Observable<AdminDailySalesResponse> {
+    return this.http
+      .get<ApiEnvelope<any> | any>('/api/admin/ventas/diarias', {
+        withCredentials: true,
+      })
+      .pipe(
+        map(response => this.normalizeDailySalesResponse(response?.data ?? response)),
+        tap(response => this.wompiDisponibleSubject.next(response.wompiDisponible)),
+      );
+  }
+
   private normalizePurchasesResponse(raw: any): AdminPurchasesResponse {
     const statsSource = Array.isArray(raw?.stats)
       ? raw.stats
@@ -155,6 +190,41 @@ export class AdminService {
       wompiDisponible: Number(raw?.wompiDisponible ?? raw?.disponible ?? 0),
       pendientes: pendientesSource.map((item: any) => this.normalizeAffiliateLiquidationItem(item)),
       pagados: pagadosSource.map((item: any) => this.normalizeAffiliateLiquidationItem(item)),
+    };
+  }
+
+  private normalizeDailySalesResponse(raw: any): AdminDailySalesResponse {
+    const totals = raw?.totals ?? raw?.resumen ?? {};
+    const daysSource = Array.isArray(raw?.days)
+      ? raw.days
+      : Array.isArray(raw?.dias)
+        ? raw.dias
+        : [];
+
+    return {
+      wompiDisponible: Number(raw?.wompiDisponible ?? raw?.disponible ?? 0),
+      tasaDolar: Number(raw?.tasaDolar ?? raw?.tasa_dolar ?? 3500),
+      metaDiaria: Number(raw?.metaDiaria ?? raw?.meta_diaria ?? 100000),
+      totals: {
+        granTotalEstimado: Number(
+          totals?.granTotalEstimado ?? totals?.gran_total_estimado ?? raw?.granTotalEstimado ?? 0,
+        ),
+        totalPeriodoCop: Number(
+          totals?.totalPeriodoCop ?? totals?.total_periodo_cop ?? raw?.totalPeriodoCop ?? 0,
+        ),
+        totalPeriodoUsd: Number(
+          totals?.totalPeriodoUsd ?? totals?.total_periodo_usd ?? raw?.totalPeriodoUsd ?? 0,
+        ),
+      },
+      days: daysSource.map((item: any) => ({
+        dia: String(item?.dia ?? ''),
+        totalWompi: Number(item?.totalWompi ?? item?.total_wompi ?? 0),
+        totalMp: Number(item?.totalMp ?? item?.total_mp ?? 0),
+        totalPaypal: Number(item?.totalPaypal ?? item?.total_paypal ?? 0),
+        totalEstimado: Number(item?.totalEstimado ?? item?.total_estimado ?? 0),
+        totalNeto: Number(item?.totalNeto ?? item?.total_neto ?? 0),
+        metaDiaria: Number(item?.metaDiaria ?? item?.meta_diaria ?? raw?.metaDiaria ?? raw?.meta_diaria ?? 100000),
+      })),
     };
   }
 

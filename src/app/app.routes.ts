@@ -25,6 +25,7 @@ import { AdminPlaceholder } from './admin/admin-placeholder';
 import { adminGuard } from './guards/admin.guard';
 import { AdminPurchases } from './admin/admin-purchases';
 import { AdminAffiliateLiquidations } from './admin/admin-affiliate-liquidations';
+import { AdminDailySales } from './admin/admin-daily-sales';
 import { ReferidosComponent } from './referidos/referidos';
 
 
@@ -144,11 +145,9 @@ export const routes: Routes = [
     },
     {
       path: 'ventas/diarias',
-      component: AdminPlaceholder,
+      component: AdminDailySales,
       data: {
         animation: 'AdminVentasDiariasPage',
-        title: 'Ventas Diarias',
-        description: 'Vista preparada para mostrar el consolidado de ventas por dia.',
       },
     },
     {
