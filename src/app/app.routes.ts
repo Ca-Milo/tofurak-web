@@ -27,7 +27,9 @@ import { AdminPurchases } from './admin/admin-purchases';
 import { AdminAffiliateLiquidations } from './admin/admin-affiliate-liquidations';
 import { AdminDailySales } from './admin/admin-daily-sales';
 import { AdminExchangeLogs } from './admin/admin-exchange-logs';
+import { AdminCodes } from './admin/admin-codes';
 import { AdminServerLogs } from './admin/admin-server-logs';
+import { AdminTopClients } from './admin/admin-top-clients';
 import { ReferidosComponent } from './referidos/referidos';
 
 
@@ -131,11 +133,9 @@ export const routes: Routes = [
     },
     {
       path: 'codigos',
-      component: AdminPlaceholder,
+      component: AdminCodes,
       data: {
         animation: 'AdminCodigosPage',
-        title: 'Codigos & Afiliados',
-        description: 'Modulo listo para migrar la gestion de codigos promocionales y afiliados.',
       },
     },
     {
@@ -154,11 +154,9 @@ export const routes: Routes = [
     },
     {
       path: 'clientes',
-      component: AdminPlaceholder,
+      component: AdminTopClients,
       data: {
         animation: 'AdminClientesPage',
-        title: 'Top Clientes',
-        description: 'Este modulo mostrara el ranking y analitica de clientes principales.',
       },
     },
     {

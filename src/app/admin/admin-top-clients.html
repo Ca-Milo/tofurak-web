@@ -1,0 +1,69 @@
+<div class="top-clients-shell">
+  @if (loading) {
+  <div class="state-card">
+    <h2>Cargando top clientes...</h2>
+    <p>Estamos consolidando el ranking historico de donadores.</p>
+  </div>
+  } @else if (errorMessage) {
+  <div class="state-card state-error">
+    <h2>No se pudo cargar</h2>
+    <p>{{ errorMessage }}</p>
+    <button type="button" (click)="loadClients()">Reintentar</button>
+  </div>
+  } @else {
+  <div class="header-row">
+    <h2>Top Donadores Historicos</h2>
+    <div class="header-note">Basado en la suma total de todas las pasarelas.</div>
+  </div>
+
+  <div class="table-card">
+    <table class="clients-table">
+      <thead>
+        <tr>
+          <th class="rank-col">#</th>
+          <th>Cliente / Cuenta</th>
+          <th>Total Gastado (Estimado COP)</th>
+          <th>Transacciones</th>
+          <th>Ultima Donacion</th>
+          <th>Estado</th>
+        </tr>
+      </thead>
+      <tbody>
+        @for (row of rows; track trackByClient($index, row)) {
+        <tr>
+          <td>
+            <div [class]="getRankClass(row.rank)">{{ row.rank }}</div>
+          </td>
+          <td>
+            <div class="user-cell">
+              <div class="user-avatar">{{ getInitial(row) }}</div>
+              <div>
+                <div class="user-name">{{ row.nombreApodo || 'Desconocido' }}</div>
+                <div class="user-account">Cuenta: {{ row.nombreCuenta || row.userId }}</div>
+              </div>
+            </div>
+          </td>
+          <td><span class="money-val">{{ formatCop(row.totalGastado) }}</span></td>
+          <td><span class="tx-count">{{ row.totalTransacciones }} compras</span></td>
+          <td>
+            <div class="last-date">{{ formatDate(row.ultimaCompra) }}</div>
+            <div class="last-time">{{ formatTime(row.ultimaCompra) }}</div>
+          </td>
+          <td>
+            @if (row.estadoCliente === 'activo') {
+            <span class="status-active">Reciente</span>
+            } @else {
+            <span class="status-inactive">Inactivo</span>
+            }
+          </td>
+        </tr>
+        } @empty {
+        <tr>
+          <td colspan="6" class="empty-row">No hay clientes para mostrar.</td>
+        </tr>
+        }
+      </tbody>
+    </table>
+  </div>
+  }
+</div>

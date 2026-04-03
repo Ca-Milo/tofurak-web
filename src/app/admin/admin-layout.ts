@@ -26,7 +26,6 @@ export class AdminLayout implements OnInit, OnDestroy {
     { label: 'Ventas Diarias', route: '/admin/ventas/diarias' },
     { label: 'Top Clientes', route: '/admin/clientes' },
     { label: 'Logs Intercambios', route: '/admin/logs/intercambios' },
-    { label: 'Logs Intercambios (OLD)', route: '/admin/intercambios' },
     { label: 'Logs Servidor', route: '/admin/logs' },
   ];
 

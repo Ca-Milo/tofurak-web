@@ -208,6 +208,63 @@ export interface AdminServerLogsResponse {
   rows: AdminServerLogItem[];
 }
 
+export interface AdminCodeItem {
+  id: number;
+  codigo: string;
+  activo: boolean;
+  modulo: number;
+  porcentaje: number;
+  wompiVentas: number;
+  paypalVentas: number;
+  mercadopagoVentas: number;
+  totalVentas: number;
+  dineroWompiCop: number;
+  dineroMpCop: number;
+  dineroPaypalUsd: number;
+  totalGanadoCop: number;
+  netoWompi: number;
+  netoMp: number;
+  netoPaypal: number;
+  totalBrutoEstimado: number;
+  totalNetoEstimado: number;
+  pagoAfiliado: number;
+}
+
+export interface AdminCodesResponse {
+  wompiDisponible: number;
+  totals: {
+    grandTotalVentas: number;
+    grandTotalCop: number;
+    grandTotalUsd: number;
+    grandTotalPagarAfiliados: number;
+    granTotalUnificado: number;
+    tasaDolar: number;
+  };
+  chart: Array<{
+    label: string;
+    value: number;
+  }>;
+  rows: AdminCodeItem[];
+}
+
+export interface AdminTopClientItem {
+  rank: number;
+  userId: number;
+  nombreCuenta: string;
+  nombreApodo: string;
+  email: string;
+  totalGastado: number;
+  ultimaCompra: string;
+  totalTransacciones: number;
+  estadoCliente: 'activo' | 'inactivo' | string;
+}
+
+export interface AdminTopClientsResponse {
+  wompiDisponible: number;
+  tasaDolar: number;
+  rows: AdminTopClientItem[];
+}
+
 @Injectable({ providedIn: 'root' })
 export class AdminService {
   private readonly wompiDisponibleSubject = new BehaviorSubject<number | null>(null);
@@ -287,6 +344,28 @@ export class AdminService {
       })
       .pipe(
         map(response => this.normalizeServerLogsResponse(response?.data ?? response)),
+        tap(response => this.wompiDisponibleSubject.next(response.wompiDisponible)),
+      );
+  }
+
+  getCodes(): Observable<AdminCodesResponse> {
+    return this.http
+      .get<ApiEnvelope<any> | any>('/api/admin/codigos', {
+        withCredentials: true,
+      })
+      .pipe(
+        map(response => this.normalizeCodesResponse(response?.data ?? response)),
+        tap(response => this.wompiDisponibleSubject.next(response.wompiDisponible)),
+      );
+  }
+
+  getTopClients(): Observable<AdminTopClientsResponse> {
+    return this.http
+      .get<ApiEnvelope<any> | any>('/api/admin/clientes', {
+        withCredentials: true,
+      })
+      .pipe(
+        map(response => this.normalizeTopClientsResponse(response?.data ?? response)),
         tap(response => this.wompiDisponibleSubject.next(response.wompiDisponible)),
       );
   }
@@ -501,6 +580,69 @@ export class AdminService {
         ogrinas: Number(item?.ogrinas ?? 0),
         ipAddress: String(item?.ipAddress ?? item?.ip_address ?? ''),
         detalles: String(item?.detalles ?? ''),
+      })),
+    };
+  }
+
+  private normalizeCodesResponse(raw: any): AdminCodesResponse {
+    const totals = raw?.totals ?? {};
+    const chartSource = Array.isArray(raw?.chart) ? raw.chart : [];
+    const rowsSource = Array.isArray(raw?.rows) ? raw.rows : [];
+
+    return {
+      wompiDisponible: Number(raw?.wompiDisponible ?? raw?.disponible ?? 0),
+      totals: {
+        grandTotalVentas: Number(totals?.grandTotalVentas ?? totals?.grand_total_ventas ?? 0),
+        grandTotalCop: Number(totals?.grandTotalCop ?? totals?.grand_total_cop ?? 0),
+        grandTotalUsd: Number(totals?.grandTotalUsd ?? totals?.grand_total_usd ?? 0),
+        grandTotalPagarAfiliados: Number(totals?.grandTotalPagarAfiliados ?? totals?.grand_total_pagar_afiliados ?? 0),
+        granTotalUnificado: Number(totals?.granTotalUnificado ?? totals?.gran_total_unificado ?? 0),
+        tasaDolar: Number(totals?.tasaDolar ?? totals?.tasa_dolar ?? 3500),
+      },
+      chart: chartSource.map((item: any) => ({
+        label: String(item?.label ?? item?.codigo ?? ''),
+        value: Number(item?.value ?? item?.totalBrutoEstimado ?? 0),
+      })),
+      rows: rowsSource.map((item: any) => ({
+        id: Number(item?.id ?? 0),
+        codigo: String(item?.codigo ?? ''),
+        activo: Boolean(item?.activo),
+        modulo: Number(item?.modulo ?? 0),
+        porcentaje: Number(item?.porcentaje ?? 0),
+        wompiVentas: Number(item?.wompiVentas ?? item?.wompi_ventas ?? 0),
+        paypalVentas: Number(item?.paypalVentas ?? item?.paypal_ventas ?? 0),
+        mercadopagoVentas: Number(item?.mercadopagoVentas ?? item?.mercadopago_ventas ?? 0),
+        totalVentas: Number(item?.totalVentas ?? item?.total_ventas ?? 0),
+        dineroWompiCop: Number(item?.dineroWompiCop ?? item?.dinero_wompi_cop ?? 0),
+        dineroMpCop: Number(item?.dineroMpCop ?? item?.dinero_mp_cop ?? 0),
+        dineroPaypalUsd: Number(item?.dineroPaypalUsd ?? item?.dinero_paypal_usd ?? 0),
+        totalGanadoCop: Number(item?.totalGanadoCop ?? item?.total_ganado_cop ?? 0),
+        netoWompi: Number(item?.netoWompi ?? item?.neto_wompi ?? 0),
+        netoMp: Number(item?.netoMp ?? item?.neto_mp ?? 0),
+        netoPaypal: Number(item?.netoPaypal ?? item?.neto_paypal ?? 0),
+        totalBrutoEstimado: Number(item?.totalBrutoEstimado ?? item?.total_bruto_estimado ?? 0),
+        totalNetoEstimado: Number(item?.totalNetoEstimado ?? item?.total_neto_estimado ?? 0),
+        pagoAfiliado: Number(item?.pagoAfiliado ?? item?.pago_afiliado ?? 0),
+      })),
+    };
+  }
+
+  private normalizeTopClientsResponse(raw: any): AdminTopClientsResponse {
+    const rowsSource = Array.isArray(raw?.rows) ? raw.rows : [];
+
+    return {
+      wompiDisponible: Number(raw?.wompiDisponible ?? raw?.disponible ?? 0),
+      tasaDolar: Number(raw?.tasaDolar ?? raw?.tasa_dolar ?? 3500),
+      rows: rowsSource.map((item: any) => ({
+        rank: Number(item?.rank ?? 0),
+        userId: Number(item?.userId ?? item?.user_id ?? 0),
+        nombreCuenta: String(item?.nombreCuenta ?? item?.nombre_cuenta ?? ''),
+        nombreApodo: String(item?.nombreApodo ?? item?.nombre_apodo ?? ''),
+        email: String(item?.email ?? ''),
+        totalGastado: Number(item?.totalGastado ?? item?.total_gastado ?? 0),
+        ultimaCompra: String(item?.ultimaCompra ?? item?.ultima_compra ?? ''),
+        totalTransacciones: Number(item?.totalTransacciones ?? item?.total_transacciones ?? 0),
+        estadoCliente: String(item?.estadoCliente ?? item?.estado_cliente ?? ''),
       })),
     };
   }

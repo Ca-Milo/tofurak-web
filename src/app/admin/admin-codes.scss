@@ -1,0 +1,305 @@
+:host {
+  display: block;
+}
+
+.codes-shell {
+  max-width: 1500px;
+  margin: 0 auto;
+}
+
+.kpi-grid {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: 20px;
+  margin-bottom: 30px;
+}
+
+.kpi-card,
+.chart-card,
+.table-card,
+.state-card {
+  background: #fff;
+  border-radius: 12px;
+  box-shadow: 0 5px 20px rgba(0, 0, 0, 0.05);
+}
+
+.kpi-card {
+  position: relative;
+  overflow: hidden;
+  padding: 25px;
+}
+
+.kpi-card::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 5px;
+  height: 100%;
+}
+
+.kpi-cop::after { background: #28a745; }
+.kpi-usd::after { background: #003087; }
+.kpi-total::after { background: #6f42c1; }
+.kpi-sales::after { background: #ff7b00; }
+.kpi-payout::after { background: #e33; }
+
+.kpi-title {
+  font-size: 11px;
+  color: #888;
+  font-weight: 700;
+  text-transform: uppercase;
+}
+
+.kpi-value {
+  margin-top: 10px;
+  font-size: 24px;
+  font-weight: 900;
+  color: #1a1a1a;
+}
+
+.kpi-value.accent { color: #6f42c1; }
+.kpi-value.payout { color: #e33; }
+
+.kpi-card small {
+  margin-top: 5px;
+  color: #999;
+  font-size: 10px;
+}
+
+.chart-card {
+  padding: 20px;
+  margin-bottom: 30px;
+}
+
+.chart-title {
+  margin-bottom: 16px;
+  font-size: 14px;
+  font-weight: 800;
+  color: #333;
+}
+
+.chart-row {
+  display: grid;
+  grid-template-columns: 120px 1fr 150px;
+  gap: 14px;
+  align-items: center;
+  margin-bottom: 10px;
+}
+
+.chart-label {
+  font-weight: 700;
+  color: #333;
+}
+
+.chart-bar-wrap {
+  height: 12px;
+  border-radius: 999px;
+  background: #f1edf8;
+  overflow: hidden;
+}
+
+.chart-bar {
+  height: 100%;
+  border-radius: 999px;
+  background: #6f42c1;
+}
+
+.chart-value {
+  text-align: right;
+  font-weight: 700;
+  color: #555;
+}
+
+.chart-empty {
+  color: #999;
+}
+
+.codes-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 13px;
+}
+
+.codes-table th {
+  padding: 18px 15px;
+  background: #333;
+  color: #fff;
+  text-align: left;
+  font-size: 11px;
+  text-transform: uppercase;
+}
+
+.codes-table td {
+  padding: 15px;
+  border-bottom: 1px solid #eee;
+  vertical-align: middle;
+}
+
+.codes-table tr:hover {
+  background: #fcfcfc;
+}
+
+.code-name {
+  font-size: 15px;
+  font-weight: 900;
+  color: #333;
+}
+
+.code-id {
+  font-size: 10px;
+  color: #999;
+}
+
+.mod-badge {
+  display: inline-block;
+  margin-top: 4px;
+  padding: 2px 6px;
+  border-radius: 4px;
+  background: #fff3cd;
+  color: #856404;
+  border: 1px solid #ffeeba;
+  font-size: 9px;
+}
+
+.badge {
+  padding: 4px 10px;
+  border-radius: 20px;
+  font-size: 10px;
+  font-weight: 700;
+  text-transform: uppercase;
+}
+
+.badge.active {
+  background: #d4edda;
+  color: #155724;
+}
+
+.badge.inactive {
+  background: #f8d7da;
+  color: #721c24;
+}
+
+.money-cell {
+  display: flex;
+  flex-direction: column;
+}
+
+.count-badge {
+  width: fit-content;
+  margin-bottom: 4px;
+  padding: 2px 6px;
+  border-radius: 4px;
+  background: #eee;
+  color: #555;
+  font-size: 10px;
+  font-weight: 700;
+}
+
+.count-badge.dark {
+  background: #333;
+  color: #fff;
+}
+
+.money-val {
+  font-size: 13px;
+  font-weight: 700;
+}
+
+.money-val.cop { color: #28a745; }
+.money-val.usd { color: #003087; }
+.money-val.subtle {
+  color: #888;
+  font-size: 11px;
+}
+.money-val.total-net {
+  color: #6f42c1;
+  font-size: 14px;
+  font-weight: 900;
+}
+
+.net-val {
+  margin-top: 4px;
+  font-size: 11px;
+  font-weight: 800;
+  color: #d32f2f;
+}
+
+.total-col {
+  background: #fcfcfc;
+}
+
+.payout-head {
+  background: #e33 !important;
+  text-align: center;
+}
+
+.payout-box {
+  border: 1px dashed #e33;
+  border-radius: 6px;
+  background: rgba(227, 51, 51, 0.05);
+  padding: 8px;
+  text-align: center;
+}
+
+.payout-box span {
+  display: block;
+  font-size: 16px;
+  font-weight: 900;
+  color: #e33;
+}
+
+.payout-box small {
+  font-size: 10px;
+  color: #888;
+  text-transform: uppercase;
+}
+
+.muted-center {
+  text-align: center;
+  color: #ccc;
+  font-size: 11px;
+}
+
+.state-card {
+  padding: 36px 24px;
+  text-align: center;
+}
+
+.state-error button {
+  margin-top: 16px;
+  background: #1a1a1a;
+  color: #fff;
+  border: 0;
+  padding: 10px 16px;
+  border-radius: 999px;
+  cursor: pointer;
+}
+
+@media (max-width: 1280px) {
+  .kpi-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .table-card {
+    overflow-x: auto;
+  }
+
+  .codes-table {
+    min-width: 1200px;
+  }
+}
+
+@media (max-width: 768px) {
+  .kpi-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .chart-row {
+    grid-template-columns: 1fr;
+  }
+
+  .chart-value {
+    text-align: left;
+  }
+}

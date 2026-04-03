@@ -1,0 +1,137 @@
+<div class="codes-shell">
+  @if (loading) {
+  <div class="state-card">
+    <h2>Cargando codigos...</h2>
+    <p>Estamos preparando el reporte financiero.</p>
+  </div>
+  } @else if (errorMessage) {
+  <div class="state-card state-error">
+    <h2>No se pudo cargar</h2>
+    <p>{{ errorMessage }}</p>
+    <button type="button" (click)="loadCodes()">Reintentar</button>
+  </div>
+  } @else {
+  <div class="kpi-grid">
+    <div class="kpi-card kpi-cop">
+      <div class="kpi-title">Ingresos Brutos (COP)</div>
+      <div class="kpi-value">{{ formatCop(data.totals.grandTotalCop) }}</div>
+      <small>(Wompi + MP)</small>
+    </div>
+
+    <div class="kpi-card kpi-usd">
+      <div class="kpi-title">Ingresos Brutos (USD)</div>
+      <div class="kpi-value">{{ formatUsd(data.totals.grandTotalUsd) }}</div>
+      <small>(Solo PayPal)</small>
+    </div>
+
+    <div class="kpi-card kpi-total">
+      <div class="kpi-title">Bruto Unificado (Est.)</div>
+      <div class="kpi-value accent">{{ formatCop(data.totals.granTotalUnificado) }}</div>
+      <small>Tasa aprox: ${{ data.totals.tasaDolar | number:'1.0-0' }} COP</small>
+    </div>
+
+    <div class="kpi-card kpi-sales">
+      <div class="kpi-title">Ventas con Codigo</div>
+      <div class="kpi-value">{{ data.totals.grandTotalVentas | number:'1.0-0' }}</div>
+      <small>Transacciones totales</small>
+    </div>
+
+    <div class="kpi-card kpi-payout">
+      <div class="kpi-title">A Pagar Afiliados (Mod 1)</div>
+      <div class="kpi-value payout">{{ formatCop(data.totals.grandTotalPagarAfiliados) }}</div>
+      <small>Ganancia neta afiliados</small>
+    </div>
+  </div>
+
+  <div class="chart-card">
+    <div class="chart-title">Top 10 Codigos por Ingreso Bruto</div>
+    <div class="chart-list">
+      @for (item of data.chart; track item.label) {
+      <div class="chart-row">
+        <div class="chart-label">{{ item.label }}</div>
+        <div class="chart-bar-wrap">
+          <div class="chart-bar" [style.width.%]="data.chart[0]?.value ? (item.value / data.chart[0].value) * 100 : 0"></div>
+        </div>
+        <div class="chart-value">{{ formatCop(item.value) }}</div>
+      </div>
+      } @empty {
+      <div class="chart-empty">No hay datos suficientes para graficar.</div>
+      }
+    </div>
+  </div>
+
+  <div class="table-card">
+    <table class="codes-table">
+      <thead>
+        <tr>
+          <th>Codigo</th>
+          <th>Estado</th>
+          <th>Mercado Pago</th>
+          <th>Wompi</th>
+          <th>PayPal</th>
+          <th>Total Estimado</th>
+          <th class="payout-head">Pago a Afiliado</th>
+        </tr>
+      </thead>
+      <tbody>
+        @for (row of data.rows; track trackByCode($index, row)) {
+        <tr>
+          <td>
+            <span class="code-name">{{ row.codigo || 'Sin codigo' }}</span>
+            <div class="code-id">ID: {{ row.id }}</div>
+            @if (row.modulo === 1) {
+            <div class="mod-badge">Modulo 1 ({{ row.porcentaje }}%)</div>
+            }
+          </td>
+          <td>
+            <span class="badge" [class.active]="row.activo" [class.inactive]="!row.activo">
+              {{ row.activo ? 'Activo' : 'Inactivo' }}
+            </span>
+          </td>
+          <td>
+            <div class="money-cell">
+              <span class="count-badge">{{ row.mercadopagoVentas }} ventas</span>
+              <span class="money-val cop">B: {{ formatCop(row.dineroMpCop) }}</span>
+              <span class="net-val">N: {{ formatCop(row.netoMp) }}</span>
+            </div>
+          </td>
+          <td>
+            <div class="money-cell">
+              <span class="count-badge">{{ row.wompiVentas }} ventas</span>
+              <span class="money-val cop">B: {{ formatCop(row.dineroWompiCop) }}</span>
+              <span class="net-val">N: {{ formatCop(row.netoWompi) }}</span>
+            </div>
+          </td>
+          <td>
+            <div class="money-cell">
+              <span class="count-badge">{{ row.paypalVentas }} ventas</span>
+              <span class="money-val usd">B: {{ formatUsd(row.dineroPaypalUsd) }}</span>
+              <span class="net-val">N: {{ formatUsd(row.netoPaypal) }}</span>
+            </div>
+          </td>
+          <td class="total-col">
+            <div class="money-cell">
+              <span class="count-badge dark">Total: {{ row.totalVentas }} ventas</span>
+              <span class="money-val subtle">Bruto: {{ formatCop(row.totalBrutoEstimado) }}</span>
+              <span class="money-val total-net">Neto: {{ formatCop(row.totalNetoEstimado) }}</span>
+            </div>
+          </td>
+          <td>
+            @if (row.modulo === 1 && row.pagoAfiliado > 0) {
+            <div class="payout-box">
+              <small>Comision generada</small>
+              <span>{{ formatCop(row.pagoAfiliado) }}</span>
+            </div>
+            } @else if (row.modulo === 1) {
+            <div class="muted-center">Sin ventas</div>
+            } @else {
+            <div class="muted-center">No aplica (Mod 0)</div>
+            }
+          </td>
+        </tr>
+        }
+      </tbody>
+    </table>
+  </div>
+  }
+</div>
