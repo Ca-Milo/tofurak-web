@@ -85,6 +85,11 @@ export class ShopProductComponent implements OnInit {
     this.router.navigate(['/shop-cart']);
   }
 
+  goToShop(): void {
+    this.showNotification = false;
+    this.router.navigate(['/shop']);
+  }
+
   goToCategory(categoryId: number | null): void {
     this.router.navigate(['/shop'], { queryParams: categoryId ? { categoria: categoryId } : {} });
   }
