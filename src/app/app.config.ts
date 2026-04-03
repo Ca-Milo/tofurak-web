@@ -4,13 +4,14 @@ import { provideAnimations } from '@angular/platform-browser/animations';
 import { provideHttpClient, withInterceptors } from '@angular/common/http';
 
 import { routes } from './app.routes';
+import { adminLoadingInterceptor } from './interceptors/admin-loading.interceptor';
 import { authSessionInterceptor } from './interceptors/auth-session.interceptor';
 
 export const appConfig: ApplicationConfig = {
   providers: [
     provideAnimations(),
     provideBrowserGlobalErrorListeners(),
-    provideHttpClient(withInterceptors([authSessionInterceptor])),
+    provideHttpClient(withInterceptors([authSessionInterceptor, adminLoadingInterceptor])),
     provideRouter(routes)
   ]
 };

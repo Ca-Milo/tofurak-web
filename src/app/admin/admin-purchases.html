@@ -39,6 +39,16 @@
       name="q"
       placeholder="Buscar por Nombre de Cuenta o ID..."
       [(ngModel)]="searchTerm">
+    <input
+      type="date"
+      name="fechaInicio"
+      class="date-input"
+      [(ngModel)]="filters.fechaInicio">
+    <input
+      type="date"
+      name="fechaFin"
+      class="date-input"
+      [(ngModel)]="filters.fechaFin">
     <button type="submit">Buscar</button>
     @if (searchTerm.trim()) {
     <button type="button" class="btn-clear" (click)="clearSearch()">Limpiar</button>

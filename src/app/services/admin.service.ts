@@ -36,6 +36,10 @@ export interface AdminPurchaseItem {
 export interface AdminPurchasesResponse {
   wompiDisponible: number;
   stats: AdminPurchaseStat[];
+  search: {
+    fechaInicio: string;
+    fechaFin: string;
+  };
   rows: AdminPurchaseItem[];
 }
 
@@ -73,12 +77,17 @@ export interface AdminDailySalesTotals {
   granTotalEstimado: number;
   totalPeriodoCop: number;
   totalPeriodoUsd: number;
+  totalPeriodoNeto: number;
 }
 
 export interface AdminDailySalesResponse {
   wompiDisponible: number;
   tasaDolar: number;
   metaDiaria: number;
+  search: {
+    fechaInicio: string;
+    fechaFin: string;
+  };
   totals: AdminDailySalesTotals;
   days: AdminDailySalesDay[];
 }
@@ -272,9 +281,21 @@ export class AdminService {
 
   constructor(private readonly http: HttpClient) {}
 
-  getPurchases(query = ''): Observable<AdminPurchasesResponse> {
+  getPurchases(query = '', filters: { fecha_inicio?: string; fecha_fin?: string } = {}): Observable<AdminPurchasesResponse> {
     const normalizedQuery = query.trim();
-    const params = normalizedQuery ? new HttpParams().set('q', normalizedQuery) : undefined;
+    let params = new HttpParams();
+
+    if (normalizedQuery) {
+      params = params.set('q', normalizedQuery);
+    }
+
+    if (filters.fecha_inicio) {
+      params = params.set('fecha_inicio', filters.fecha_inicio);
+    }
+
+    if (filters.fecha_fin) {
+      params = params.set('fecha_fin', filters.fecha_fin);
+    }
 
     return this.http
       .get<ApiEnvelope<any> | any>('/api/admin/compras', {
@@ -315,9 +336,18 @@ export class AdminService {
     );
   }
 
-  getDailySales(): Observable<AdminDailySalesResponse> {
+  getDailySales(query: { fecha_inicio?: string; fecha_fin?: string } = {}): Observable<AdminDailySalesResponse> {
+    let params = new HttpParams();
+    if (query.fecha_inicio) {
+      params = params.set('fecha_inicio', query.fecha_inicio);
+    }
+    if (query.fecha_fin) {
+      params = params.set('fecha_fin', query.fecha_fin);
+    }
+
     return this.http
       .get<ApiEnvelope<any> | any>('/api/admin/ventas/diarias', {
+        params,
         withCredentials: true,
       })
       .pipe(
@@ -395,6 +425,10 @@ export class AdminService {
 
     return {
       wompiDisponible: Number(raw?.wompiDisponible ?? raw?.disponible ?? 0),
+      search: {
+        fechaInicio: String(raw?.search?.fechaInicio ?? raw?.search?.fecha_inicio ?? ''),
+        fechaFin: String(raw?.search?.fechaFin ?? raw?.search?.fecha_fin ?? ''),
+      },
       stats:
         normalizedStats.length > 0
           ? normalizedStats
@@ -431,6 +465,10 @@ export class AdminService {
       wompiDisponible: Number(raw?.wompiDisponible ?? raw?.disponible ?? 0),
       tasaDolar: Number(raw?.tasaDolar ?? raw?.tasa_dolar ?? 3500),
       metaDiaria: Number(raw?.metaDiaria ?? raw?.meta_diaria ?? 100000),
+      search: {
+        fechaInicio: String(raw?.search?.fechaInicio ?? raw?.search?.fecha_inicio ?? ''),
+        fechaFin: String(raw?.search?.fechaFin ?? raw?.search?.fecha_fin ?? ''),
+      },
       totals: {
         granTotalEstimado: Number(
           totals?.granTotalEstimado ?? totals?.gran_total_estimado ?? raw?.granTotalEstimado ?? 0,
@@ -440,6 +478,9 @@ export class AdminService {
         ),
         totalPeriodoUsd: Number(
           totals?.totalPeriodoUsd ?? totals?.total_periodo_usd ?? raw?.totalPeriodoUsd ?? 0,
+        ),
+        totalPeriodoNeto: Number(
+          totals?.totalPeriodoNeto ?? totals?.total_periodo_neto ?? raw?.totalPeriodoNeto ?? 0,
         ),
       },
       days: daysSource.map((item: any) => ({

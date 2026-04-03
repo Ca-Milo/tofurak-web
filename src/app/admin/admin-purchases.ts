@@ -19,6 +19,10 @@ import {
 })
 export class AdminPurchases implements OnInit, OnDestroy {
   searchTerm = '';
+  filters = {
+    fechaInicio: '',
+    fechaFin: '',
+  };
   loading = true;
   errorMessage = '';
   stats: AdminPurchaseStat[] = [];
@@ -35,6 +39,11 @@ export class AdminPurchases implements OnInit, OnDestroy {
   ) {}
 
   ngOnInit(): void {
+    const today = new Date();
+    const start = new Date(today);
+    start.setDate(today.getDate() - 29);
+    this.filters.fechaInicio = this.toDateInputValue(start);
+    this.filters.fechaFin = this.toDateInputValue(today);
     this.loadPurchases();
   }
 
@@ -50,12 +59,17 @@ export class AdminPurchases implements OnInit, OnDestroy {
     this.refreshView();
 
     this.adminService
-      .getPurchases(query)
+      .getPurchases(query, {
+        fecha_inicio: this.filters.fechaInicio,
+        fecha_fin: this.filters.fechaFin,
+      })
       .pipe(takeUntil(this.destroy$))
       .subscribe({
         next: response => {
           this.stats = response.stats;
           this.rows = response.rows;
+          this.filters.fechaInicio = response.search.fechaInicio || this.filters.fechaInicio;
+          this.filters.fechaFin = response.search.fechaFin || this.filters.fechaFin;
           this.loading = false;
           this.refreshView();
         },
@@ -133,6 +147,13 @@ export class AdminPurchases implements OnInit, OnDestroy {
 
       return String(cells[index] ?? '').toUpperCase().includes(normalizedFilter);
     });
+  }
+
+  private toDateInputValue(date: Date): string {
+    const year = date.getFullYear();
+    const month = String(date.getMonth() + 1).padStart(2, '0');
+    const day = String(date.getDate()).padStart(2, '0');
+    return `${year}-${month}-${day}`;
   }
 
   private refreshView(): void {

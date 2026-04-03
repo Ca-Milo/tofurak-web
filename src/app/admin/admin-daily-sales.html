@@ -11,10 +11,31 @@
     <button type="button" (click)="loadDailySales()">Reintentar</button>
   </div>
   } @else {
+  <div class="filters-card">
+    <div class="filters-row">
+      <div>
+        <label class="filter-label">Fecha inicio</label>
+        <input type="date" class="filter-input" [(ngModel)]="filters.fechaInicio">
+      </div>
+      <div>
+        <label class="filter-label">Fecha fin</label>
+        <input type="date" class="filter-input" [(ngModel)]="filters.fechaFin">
+      </div>
+      <div class="filters-action">
+        <button type="button" class="filter-button" (click)="loadDailySales()">Aplicar</button>
+      </div>
+    </div>
+  </div>
+
   <div class="kpi-grid">
     <div class="kpi-card kpi-total">
       <div class="kpi-title">Total 30 Dias (Estimado)</div>
       <div class="kpi-value total">{{ formatCop(sales.totals.granTotalEstimado) }}</div>
+    </div>
+
+    <div class="kpi-card kpi-net">
+      <div class="kpi-title">Ganancia Neta del Periodo</div>
+      <div class="kpi-value net-kpi">{{ formatCop(sales.totals.totalPeriodoNeto) }}</div>
     </div>
 
     <div class="kpi-card kpi-cop">
@@ -25,6 +46,25 @@
     <div class="kpi-card kpi-usd">
       <div class="kpi-title">Total PayPal (USD)</div>
       <div class="kpi-value">{{ formatUsd(sales.totals.totalPeriodoUsd) }}</div>
+    </div>
+  </div>
+
+  <div class="chart-card">
+    <div class="chart-title">Ganancia Neta Diaria del Rango Seleccionado</div>
+    <div class="bars-grid">
+      @for (day of chartDays; track trackByDay($index, day)) {
+      <div class="bar-card" [attr.title]="shortDayLabel(day.dia) + ' · ' + formatCop(day.totalNeto)">
+        <div class="bar-track">
+          <div
+            class="bar-fill"
+            [class.bar-missed]="day.totalNeto < day.metaDiaria"
+            [style.height.%]="getBarHeight(day)"></div>
+        </div>
+        <div class="bar-date">{{ shortDayLabel(day.dia) }}</div>
+      </div>
+      } @empty {
+      <div class="chart-empty">No hay dias para graficar en este rango.</div>
+      }
     </div>
   </div>
 
