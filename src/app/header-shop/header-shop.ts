@@ -68,4 +68,8 @@ export class HeaderShop implements OnInit, OnDestroy {
   hasReferralAccess(): boolean {
     return Number(this.user?.module ?? 0) === 1;
   }
+
+  hasAdminAccess(): boolean {
+    return Number(this.user?.rango ?? this.user?.rank ?? 0) >= 2;
+  }
 }

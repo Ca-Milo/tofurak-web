@@ -158,6 +158,9 @@
           <a routerLink="/profile" class="linka">
             <div class="dropdown-menu-content-item">Gestión de cuenta</div>
           </a>
+          <a *ngIf="hasAdminAccess()" routerLink="/admin" class="linka">
+            <div class="dropdown-menu-content-item">Panel admin</div>
+          </a>
           <button (click)="logout()" class="linka logout-link">
             <div class="dropdown-menu-content-item">Desconexión</div>
           </button>

@@ -26,6 +26,8 @@ import { adminGuard } from './guards/admin.guard';
 import { AdminPurchases } from './admin/admin-purchases';
 import { AdminAffiliateLiquidations } from './admin/admin-affiliate-liquidations';
 import { AdminDailySales } from './admin/admin-daily-sales';
+import { AdminExchangeLogs } from './admin/admin-exchange-logs';
+import { AdminServerLogs } from './admin/admin-server-logs';
 import { ReferidosComponent } from './referidos/referidos';
 
 
@@ -161,11 +163,9 @@ export const routes: Routes = [
     },
     {
       path: 'logs/intercambios',
-      component: AdminPlaceholder,
+      component: AdminExchangeLogs,
       data: {
         animation: 'AdminLogsIntercambiosPage',
-        title: 'Logs Intercambios',
-        description: 'Seccion reservada para los logs nuevos de intercambios.',
       },
     },
     {
@@ -179,11 +179,9 @@ export const routes: Routes = [
     },
     {
       path: 'logs',
-      component: AdminPlaceholder,
+      component: AdminServerLogs,
       data: {
         animation: 'AdminLogsPage',
-        title: 'Logs Servidor',
-        description: 'Modulo base para explorar y administrar los logs del servidor.',
       },
     },
   ],

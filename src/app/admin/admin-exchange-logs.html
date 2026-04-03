@@ -1,0 +1,438 @@
+<div class="exchange-logs-shell">
+  <div class="search-card">
+    <form class="form-grid" (ngSubmit)="submitFilters()">
+      <div>
+        <label class="form-label">Que buscas?</label>
+        <select
+          name="searchTarget"
+          class="form-input"
+          [(ngModel)]="form.searchTarget"
+          (ngModelChange)="onSearchTargetChange()">
+          <option value="" disabled>-- Selecciona --</option>
+          <option value="personaje">Un Personaje</option>
+          <option value="cuenta">Una Cuenta</option>
+          <option value="todos">Ver todos los logs</option>
+        </select>
+      </div>
+
+      @if (form.searchTarget !== 'todos' && form.searchTarget) {
+      <div>
+        <label class="form-label">{{ searchValueLabel }}</label>
+        <input
+          type="text"
+          name="searchValue"
+          class="form-input"
+          placeholder="Escribe aqui..."
+          [(ngModel)]="form.searchValue">
+      </div>
+      }
+
+      <div>
+        <label class="form-label">Buscar Objeto (IDs Modelo)</label>
+        <input
+          type="text"
+          name="itemIds"
+          class="form-input"
+          placeholder="Ej: 9149, 1234"
+          [(ngModel)]="form.itemIds">
+      </div>
+
+      <div>
+        <label class="form-label">Busqueda Libre (Texto)</label>
+        <input
+          type="text"
+          name="freeText"
+          class="form-input"
+          placeholder="Buscar palabras..."
+          [(ngModel)]="form.freeText">
+      </div>
+
+      <div>
+        <label class="form-label">Tipo Exchange</label>
+        <div class="searchable-select" (click)="$event.stopPropagation()">
+          <button type="button" class="select-trigger" (click)="toggleDropdown('tipoExchange')">
+            <span>{{ form.tipoExchange || '-- Todos --' }}</span>
+            <span class="trigger-actions">
+              @if (form.tipoExchange) {
+              <span class="clear-chip" (click)="clearDropdownValue('tipoExchange'); $event.stopPropagation()">×</span>
+              }
+              <span>{{ openDropdown === 'tipoExchange' ? '▲' : '▼' }}</span>
+            </span>
+          </button>
+          @if (openDropdown === 'tipoExchange') {
+          <div class="select-panel">
+            <input
+              type="text"
+              class="select-search"
+              placeholder="Buscar tipo..."
+              [(ngModel)]="dropdownSearch.tipoExchange"
+              [ngModelOptions]="{ standalone: true }"
+              (click)="$event.stopPropagation()">
+            <button type="button" class="select-option all-option" (click)="selectDropdownOption('tipoExchange', '')">-- Todos --</button>
+            <div class="options-list">
+              @for (item of getFilteredDropdownOptions('tipoExchange'); track item) {
+              <button type="button" class="select-option" (click)="selectDropdownOption('tipoExchange', item)">{{ item }}</button>
+              } @empty {
+              <div class="no-options">Sin coincidencias</div>
+              }
+            </div>
+          </div>
+          }
+        </div>
+      </div>
+
+      <div>
+        <label class="form-label">Evento</label>
+        <div class="searchable-select" (click)="$event.stopPropagation()">
+          <button type="button" class="select-trigger" (click)="toggleDropdown('evento')">
+            <span>{{ form.evento || '-- Todos --' }}</span>
+            <span class="trigger-actions">
+              @if (form.evento) {
+              <span class="clear-chip" (click)="clearDropdownValue('evento'); $event.stopPropagation()">×</span>
+              }
+              <span>{{ openDropdown === 'evento' ? '▲' : '▼' }}</span>
+            </span>
+          </button>
+          @if (openDropdown === 'evento') {
+          <div class="select-panel">
+            <input
+              type="text"
+              class="select-search"
+              placeholder="Buscar evento..."
+              [(ngModel)]="dropdownSearch.evento"
+              [ngModelOptions]="{ standalone: true }"
+              (click)="$event.stopPropagation()">
+            <button type="button" class="select-option all-option" (click)="selectDropdownOption('evento', '')">-- Todos --</button>
+            <div class="options-list">
+              @for (item of getFilteredDropdownOptions('evento'); track item) {
+              <button type="button" class="select-option" (click)="selectDropdownOption('evento', item)">{{ item }}</button>
+              } @empty {
+              <div class="no-options">Sin coincidencias</div>
+              }
+            </div>
+          </div>
+          }
+        </div>
+      </div>
+
+      <div>
+        <label class="form-label">Accion</label>
+        <div class="searchable-select" (click)="$event.stopPropagation()">
+          <button type="button" class="select-trigger" (click)="toggleDropdown('accion')">
+            <span>{{ form.accion || '-- Todas --' }}</span>
+            <span class="trigger-actions">
+              @if (form.accion) {
+              <span class="clear-chip" (click)="clearDropdownValue('accion'); $event.stopPropagation()">×</span>
+              }
+              <span>{{ openDropdown === 'accion' ? '▲' : '▼' }}</span>
+            </span>
+          </button>
+          @if (openDropdown === 'accion') {
+          <div class="select-panel">
+            <input
+              type="text"
+              class="select-search"
+              placeholder="Buscar accion..."
+              [(ngModel)]="dropdownSearch.accion"
+              [ngModelOptions]="{ standalone: true }"
+              (click)="$event.stopPropagation()">
+            <button type="button" class="select-option all-option" (click)="selectDropdownOption('accion', '')">-- Todas --</button>
+            <div class="options-list">
+              @for (item of getFilteredDropdownOptions('accion'); track item) {
+              <button type="button" class="select-option" (click)="selectDropdownOption('accion', item)">{{ item }}</button>
+              } @empty {
+              <div class="no-options">Sin coincidencias</div>
+              }
+            </div>
+          </div>
+          }
+        </div>
+      </div>
+
+      <div>
+        <label class="form-label">Direccion IP</label>
+        <div class="searchable-select" (click)="$event.stopPropagation()">
+          <button type="button" class="select-trigger" (click)="toggleDropdown('ip')">
+            <span>{{ form.ip || '-- Todas --' }}</span>
+            <span class="trigger-actions">
+              @if (form.ip) {
+              <span class="clear-chip" (click)="clearDropdownValue('ip'); $event.stopPropagation()">×</span>
+              }
+              <span>{{ openDropdown === 'ip' ? '▲' : '▼' }}</span>
+            </span>
+          </button>
+          @if (openDropdown === 'ip') {
+          <div class="select-panel">
+            <input
+              type="text"
+              class="select-search"
+              placeholder="Buscar IP..."
+              [(ngModel)]="dropdownSearch.ip"
+              [ngModelOptions]="{ standalone: true }"
+              (click)="$event.stopPropagation()">
+            <button type="button" class="select-option all-option" (click)="selectDropdownOption('ip', '')">-- Todas --</button>
+            <div class="options-list">
+              @for (item of getFilteredDropdownOptions('ip'); track item) {
+              <button type="button" class="select-option" (click)="selectDropdownOption('ip', item)">{{ item }}</button>
+              } @empty {
+              <div class="no-options">Sin coincidencias</div>
+              }
+            </div>
+          </div>
+          }
+        </div>
+      </div>
+
+      <div class="special-filters">
+        <label class="form-label">Filtros Especiales</label>
+        <label class="check-item">
+          <input type="checkbox" name="hasKamas" [(ngModel)]="form.hasKamas">
+          <span>Kamas</span>
+        </label>
+        <label class="check-item">
+          <input type="checkbox" name="hasOgrinas" [(ngModel)]="form.hasOgrinas">
+          <span>Ogrinas</span>
+        </label>
+        <label class="check-item alert-check">
+          <input type="checkbox" name="sameIp" [(ngModel)]="form.sameIp">
+          <span>Misma IP</span>
+        </label>
+      </div>
+
+      <div class="date-range">
+        <label class="form-label">Rango de Fechas (Opcional)</label>
+        <div class="date-actions">
+          <input type="date" name="fechaInicio" class="form-input" [(ngModel)]="form.fechaInicio">
+          <input type="date" name="fechaFin" class="form-input" [(ngModel)]="form.fechaFin">
+          <button type="submit" class="btn-filter">Filtrar</button>
+          @if (runSearch) {
+          <button type="button" class="btn-clear" (click)="clearFilters()">Limpiar</button>
+          }
+        </div>
+      </div>
+    </form>
+  </div>
+
+  @if (loading) {
+  <div class="state-card">
+    <h2>Cargando logs...</h2>
+    <p>Estamos preparando la auditoria de intercambios.</p>
+  </div>
+  } @else if (errorMessage) {
+  <div class="state-card state-error">
+    <h2>No se pudo cargar</h2>
+    <p>{{ errorMessage }}</p>
+  </div>
+  } @else if (!runSearch) {
+  <div class="initial-state">
+    <div class="state-icon">⇄</div>
+    <h2>Auditoria de Intercambios</h2>
+    <p>
+      Por seguridad y rendimiento, la tabla no se carga automaticamente. Selecciona si deseas buscar
+      por Cuenta, por Personaje o ver el historial completo.
+    </p>
+  </div>
+  } @else {
+  <div class="results-count">
+    <b>{{ pagination.totalRows | number:'1.0-0' }}</b> registros encontrados.
+  </div>
+
+  <div class="table-card">
+    <table class="logs-table">
+      <thead>
+        <tr>
+          <th class="toggle-col"></th>
+          <th class="info-col">Fecha / Info</th>
+          <th class="party-col">Iniciador (Actor)</th>
+          <th class="arrow-col"></th>
+          <th class="party-col">Receptor (Contra)</th>
+          <th>Estado / Mapa</th>
+        </tr>
+      </thead>
+      <tbody>
+        @for (row of rows; track trackByRow($index, row)) {
+        <tr class="tr-main" [class.expanded]="isExpanded(row.id)">
+          <td>
+            <button type="button" class="btn-toggle" (click)="toggleDetails(row.id)">
+              {{ isExpanded(row.id) ? '▲' : '▼' }}
+            </button>
+          </td>
+
+          <td>
+            <div class="date-main">{{ formatTimestamp(row.timestamp) }}</div>
+            <span class="badge bg-type">{{ row.tipoExchange || '---' }}</span>
+            <div class="event-line">{{ row.evento || 'Sin evento' }}</div>
+          </td>
+
+          <td>
+            <div class="pj-box" [class.suspicious]="form.sameIp && row.actor.ip && row.actor.ip === row.contra.ip">
+              <div class="pj-name">
+                {{ row.actor.personajeNombre || 'Sin personaje' }}
+                <span class="entity-id">(#{{ row.actor.personajeId || 0 }})</span>
+              </div>
+              <div class="acc-name">
+                {{ row.actor.cuentaNombre || 'Sin cuenta' }}
+                <span class="ip-text" [class.alert]="form.sameIp && row.actor.ip && row.actor.ip === row.contra.ip">
+                  {{ row.actor.ip || 'Sin IP' }}
+                </span>
+              </div>
+            </div>
+          </td>
+
+          <td class="arrow-col">
+            @if (row.actor.ip && row.actor.ip === row.contra.ip) {
+            <span class="same-ip-flag">!</span>
+            } @else {
+            <span class="arrow-mark">→</span>
+            }
+          </td>
+
+          <td>
+            @if (row.contra.personajeId > 0 || row.contra.cuentaId > 0) {
+            <div class="pj-box" [class.suspicious]="form.sameIp && row.actor.ip && row.actor.ip === row.contra.ip">
+              <div class="pj-name">
+                {{ row.contra.personajeNombre || 'Sin personaje' }}
+                <span class="entity-id">(#{{ row.contra.personajeId || 0 }})</span>
+              </div>
+              <div class="acc-name">
+                {{ row.contra.cuentaNombre || 'Sin cuenta' }}
+                <span class="ip-text" [class.alert]="form.sameIp && row.actor.ip && row.actor.ip === row.contra.ip">
+                  {{ row.contra.ip || 'Sin IP' }}
+                </span>
+              </div>
+            </div>
+            } @else {
+            <div class="no-counterpart">Sin contraparte (Ej: Basurero/Suelo)</div>
+            }
+          </td>
+
+          <td>
+            <span class="badge" [class.bg-ok]="row.exito" [class.bg-fail]="!row.exito">
+              {{ row.exito ? 'EXITO' : 'FALLO / CANCELADO' }}
+            </span>
+            <div class="map-line">Mapa ID: <b>{{ row.mapaId }}</b></div>
+            @if (row.accion) {
+            <div class="action-line">{{ row.accion }}</div>
+            }
+          </td>
+        </tr>
+
+        @if (isExpanded(row.id)) {
+        <tr class="tr-details">
+          <td colspan="6">
+            <div class="details-wrapper">
+              <div class="details-col">
+                <h4>Puesto por el Iniciador (Actor)</h4>
+
+                <div class="currencies">
+                  @if (row.kamasActor > 0) {
+                  <span class="currency kamas">Kamas: {{ formatNumber(row.kamasActor) }}</span>
+                  }
+                  @if (row.ogrinasActor > 0) {
+                  <span class="currency ogrinas">Ogrinas: {{ formatNumber(row.ogrinasActor) }}</span>
+                  }
+                </div>
+
+                <div class="objects-block">
+                  <b>Objetos:</b>
+                  @if (row.objetosActor.length) {
+                  <ul class="object-list">
+                    @for (item of row.objetosActor; track item.objetoId + '-' + item.modeloId + '-' + item.nombre) {
+                    <li class="object-item">
+                      <div class="object-head">
+                        <b>{{ item.cantidad }}x</b> {{ item.nombre }}
+                        <span class="object-meta">(UID: {{ item.objetoId || '?' }} | Mod: {{ item.modeloId || '?' }})</span>
+                      </div>
+                      @if (getParsedStats(item).length) {
+                      <div class="object-stats">
+                        @for (stat of getParsedStats(item); track stat.text + '-' + $index) {
+                        <div class="stat-line" [class.stat-positive]="stat.tone === 'positive'" [class.stat-negative]="stat.tone === 'negative'" [class.stat-dice]="stat.tone === 'dice'">
+                          {{ stat.text }}
+                        </div>
+                        }
+                      </div>
+                      }
+                    </li>
+                    }
+                  </ul>
+                  } @else {
+                  <span class="empty-objects">Sin objetos</span>
+                  }
+                </div>
+              </div>
+
+              <div class="details-col">
+                <h4>Puesto por el Receptor (Contra)</h4>
+
+                <div class="currencies">
+                  @if (row.kamasContra > 0) {
+                  <span class="currency kamas">Kamas: {{ formatNumber(row.kamasContra) }}</span>
+                  }
+                  @if (row.ogrinasContra > 0) {
+                  <span class="currency ogrinas">Ogrinas: {{ formatNumber(row.ogrinasContra) }}</span>
+                  }
+                </div>
+
+                <div class="objects-block">
+                  <b>Objetos:</b>
+                  @if (row.objetosContra.length) {
+                  <ul class="object-list">
+                    @for (item of row.objetosContra; track item.objetoId + '-' + item.modeloId + '-' + item.nombre) {
+                    <li class="object-item">
+                      <div class="object-head">
+                        <b>{{ item.cantidad }}x</b> {{ item.nombre }}
+                        <span class="object-meta">(UID: {{ item.objetoId || '?' }} | Mod: {{ item.modeloId || '?' }})</span>
+                      </div>
+                      @if (getParsedStats(item).length) {
+                      <div class="object-stats">
+                        @for (stat of getParsedStats(item); track stat.text + '-' + $index) {
+                        <div class="stat-line" [class.stat-positive]="stat.tone === 'positive'" [class.stat-negative]="stat.tone === 'negative'" [class.stat-dice]="stat.tone === 'dice'">
+                          {{ stat.text }}
+                        </div>
+                        }
+                      </div>
+                      }
+                    </li>
+                    }
+                  </ul>
+                  } @else {
+                  <span class="empty-objects">Sin objetos</span>
+                  }
+                </div>
+              </div>
+            </div>
+
+            @if (row.detalles) {
+            <div class="system-log">
+              <b>Log sistema:</b><br>
+              {{ row.detalles }}
+            </div>
+            }
+          </td>
+        </tr>
+        }
+        } @empty {
+        <tr>
+          <td colspan="6" class="empty-row">No se encontraron logs con estos filtros.</td>
+        </tr>
+        }
+      </tbody>
+    </table>
+
+    @if (pagination.totalPages > 1) {
+    <div class="pagination">
+      @if (pagination.page > 1) {
+      <button type="button" class="page-link" (click)="goToPage(1)">«</button>
+      <button type="button" class="page-link" (click)="goToPage(pagination.page - 1)">Ant.</button>
+      }
+
+      <span class="page-link active">Pag {{ pagination.page }} de {{ pagination.totalPages }}</span>
+
+      @if (pagination.page < pagination.totalPages) {
+      <button type="button" class="page-link" (click)="goToPage(pagination.page + 1)">Sig.</button>
+      }
+    </div>
+    }
+  </div>
+  }
+</div>

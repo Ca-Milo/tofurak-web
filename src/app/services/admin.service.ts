@@ -83,6 +83,131 @@ export interface AdminDailySalesResponse {
   days: AdminDailySalesDay[];
 }
 
+export interface AdminExchangeLogParty {
+  personajeId: number;
+  personajeNombre: string;
+  cuentaId: number;
+  cuentaNombre: string;
+  ip: string;
+  tipo?: string;
+}
+
+export interface AdminExchangeLogObject {
+  cantidad: number;
+  nombre: string;
+  objetoId: number;
+  modeloId: number;
+  stats: string;
+}
+
+export interface AdminExchangeLogItem {
+  id: number;
+  timestamp: number;
+  fechaHora: string;
+  tipoExchange: string;
+  evento: string;
+  exito: boolean;
+  mapaId: number;
+  accion: string;
+  detalles: string;
+  actor: AdminExchangeLogParty;
+  contra: AdminExchangeLogParty;
+  kamasActor: number;
+  kamasContra: number;
+  ogrinasActor: number;
+  ogrinasContra: number;
+  objetosActor: AdminExchangeLogObject[];
+  objetosContra: AdminExchangeLogObject[];
+}
+
+export interface AdminExchangeLogFilters {
+  tiposExchange: string[];
+  eventos: string[];
+  acciones: string[];
+  ips: string[];
+}
+
+export interface AdminExchangeLogSearchState {
+  searchTarget: string;
+  searchValue: string;
+  tipoExchange: string;
+  evento: string;
+  accion: string;
+  ip: string;
+  fechaInicio: string;
+  fechaFin: string;
+  hasKamas: boolean;
+  hasOgrinas: boolean;
+  sameIp: boolean;
+  itemIds: string;
+  freeText: string;
+}
+
+export interface AdminExchangeLogPagination {
+  page: number;
+  perPage: number;
+  totalRows: number;
+  totalPages: number;
+  runSearch: boolean;
+}
+
+export interface AdminExchangeLogsResponse {
+  wompiDisponible: number;
+  filters: AdminExchangeLogFilters;
+  search: AdminExchangeLogSearchState;
+  pagination: AdminExchangeLogPagination;
+  rows: AdminExchangeLogItem[];
+}
+
+export interface AdminServerLogItem {
+  id: number;
+  fechaHora: string;
+  timestamp: number;
+  tipo: string;
+  accion: string;
+  personajeId: number;
+  personajeNombre: string;
+  cuentaId: number;
+  cuentaNombre: string;
+  objetoId: number;
+  objetoNombre: string;
+  cantidad: number;
+  kamas: number;
+  ogrinas: number;
+  ipAddress: string;
+  detalles: string;
+}
+
+export interface AdminServerLogSearchState {
+  tipo: string;
+  accion: string;
+  personaje: string;
+  cuenta: string;
+  objeto: string;
+  ip: string;
+  fechaInicio: string;
+  fechaFin: string;
+  sort: string;
+  dir: 'ASC' | 'DESC' | string;
+}
+
+export interface AdminServerLogPagination {
+  page: number;
+  perPage: number;
+  totalRows: number;
+  totalPages: number;
+}
+
+export interface AdminServerLogsResponse {
+  wompiDisponible: number;
+  summary: {
+    totalRows: number;
+  };
+  search: AdminServerLogSearchState;
+  pagination: AdminServerLogPagination;
+  rows: AdminServerLogItem[];
+}
+
 @Injectable({ providedIn: 'root' })
 export class AdminService {
   private readonly wompiDisponibleSubject = new BehaviorSubject<number | null>(null);
@@ -140,6 +265,28 @@ export class AdminService {
       })
       .pipe(
         map(response => this.normalizeDailySalesResponse(response?.data ?? response)),
+        tap(response => this.wompiDisponibleSubject.next(response.wompiDisponible)),
+      );
+  }
+
+  getExchangeLogs(payload: Record<string, string | number | boolean | undefined> = {}): Observable<AdminExchangeLogsResponse> {
+    return this.http
+      .post<ApiEnvelope<any> | any>('/api/admin/logs/intercambios', payload, {
+        withCredentials: true,
+      })
+      .pipe(
+        map(response => this.normalizeExchangeLogsResponse(response?.data ?? response)),
+        tap(response => this.wompiDisponibleSubject.next(response.wompiDisponible)),
+      );
+  }
+
+  getServerLogs(payload: Record<string, string | number | boolean | undefined> = {}): Observable<AdminServerLogsResponse> {
+    return this.http
+      .post<ApiEnvelope<any> | any>('/api/admin/logs', payload, {
+        withCredentials: true,
+      })
+      .pipe(
+        map(response => this.normalizeServerLogsResponse(response?.data ?? response)),
         tap(response => this.wompiDisponibleSubject.next(response.wompiDisponible)),
       );
   }
@@ -226,6 +373,148 @@ export class AdminService {
         metaDiaria: Number(item?.metaDiaria ?? item?.meta_diaria ?? raw?.metaDiaria ?? raw?.meta_diaria ?? 100000),
       })),
     };
+  }
+
+  private normalizeExchangeLogsResponse(raw: any): AdminExchangeLogsResponse {
+    const rowsSource = Array.isArray(raw?.rows)
+      ? raw.rows
+      : Array.isArray(raw?.logs)
+        ? raw.logs
+        : [];
+
+    return {
+      wompiDisponible: Number(raw?.wompiDisponible ?? raw?.disponible ?? 0),
+      filters: {
+        tiposExchange: Array.isArray(raw?.filters?.tiposExchange)
+          ? raw.filters.tiposExchange.map((item: any) => String(item))
+          : [],
+        eventos: Array.isArray(raw?.filters?.eventos)
+          ? raw.filters.eventos.map((item: any) => String(item))
+          : [],
+        acciones: Array.isArray(raw?.filters?.acciones)
+          ? raw.filters.acciones.map((item: any) => String(item))
+          : [],
+        ips: Array.isArray(raw?.filters?.ips)
+          ? raw.filters.ips.map((item: any) => String(item))
+          : [],
+      },
+      search: {
+        searchTarget: String(raw?.search?.searchTarget ?? raw?.search_target ?? ''),
+        searchValue: String(raw?.search?.searchValue ?? raw?.search_value ?? ''),
+        tipoExchange: String(raw?.search?.tipoExchange ?? raw?.tipo_exchange ?? ''),
+        evento: String(raw?.search?.evento ?? ''),
+        accion: String(raw?.search?.accion ?? ''),
+        ip: String(raw?.search?.ip ?? ''),
+        fechaInicio: String(raw?.search?.fechaInicio ?? raw?.fecha_inicio ?? ''),
+        fechaFin: String(raw?.search?.fechaFin ?? raw?.fecha_fin ?? ''),
+        hasKamas: Boolean(raw?.search?.hasKamas ?? raw?.has_kamas ?? false),
+        hasOgrinas: Boolean(raw?.search?.hasOgrinas ?? raw?.has_ogrinas ?? false),
+        sameIp: Boolean(raw?.search?.sameIp ?? raw?.same_ip ?? false),
+        itemIds: String(raw?.search?.itemIds ?? raw?.item_ids ?? ''),
+        freeText: String(raw?.search?.freeText ?? raw?.free_text ?? ''),
+      },
+      pagination: {
+        page: Number(raw?.pagination?.page ?? raw?.page ?? 1),
+        perPage: Number(raw?.pagination?.perPage ?? raw?.per_page ?? 40),
+        totalRows: Number(raw?.pagination?.totalRows ?? raw?.total_rows ?? 0),
+        totalPages: Number(raw?.pagination?.totalPages ?? raw?.total_paginas ?? 0),
+        runSearch: Boolean(raw?.pagination?.runSearch ?? raw?.run_search ?? false),
+      },
+      rows: rowsSource.map((item: any) => ({
+        id: Number(item?.id ?? 0),
+        timestamp: Number(item?.timestamp ?? item?.tiempo ?? 0),
+        fechaHora: String(item?.fechaHora ?? item?.fecha_hora ?? ''),
+        tipoExchange: String(item?.tipoExchange ?? item?.tipo_exchange ?? ''),
+        evento: String(item?.evento ?? ''),
+        exito: Boolean(item?.exito),
+        mapaId: Number(item?.mapaId ?? item?.mapa_id ?? 0),
+        accion: String(item?.accion ?? ''),
+        detalles: String(item?.detalles ?? item?.detail ?? item?.detalle ?? ''),
+        actor: {
+          personajeId: Number(item?.actor?.personajeId ?? item?.actor_personaje_id ?? 0),
+          personajeNombre: String(item?.actor?.personajeNombre ?? item?.actor_personaje_nombre ?? ''),
+          cuentaId: Number(item?.actor?.cuentaId ?? item?.actor_cuenta_id ?? 0),
+          cuentaNombre: String(item?.actor?.cuentaNombre ?? item?.actor_cuenta_nombre ?? ''),
+          ip: String(item?.actor?.ip ?? item?.actor_ip ?? ''),
+        },
+        contra: {
+          tipo: String(item?.contra?.tipo ?? item?.contra_tipo ?? ''),
+          personajeId: Number(item?.contra?.personajeId ?? item?.contra_personaje_id ?? 0),
+          personajeNombre: String(item?.contra?.personajeNombre ?? item?.contra_personaje_nombre ?? ''),
+          cuentaId: Number(item?.contra?.cuentaId ?? item?.contra_cuenta_id ?? 0),
+          cuentaNombre: String(item?.contra?.cuentaNombre ?? item?.contra_cuenta_nombre ?? ''),
+          ip: String(item?.contra?.ip ?? item?.contra_ip ?? ''),
+        },
+        kamasActor: Number(item?.kamasActor ?? item?.kamas_actor ?? 0),
+        kamasContra: Number(item?.kamasContra ?? item?.kamas_contra ?? 0),
+        ogrinasActor: Number(item?.ogrinasActor ?? item?.ogrinas_actor ?? 0),
+        ogrinasContra: Number(item?.ogrinasContra ?? item?.ogrinas_contra ?? 0),
+        objetosActor: this.normalizeExchangeObjects(item?.objetosActor ?? item?.objetos_actor ?? item?.objetos_actor_json),
+        objetosContra: this.normalizeExchangeObjects(item?.objetosContra ?? item?.objetos_contra ?? item?.objetos_contra_json),
+      })),
+    };
+  }
+
+  private normalizeServerLogsResponse(raw: any): AdminServerLogsResponse {
+    const rowsSource = Array.isArray(raw?.rows) ? raw.rows : [];
+    const summary = raw?.summary ?? {};
+    const pagination = raw?.pagination ?? {};
+    const search = raw?.search ?? {};
+
+    return {
+      wompiDisponible: Number(raw?.wompiDisponible ?? raw?.disponible ?? 0),
+      summary: {
+        totalRows: Number(summary?.totalRows ?? summary?.total_rows ?? pagination?.totalRows ?? 0),
+      },
+      search: {
+        tipo: String(search?.tipo ?? ''),
+        accion: String(search?.accion ?? ''),
+        personaje: String(search?.personaje ?? ''),
+        cuenta: String(search?.cuenta ?? ''),
+        objeto: String(search?.objeto ?? ''),
+        ip: String(search?.ip ?? ''),
+        fechaInicio: String(search?.fechaInicio ?? search?.fecha_inicio ?? ''),
+        fechaFin: String(search?.fechaFin ?? search?.fecha_fin ?? ''),
+        sort: String(search?.sort ?? 'fecha_hora'),
+        dir: String(search?.dir ?? 'DESC').toUpperCase(),
+      },
+      pagination: {
+        page: Number(pagination?.page ?? 1),
+        perPage: Number(pagination?.perPage ?? pagination?.per_page ?? 50),
+        totalRows: Number(pagination?.totalRows ?? pagination?.total_rows ?? 0),
+        totalPages: Number(pagination?.totalPages ?? pagination?.total_paginas ?? 0),
+      },
+      rows: rowsSource.map((item: any) => ({
+        id: Number(item?.id ?? 0),
+        fechaHora: String(item?.fechaHora ?? item?.fecha_hora ?? ''),
+        timestamp: Number(item?.timestamp ?? 0),
+        tipo: String(item?.tipo ?? ''),
+        accion: String(item?.accion ?? ''),
+        personajeId: Number(item?.personajeId ?? item?.personaje_id ?? 0),
+        personajeNombre: String(item?.personajeNombre ?? item?.personaje_nombre ?? ''),
+        cuentaId: Number(item?.cuentaId ?? item?.cuenta_id ?? 0),
+        cuentaNombre: String(item?.cuentaNombre ?? item?.cuenta_nombre ?? ''),
+        objetoId: Number(item?.objetoId ?? item?.objeto_id ?? 0),
+        objetoNombre: String(item?.objetoNombre ?? item?.objeto_nombre ?? ''),
+        cantidad: Number(item?.cantidad ?? 0),
+        kamas: Number(item?.kamas ?? 0),
+        ogrinas: Number(item?.ogrinas ?? 0),
+        ipAddress: String(item?.ipAddress ?? item?.ip_address ?? ''),
+        detalles: String(item?.detalles ?? ''),
+      })),
+    };
+  }
+
+  private normalizeExchangeObjects(value: any): AdminExchangeLogObject[] {
+    const source = Array.isArray(value) ? value : [];
+
+    return source.map((item: any) => ({
+      cantidad: Number(item?.cantidad ?? item?.quantity ?? 1),
+      nombre: String(item?.nombre ?? item?.name ?? 'Objeto'),
+      objetoId: Number(item?.objetoId ?? item?.objectId ?? 0),
+      modeloId: Number(item?.modeloId ?? item?.modelId ?? 0),
+      stats: String(item?.stats ?? ''),
+    }));
   }
 
   private normalizeAffiliateLiquidationItem(item: any): AdminAffiliateLiquidationItem {

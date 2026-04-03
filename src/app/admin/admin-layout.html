@@ -19,6 +19,7 @@
       <a
         [routerLink]="item.route"
         routerLinkActive="active"
+        [routerLinkActiveOptions]="{ exact: true }"
         class="admin-link"
         (click)="closeMobileMenu()">
         {{ item.label }}

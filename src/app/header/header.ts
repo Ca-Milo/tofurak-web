@@ -89,6 +89,10 @@ export class Header implements OnInit, OnDestroy {
     return 'No Abonado';
   }
 
+  hasAdminAccess(): boolean {
+    return Number(this.currentUser?.rango ?? this.currentUser?.rank ?? 0) >= 2;
+  }
+
   logout(): void {
     this.hart.logout();
     this.isLoggedIn = false;

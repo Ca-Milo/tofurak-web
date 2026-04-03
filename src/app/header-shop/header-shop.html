@@ -51,6 +51,13 @@
                     <span class="item-text">Gestión de cuenta</span>
                 </a>
 
+                @if (hasAdminAccess()) {
+                <a routerLink="/admin" class="dropdown-item">
+                    <span class="item-icon icon-user"></span>
+                    <span class="item-text">Panel admin</span>
+                </a>
+                }
+
                 @if (hasReferralAccess()) {
                 <a routerLink="/referidos" class="dropdown-item">
                     <span class="item-icon icon-history"></span>

@@ -1,0 +1,169 @@
+<div class="server-logs-shell">
+  <div class="summary-card">
+    <div class="summary-label">Total registros encontrados</div>
+    <div class="summary-value">{{ totalRows | number:'1.0-0' }}</div>
+  </div>
+
+  <div class="search-card">
+    <form class="form-grid" (ngSubmit)="submitFilters()">
+      <div>
+        <label class="form-label">Tipo de Log</label>
+        <select name="tipo" class="form-input" [(ngModel)]="form.tipo">
+          <option value="">-- Todos --</option>
+          @for (item of typeOptions; track item) {
+          <option [value]="item">{{ item }}</option>
+          }
+        </select>
+      </div>
+
+      <div>
+        <label class="form-label">Accion</label>
+        <input type="text" name="accion" class="form-input" placeholder="Ej: DROP, DELETE, BUY..." [(ngModel)]="form.accion">
+      </div>
+
+      <div>
+        <label class="form-label">Personaje (Nombre o ID)</label>
+        <input type="text" name="personaje" class="form-input" placeholder="Ej: 1548 o DarkPJ" [(ngModel)]="form.personaje">
+      </div>
+
+      <div>
+        <label class="form-label">Cuenta (Nombre o ID)</label>
+        <input type="text" name="cuenta" class="form-input" placeholder="Ej: 897 o test_acc" [(ngModel)]="form.cuenta">
+      </div>
+
+      <div>
+        <label class="form-label">Objeto (Nombre o ID)</label>
+        <input type="text" name="objeto" class="form-input" placeholder="Ej: 39 o Amuleto" [(ngModel)]="form.objeto">
+      </div>
+
+      <div>
+        <label class="form-label">IP Address</label>
+        <input type="text" name="ip" class="form-input" placeholder="Ej: 186.86" [(ngModel)]="form.ip">
+      </div>
+
+      <div class="date-group">
+        <label class="form-label">
+          Rango de Fechas
+          <span class="presets">
+            <button type="button" class="btn-preset" (click)="setDatePreset('hoy')">Hoy</button>
+            <button type="button" class="btn-preset" (click)="setDatePreset('7dias')">7 Dias</button>
+            <button type="button" class="btn-preset" (click)="setDatePreset('mes')">Mes</button>
+          </span>
+        </label>
+        <div class="date-row">
+          <input type="date" name="fechaInicio" class="form-input" [(ngModel)]="form.fechaInicio">
+          <input type="date" name="fechaFin" class="form-input" [(ngModel)]="form.fechaFin">
+        </div>
+      </div>
+
+      <div class="action-group">
+        <button type="submit" class="btn-filter">Buscar</button>
+        <button type="button" class="btn-clear" (click)="clearFilters()">Limpiar</button>
+      </div>
+    </form>
+  </div>
+
+  @if (loading) {
+  <div class="state-card">
+    <h2>Cargando logs...</h2>
+    <p>Estamos reuniendo la actividad del servidor.</p>
+  </div>
+  } @else if (errorMessage) {
+  <div class="state-card state-error">
+    <h2>No se pudo cargar</h2>
+    <p>{{ errorMessage }}</p>
+  </div>
+  } @else {
+  <div class="table-card">
+    <table class="logs-table">
+      <thead>
+        <tr>
+          <th class="toggle-col"></th>
+          <th><button type="button" class="sort-link" (click)="toggleSort('fecha_hora')">Fecha/Hora {{ getSortIcon('fecha_hora') }}</button></th>
+          <th><button type="button" class="sort-link" (click)="toggleSort('tipo')">Tipo {{ getSortIcon('tipo') }}</button></th>
+          <th><button type="button" class="sort-link" (click)="toggleSort('accion')">Accion {{ getSortIcon('accion') }}</button></th>
+          <th><button type="button" class="sort-link" (click)="toggleSort('personaje_nombre')">Personaje {{ getSortIcon('personaje_nombre') }}</button></th>
+          <th><button type="button" class="sort-link" (click)="toggleSort('cuenta_nombre')">Cuenta {{ getSortIcon('cuenta_nombre') }}</button></th>
+          <th><button type="button" class="sort-link" (click)="toggleSort('objeto_id')">Objeto / Monedas {{ getSortIcon('objeto_id') }}</button></th>
+          <th>IP Address</th>
+        </tr>
+      </thead>
+      <tbody>
+        @for (row of rows; track trackByRow($index, row)) {
+        <tr class="tr-main" [class.expanded]="isExpanded(row.id)">
+          <td>
+            <button type="button" class="btn-toggle" (click)="toggleDetails(row.id)">{{ isExpanded(row.id) ? '▲' : '▼' }}</button>
+          </td>
+          <td class="date-cell">{{ formatTimestamp(row.timestamp) }}</td>
+          <td><span [class]="getTypeClass(row.tipo)">{{ row.tipo }}</span></td>
+          <td><b class="action-text">{{ row.accion }}</b></td>
+          <td>
+            @if (row.personajeNombre) {
+            <b>{{ row.personajeNombre }}</b>
+            <div class="meta-id">ID: {{ row.personajeId }}</div>
+            } @else {
+            <span class="na-text">N/A</span>
+            }
+          </td>
+          <td>
+            @if (row.cuentaNombre) {
+            <b>{{ row.cuentaNombre }}</b>
+            <div class="meta-id">ID: {{ row.cuentaId }}</div>
+            } @else {
+            <span class="na-text">N/A</span>
+            }
+          </td>
+          <td>
+            @if (row.tipo === 'KAMAS') {
+            <span class="money-kamas">💰 {{ formatNumber(row.kamas) }} Kamas</span>
+            } @else if (row.tipo === 'OGRINAS') {
+            <span class="money-ogrinas">💎 {{ formatNumber(row.ogrinas) }} Ogrinas</span>
+            } @else if (row.objetoNombre) {
+            <span>{{ row.objetoNombre }}</span>
+            <span class="object-id">(#{{ row.objetoId }})</span>
+            @if (row.cantidad > 1) {
+            <b>x{{ row.cantidad }}</b>
+            }
+            } @else {
+            <span class="na-text">-</span>
+            }
+          </td>
+          <td class="ip-cell">{{ row.ipAddress || '-' }}</td>
+        </tr>
+
+        @if (isExpanded(row.id)) {
+        <tr class="tr-details">
+          <td colspan="8">
+            <div class="details-box">
+              <strong>LOG ID:</strong> {{ row.id }}<br><br>
+              <strong>DETALLES TECNICOS:</strong><br>
+              {{ row.detalles || 'Sin detalles adicionales registrados.' }}
+            </div>
+          </td>
+        </tr>
+        }
+        } @empty {
+        <tr>
+          <td colspan="8" class="empty-row">No hay registros que coincidan con los filtros.</td>
+        </tr>
+        }
+      </tbody>
+    </table>
+
+    @if (pagination.totalPages > 1) {
+    <div class="pagination">
+      @if (pagination.page > 1) {
+      <button type="button" class="page-link" (click)="goToPage(1)">«</button>
+      <button type="button" class="page-link" (click)="goToPage(pagination.page - 1)">Ant.</button>
+      }
+
+      <span class="page-link active">Pag {{ pagination.page }} de {{ pagination.totalPages }}</span>
+
+      @if (pagination.page < pagination.totalPages) {
+      <button type="button" class="page-link" (click)="goToPage(pagination.page + 1)">Sig.</button>
+      }
+    </div>
+    }
+  </div>
+  }
+</div>
