@@ -86,7 +86,7 @@
         @for (day of orderedDays; track trackByDay($index, day)) {
         <tr [class.missed-goal]="day.totalNeto < day.metaDiaria">
           <td>
-            <span class="date-badge">{{ shortDayLabel(day.dia) }}</span>
+            <span class="date-badge">{{ day.dia }}</span>
           </td>
           <td><span class="money-val cop">{{ formatCop(day.totalWompi) }}</span></td>
           <td><span class="money-val cop">{{ formatCop(day.totalMp) }}</span></td>
