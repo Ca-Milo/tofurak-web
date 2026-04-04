@@ -28,24 +28,25 @@
   </div>
 
   <div class="kpi-grid">
-    <div class="kpi-card kpi-total">
-      <div class="kpi-title">Total 30 Dias (Estimado)</div>
-      <div class="kpi-value total">{{ formatCop(sales.totals.granTotalEstimado) }}</div>
-    </div>
-
     <div class="kpi-card kpi-net">
       <div class="kpi-title">Ganancia Neta del Periodo</div>
       <div class="kpi-value net-kpi">{{ formatCop(sales.totals.totalPeriodoNeto) }}</div>
     </div>
 
-    <div class="kpi-card kpi-cop">
-      <div class="kpi-title">Total Wompi + MP (COP)</div>
-      <div class="kpi-value">{{ formatCop(sales.totals.totalPeriodoCop) }}</div>
+    <div class="kpi-card kpi-wompi">
+      <div class="kpi-title">Total Wompi (COP)</div>
+      <div class="kpi-value wompi-kpi">{{ formatCop(totalWompiPeriodo) }}</div>
+    </div>
+
+    <div class="kpi-card kpi-mp">
+      <div class="kpi-title">Total Mercado Pago (COP)</div>
+      <div class="kpi-value mp-kpi">{{ formatCop(totalMpPeriodo) }}</div>
     </div>
 
     <div class="kpi-card kpi-usd">
       <div class="kpi-title">Total PayPal (USD)</div>
       <div class="kpi-value">{{ formatUsd(sales.totals.totalPeriodoUsd) }}</div>
+      <div class="kpi-subvalue">≈ {{ formatApproxCop(sales.totals.totalPeriodoUsd * sales.tasaDolar) }}</div>
     </div>
   </div>
 

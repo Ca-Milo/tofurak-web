@@ -99,6 +99,14 @@ export class AdminDailySales implements OnInit, OnDestroy {
     return [...this.sales.days].sort((a, b) => a.dia.localeCompare(b.dia));
   }
 
+  get totalWompiPeriodo(): number {
+    return this.sales.days.reduce((total, day) => total + (day.totalWompi || 0), 0);
+  }
+
+  get totalMpPeriodo(): number {
+    return this.sales.days.reduce((total, day) => total + (day.totalMp || 0), 0);
+  }
+
   get maxChartValue(): number {
     return this.chartDays.reduce((max, day) => Math.max(max, day.totalNeto), 0);
   }

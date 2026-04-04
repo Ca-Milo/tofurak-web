@@ -61,7 +61,7 @@
 
 .kpi-grid {
   display: grid;
-  grid-template-columns: repeat(4, minmax(0, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
   gap: 20px;
   margin-bottom: 32px;
 }
@@ -93,6 +93,14 @@
   background: #28a745;
 }
 
+.kpi-wompi::after {
+  background: #f08c00;
+}
+
+.kpi-mp::after {
+  background: #009ee3;
+}
+
 .kpi-usd::after {
   background: #003087;
 }
@@ -115,12 +123,27 @@
   color: #1a1a1a;
 }
 
+.kpi-subvalue {
+  margin-top: 8px;
+  font-size: 13px;
+  font-weight: 700;
+  color: #5f6b7a;
+}
+
 .kpi-value.total {
   color: #6f42c1;
 }
 
 .kpi-value.net-kpi {
   color: #0ca678;
+}
+
+.kpi-value.wompi-kpi {
+  color: #f08c00;
+}
+
+.kpi-value.mp-kpi {
+  color: #009ee3;
 }
 
 .chart-card {
@@ -303,10 +326,6 @@
   .filter-input {
     min-width: 0;
     width: 100%;
-  }
-
-  .kpi-grid {
-    grid-template-columns: 1fr;
   }
 
   .table-card {
