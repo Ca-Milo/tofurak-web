@@ -200,6 +200,11 @@ export interface AdminServerLogSearchState {
   dir: 'ASC' | 'DESC' | string;
 }
 
+export interface AdminServerLogFilters {
+  tipos: string[];
+  acciones: string[];
+}
+
 export interface AdminServerLogPagination {
   page: number;
   perPage: number;
@@ -209,6 +214,7 @@ export interface AdminServerLogPagination {
 
 export interface AdminServerLogsResponse {
   wompiDisponible: number;
+  filters: AdminServerLogFilters;
   summary: {
     totalRows: number;
   };
@@ -583,6 +589,14 @@ export class AdminService {
 
     return {
       wompiDisponible: Number(raw?.wompiDisponible ?? raw?.disponible ?? 0),
+      filters: {
+        tipos: Array.isArray(raw?.filters?.tipos)
+          ? raw.filters.tipos.map((item: any) => String(item))
+          : [],
+        acciones: Array.isArray(raw?.filters?.acciones)
+          ? raw.filters.acciones.map((item: any) => String(item))
+          : [],
+      },
       summary: {
         totalRows: Number(summary?.totalRows ?? summary?.total_rows ?? pagination?.totalRows ?? 0),
       },

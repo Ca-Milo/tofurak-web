@@ -1,5 +1,5 @@
 import { CommonModule, DatePipe, DecimalPipe } from '@angular/common';
-import { ChangeDetectorRef, Component, OnDestroy, OnInit } from '@angular/core';
+import { ChangeDetectorRef, Component, HostListener, OnDestroy, OnInit } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
@@ -21,8 +21,8 @@ type SortColumn = 'fecha_hora' | 'tipo' | 'accion' | 'personaje_nombre' | 'cuent
   styleUrl: './admin-server-logs.scss',
 })
 export class AdminServerLogs implements OnInit, OnDestroy {
-  readonly typeOptions = ['OBJETO', 'KAMAS', 'OGRINAS', 'PERSONAJE', 'CUENTA', 'COMERCIO', 'SISTEMA', 'OTRO'];
-
+  typeOptions: string[] = [];
+  actionOptions: string[] = [];
   loading = true;
   errorMessage = '';
   totalRows = 0;
@@ -35,6 +35,10 @@ export class AdminServerLogs implements OnInit, OnDestroy {
   };
   rows: AdminServerLogItem[] = [];
   expandedRows = new Set<number>();
+  openDropdown: 'accion' | null = null;
+  dropdownSearch = {
+    accion: '',
+  };
 
   private readonly destroy$ = new Subject<void>();
 
@@ -52,6 +56,11 @@ export class AdminServerLogs implements OnInit, OnDestroy {
   ngOnDestroy(): void {
     this.destroy$.next();
     this.destroy$.complete();
+  }
+
+  @HostListener('document:click')
+  closeDropdowns(): void {
+    this.openDropdown = null;
   }
 
   submitFilters(): void {
@@ -142,6 +151,35 @@ export class AdminServerLogs implements OnInit, OnDestroy {
     return row.id;
   }
 
+  toggleDropdown(name: 'accion'): void {
+    this.openDropdown = this.openDropdown === name ? null : name;
+    if (this.openDropdown === name) {
+      this.dropdownSearch[name] = '';
+    }
+  }
+
+  selectDropdownOption(name: 'accion', value: string): void {
+    this.form.accion = value;
+    this.dropdownSearch[name] = '';
+    this.openDropdown = null;
+  }
+
+  clearDropdownValue(name: 'accion'): void {
+    this.form.accion = '';
+    this.dropdownSearch[name] = '';
+    this.openDropdown = null;
+  }
+
+  getFilteredDropdownOptions(name: 'accion'): string[] {
+    const term = this.dropdownSearch[name].trim().toUpperCase();
+
+    if (!term) {
+      return this.actionOptions;
+    }
+
+    return this.actionOptions.filter(item => item.toUpperCase().includes(term));
+  }
+
   private loadLogs(payload: Record<string, string | number> = {}): void {
     this.loading = true;
     this.errorMessage = '';
@@ -152,6 +190,8 @@ export class AdminServerLogs implements OnInit, OnDestroy {
       .pipe(takeUntil(this.destroy$))
       .subscribe({
         next: response => {
+          this.typeOptions = response.filters.tipos;
+          this.actionOptions = response.filters.acciones;
           this.form = { ...response.search };
           this.pagination = response.pagination;
           this.totalRows = response.summary.totalRows;

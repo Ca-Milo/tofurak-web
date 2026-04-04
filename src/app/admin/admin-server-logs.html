@@ -18,7 +18,36 @@
 
       <div>
         <label class="form-label">Accion</label>
-        <input type="text" name="accion" class="form-input" placeholder="Ej: DROP, DELETE, BUY..." [(ngModel)]="form.accion">
+        <div class="searchable-select" (click)="$event.stopPropagation()">
+          <button type="button" class="select-trigger" (click)="toggleDropdown('accion')">
+            <span>{{ form.accion || '-- Todas --' }}</span>
+            <span class="trigger-actions">
+              @if (form.accion) {
+              <span class="clear-chip" (click)="clearDropdownValue('accion'); $event.stopPropagation()">×</span>
+              }
+              <span>{{ openDropdown === 'accion' ? '▲' : '▼' }}</span>
+            </span>
+          </button>
+          @if (openDropdown === 'accion') {
+          <div class="select-panel">
+            <input
+              type="text"
+              class="select-search"
+              placeholder="Buscar accion..."
+              [(ngModel)]="dropdownSearch.accion"
+              [ngModelOptions]="{ standalone: true }"
+              (click)="$event.stopPropagation()">
+            <button type="button" class="select-option all-option" (click)="selectDropdownOption('accion', '')">-- Todas --</button>
+            <div class="options-list">
+              @for (item of getFilteredDropdownOptions('accion'); track item) {
+              <button type="button" class="select-option" (click)="selectDropdownOption('accion', item)">{{ item }}</button>
+              } @empty {
+              <div class="no-options">Sin coincidencias</div>
+              }
+            </div>
+          </div>
+          }
+        </div>
       </div>
 
       <div>
