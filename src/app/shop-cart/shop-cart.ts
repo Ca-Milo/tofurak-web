@@ -28,7 +28,7 @@ export class ShopCart implements OnInit, OnDestroy {
     'AfzCjGoelcfp4GoKxGCUmORkOIK3hvfoARxUJSeMoNfBfAbAv93NrzHZLckXFtomgybWVua35j-ehS78';
   private readonly paypalCurrency = 'USD';
   readonly showBoldButton = true;
-  readonly showMercadoPagoButton = true;
+  readonly showMercadoPagoButton = false;
   readonly showWompiButton = true;
 
   cartItems: CartItem[] = [];
@@ -111,7 +111,12 @@ export class ShopCart implements OnInit, OnDestroy {
   }
 
   get canPayWithBold(): boolean {
-    return this.showBoldButton && this.cartItems.length > 0;
+    return (
+      this.showBoldButton &&
+      this.totals.cop > 0 &&
+      this.wompiAvailabilityResolved &&
+      !this.wompiAvailability.disponible
+    );
   }
 
   get canPayWithMercadoPago(): boolean {
@@ -129,7 +134,7 @@ export class ShopCart implements OnInit, OnDestroy {
 
   get showWompiUnavailableMessage(): boolean {
     return (
-      (this.showWompiButton || this.showMercadoPagoButton) &&
+      (this.showWompiButton || this.showBoldButton || this.showMercadoPagoButton) &&
       this.totals.cop > 0 &&
       this.wompiAvailabilityResolved &&
       !this.wompiAvailability.disponible
