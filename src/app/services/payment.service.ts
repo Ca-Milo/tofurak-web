@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { Observable, catchError, firstValueFrom, map, throwError } from 'rxjs';
+import { Observable, catchError, map, throwError } from 'rxjs';
 
 export interface PaymentCartItemPayload {
   productId: number;
@@ -21,7 +21,7 @@ export interface OrderHistoryItemProduct {
 
 export interface OrderHistoryItem {
   reference: string;
-  method: 'mercado_pago' | 'paypal' | 'wompi' | string;
+  method: 'bold' | 'mercado_pago' | 'paypal' | 'wompi' | string;
   methodLabel: string;
   status: string;
   statusLabel: string;
@@ -82,6 +82,12 @@ export class PaymentService {
 
   createMercadoPagoPreference(payload: PaymentPayload): Observable<{ initPoint?: string }> {
     return this.http.post<{ initPoint?: string }>(`${this.baseUrl}/crear-preferencia`, payload, {
+      withCredentials: true,
+    });
+  }
+
+  createBoldOrder(payload: PaymentPayload): Observable<{ paymentUrl?: string }> {
+    return this.http.post<{ paymentUrl?: string }>(`${this.baseUrl}/crear-orden-bold`, payload, {
       withCredentials: true,
     });
   }
@@ -206,6 +212,7 @@ export class PaymentService {
 
   private normalizePaymentMethod(method: string): string {
     const normalized = method.toLowerCase().replace(/\s+/g, '_');
+    if (normalized === 'bold') return 'bold';
     if (normalized === 'mercado_pago' || normalized === 'mercadopago') return 'mercado_pago';
     if (normalized === 'paypal' || normalized === 'pay_pal') return 'paypal';
     if (normalized === 'wompi') return 'wompi';
@@ -214,6 +221,8 @@ export class PaymentService {
 
   private getMethodLabel(method: string, fallback: string): string {
     switch (method) {
+      case 'bold':
+        return 'Bold';
       case 'mercado_pago':
         return 'Mercado Pago';
       case 'paypal':

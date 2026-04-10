@@ -27,6 +27,9 @@ export class ShopCart implements OnInit, OnDestroy {
   private readonly paypalClientId =
     'AfzCjGoelcfp4GoKxGCUmORkOIK3hvfoARxUJSeMoNfBfAbAv93NrzHZLckXFtomgybWVua35j-ehS78';
   private readonly paypalCurrency = 'USD';
+  readonly showBoldButton = true;
+  readonly showMercadoPagoButton = false;
+  readonly showWompiButton = false;
 
   cartItems: CartItem[] = [];
   user: User | null = null;
@@ -36,6 +39,7 @@ export class ShopCart implements OnInit, OnDestroy {
   couponMessage = '';
   couponMessageColor: 'green' | 'red' | 'gray' = 'gray';
   loadingCoupon = false;
+  payingBold = false;
   payingMercadoPago = false;
   payingWompi = false;
   paypalRendered = false;
@@ -99,11 +103,24 @@ export class ShopCart implements OnInit, OnDestroy {
   }
 
   get canPayWithWompi(): boolean {
-    return this.totals.cop > 0 && (!this.wompiAvailabilityResolved || this.wompiAvailability.disponible);
+    return (
+      this.showWompiButton &&
+      this.totals.cop > 0 &&
+      (!this.wompiAvailabilityResolved || this.wompiAvailability.disponible)
+    );
+  }
+
+  get canPayWithBold(): boolean {
+    return this.showBoldButton && this.cartItems.length > 0;
   }
 
   get canPayWithMercadoPago(): boolean {
-    return this.totals.cop > 0 && this.wompiAvailabilityResolved && !this.wompiAvailability.disponible;
+    return (
+      this.showMercadoPagoButton &&
+      this.totals.cop > 0 &&
+      this.wompiAvailabilityResolved &&
+      !this.wompiAvailability.disponible
+    );
   }
 
   get canPayWithPaypal(): boolean {
@@ -111,7 +128,12 @@ export class ShopCart implements OnInit, OnDestroy {
   }
 
   get showWompiUnavailableMessage(): boolean {
-    return this.totals.cop > 0 && this.wompiAvailabilityResolved && !this.wompiAvailability.disponible;
+    return (
+      (this.showWompiButton || this.showMercadoPagoButton) &&
+      this.totals.cop > 0 &&
+      this.wompiAvailabilityResolved &&
+      !this.wompiAvailability.disponible
+    );
   }
 
   validarCupon(): void {
@@ -154,6 +176,38 @@ export class ShopCart implements OnInit, OnDestroy {
           this.couponMessage = error?.message || 'Error de conexion al validar el codigo.';
           this.couponMessageColor = 'red';
           this.refreshView();
+        },
+      });
+  }
+
+  pagarBold(): void {
+    if (!this.ensureUserCanPay() || this.hasPendingCoupon() || this.payingBold) {
+      return;
+    }
+
+    this.payingBold = true;
+
+    this.paymentService
+      .createBoldOrder(this.buildPaymentPayload())
+      .pipe(takeUntil(this.destroy$))
+      .subscribe({
+        next: response => {
+          const paymentUrl = response?.paymentUrl;
+          if (!paymentUrl) {
+            this.payingBold = false;
+            void Swal.fire('Error', 'No se recibio la URL de pago de Bold.', 'error');
+            return;
+          }
+
+          window.location.href = paymentUrl;
+        },
+        error: error => {
+          this.payingBold = false;
+          void Swal.fire(
+            'Error',
+            error?.error?.message || 'No pudimos iniciar el pago con Bold.',
+            'error',
+          );
         },
       });
   }
@@ -372,7 +426,7 @@ export class ShopCart implements OnInit, OnDestroy {
       await this.loadScript(
         `https://www.paypal.com/sdk/js?client-id=${encodeURIComponent(this.paypalClientId)}&currency=${encodeURIComponent(
           this.paypalCurrency,
-        )}`,
+        )}&disable-funding=card`,
         'paypal-sdk',
       );
     } catch {

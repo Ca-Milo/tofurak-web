@@ -97,6 +97,10 @@
         </div>
 
         <div class="payment-buttons">
+          <button *ngIf="canPayWithBold" class="btn-payment btn-bold" type="button" (click)="pagarBold()" [disabled]="payingBold">
+            {{ payingBold ? 'Procesando...' : 'Pagar con Bold' }}
+          </button>
+
           <button *ngIf="canPayWithMercadoPago" class="btn-payment btn-mercado-pago" type="button" (click)="pagarMercadoPago()" [disabled]="payingMercadoPago">
             {{ payingMercadoPago ? 'Procesando...' : 'Pagar con Mercado Pago' }}
           </button>
