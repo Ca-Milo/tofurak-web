@@ -27,8 +27,8 @@ export class ShopCart implements OnInit, OnDestroy {
   private readonly paypalClientId =
     'AfzCjGoelcfp4GoKxGCUmORkOIK3hvfoARxUJSeMoNfBfAbAv93NrzHZLckXFtomgybWVua35j-ehS78';
   private readonly paypalCurrency = 'USD';
-  readonly showBoldButton = true;
-  readonly showMercadoPagoButton = false;
+  readonly showBoldButton = false;
+  readonly showMercadoPagoButton = true;
   readonly showWompiButton = true;
 
   cartItems: CartItem[] = [];
