@@ -97,26 +97,28 @@
         </div>
 
         <div class="payment-buttons">
-          <button *ngIf="canPayWithBold" class="btn-payment btn-bold" type="button" (click)="pagarBold()" [disabled]="payingBold">
-            {{ payingBold ? 'Procesando...' : 'Pagar con Bold' }}
-          </button>
 
-          <button *ngIf="canPayWithMercadoPago" class="btn-payment btn-mercado-pago" type="button" (click)="pagarMercadoPago()" [disabled]="payingMercadoPago">
-            {{ payingMercadoPago ? 'Procesando...' : 'Pagar con Mercado Pago' }}
+          <!-- El botón de Bold se muestra siempre, pero se deshabilita si no es posible pagar con Bold  *ngIf="canPayWithBold" -->
+          <button  class="btn-payment btn-bold" type="button" (click)="pagarBold()" [disabled]="payingBold">
+            {{ payingBold ? 'Procesando...' : 'Pagar con Bold' }}
           </button>
 
           <button *ngIf="canPayWithWompi" class="btn-payment btn-wompi" type="button" (click)="pagarWompi()" [disabled]="payingWompi">
             {{ payingWompi ? 'Cargando Wompi...' : 'Pagar con Wompi' }}
           </button>
+          <!-- El botón de Mercado Pago se muestra siempre, pero se deshabilita si no es posible pagar con Mercado Pago  *ngIf="canPayWithMercadoPago"  payingMercadoPago -->
+          <button *ngIf="false" class="btn-payment btn-mercado-pago" type="button" (click)="pagarMercadoPago()" [disabled]="false">
+            {{ payingMercadoPago ? 'Procesando...' : 'Pagar con Mercado Pago' }}
+          </button>
 
           <div id="paypal-button-container" [class.hidden]="!canPayWithPaypal"></div>
         </div>
 
-        @if (showWompiUnavailableMessage) {
+
         <div class="payment-status payment-status-warning">
-          Wompi no esta disponible para esta compra. Puedes continuar con Bold o PayPal.
+          Bold permite hacer pagos con tarjetas internacionales, mientras que PayPal es una opción global. Si tienes problemas con Wompi, te recomendamos usar Bold o PayPal para completar tu compra.
         </div>
-        }
+        
       </aside>
     </div>
   </div>

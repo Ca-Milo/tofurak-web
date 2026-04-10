@@ -1,4 +1,4 @@
-import { ChangeDetectorRef, Component, OnInit, OnDestroy } from '@angular/core';
+import { ChangeDetectorRef, Component, HostListener, OnInit, OnDestroy } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
 import { Subject, finalize, firstValueFrom } from 'rxjs';
@@ -27,7 +27,7 @@ export class ShopCart implements OnInit, OnDestroy {
   private readonly paypalClientId =
     'AfzCjGoelcfp4GoKxGCUmORkOIK3hvfoARxUJSeMoNfBfAbAv93NrzHZLckXFtomgybWVua35j-ehS78';
   private readonly paypalCurrency = 'USD';
-  readonly showBoldButton = false;
+  readonly showBoldButton = true;
   readonly showMercadoPagoButton = true;
   readonly showWompiButton = true;
 
@@ -59,6 +59,8 @@ export class ShopCart implements OnInit, OnDestroy {
   ) {}
 
   ngOnInit(): void {
+    this.resetPaymentUiState();
+
     this.cartService.cart$.pipe(takeUntil(this.destroy$)).subscribe(() => {
       this.cartItems = this.cartService.items;
       this.totals = this.cartService.totals;
@@ -79,6 +81,16 @@ export class ShopCart implements OnInit, OnDestroy {
   ngOnDestroy(): void {
     this.destroy$.next();
     this.destroy$.complete();
+  }
+
+  @HostListener('window:pageshow')
+  onPageShow(): void {
+    this.resetPaymentUiState();
+  }
+
+  @HostListener('window:focus')
+  onWindowFocus(): void {
+    this.resetPaymentUiState();
   }
 
   increase(id: number): void {
@@ -420,6 +432,24 @@ export class ShopCart implements OnInit, OnDestroy {
       userId: this.user?.id || '',
       promoCode: this.validatedPromoCode || undefined,
     };
+  }
+
+  private resetPaymentUiState(): void {
+    this.payingBold = false;
+    this.payingMercadoPago = false;
+    this.payingWompi = false;
+    this.resetPayPalButtons();
+    this.refreshView();
+    void this.tryRenderPayPalButtons();
+  }
+
+  private resetPayPalButtons(): void {
+    this.paypalRendered = false;
+
+    const container = document.getElementById('paypal-button-container');
+    if (container) {
+      container.innerHTML = '';
+    }
   }
 
   private async tryRenderPayPalButtons(): Promise<void> {
