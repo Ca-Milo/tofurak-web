@@ -9,7 +9,7 @@ interface ApiEnvelope<T> {
 }
 
 export interface AdminPurchaseStat {
-  key: 'total' | 'mercado_pago' | 'wompi' | 'paypal' | string;
+  key: 'total' | 'mercado_pago' | 'wompi' | 'bold' | 'paypal' | string;
   label: string;
   value: number;
 }
@@ -66,6 +66,7 @@ export interface AdminAffiliateLiquidationsResponse {
 export interface AdminDailySalesDay {
   dia: string;
   totalWompi: number;
+  totalBold: number;
   totalMp: number;
   totalPaypal: number;
   totalEstimado: number;
@@ -230,14 +231,17 @@ export interface AdminCodeItem {
   modulo: number;
   porcentaje: number;
   wompiVentas: number;
+  boldVentas: number;
   paypalVentas: number;
   mercadopagoVentas: number;
   totalVentas: number;
   dineroWompiCop: number;
+  dineroBoldCop: number;
   dineroMpCop: number;
   dineroPaypalUsd: number;
   totalGanadoCop: number;
   netoWompi: number;
+  netoBold: number;
   netoMp: number;
   netoPaypal: number;
   totalBrutoEstimado: number;
@@ -442,6 +446,7 @@ export class AdminService {
               { key: 'total', label: 'Ventas Totales', value: fallbackTotal },
               { key: 'mercado_pago', label: 'Mercado Pago', value: 0 },
               { key: 'wompi', label: 'Wompi', value: 0 },
+              { key: 'bold', label: 'Bold', value: 0 },
               { key: 'paypal', label: 'PayPal', value: 0 },
             ],
       rows: rowsSource.map((item: any) => this.normalizePurchaseRow(item)),
@@ -492,6 +497,7 @@ export class AdminService {
       days: daysSource.map((item: any) => ({
         dia: String(item?.dia ?? ''),
         totalWompi: Number(item?.totalWompi ?? item?.total_wompi ?? 0),
+        totalBold: Number(item?.totalBold ?? item?.total_bold ?? 0),
         totalMp: Number(item?.totalMp ?? item?.total_mp ?? 0),
         totalPaypal: Number(item?.totalPaypal ?? item?.total_paypal ?? 0),
         totalEstimado: Number(item?.totalEstimado ?? item?.total_estimado ?? 0),
@@ -665,14 +671,17 @@ export class AdminService {
         modulo: Number(item?.modulo ?? 0),
         porcentaje: Number(item?.porcentaje ?? 0),
         wompiVentas: Number(item?.wompiVentas ?? item?.wompi_ventas ?? 0),
+        boldVentas: Number(item?.boldVentas ?? item?.bold_ventas ?? 0),
         paypalVentas: Number(item?.paypalVentas ?? item?.paypal_ventas ?? 0),
         mercadopagoVentas: Number(item?.mercadopagoVentas ?? item?.mercadopago_ventas ?? 0),
         totalVentas: Number(item?.totalVentas ?? item?.total_ventas ?? 0),
         dineroWompiCop: Number(item?.dineroWompiCop ?? item?.dinero_wompi_cop ?? 0),
+        dineroBoldCop: Number(item?.dineroBoldCop ?? item?.dinero_bold_cop ?? 0),
         dineroMpCop: Number(item?.dineroMpCop ?? item?.dinero_mp_cop ?? 0),
         dineroPaypalUsd: Number(item?.dineroPaypalUsd ?? item?.dinero_paypal_usd ?? 0),
         totalGanadoCop: Number(item?.totalGanadoCop ?? item?.total_ganado_cop ?? 0),
         netoWompi: Number(item?.netoWompi ?? item?.neto_wompi ?? 0),
+        netoBold: Number(item?.netoBold ?? item?.neto_bold ?? 0),
         netoMp: Number(item?.netoMp ?? item?.neto_mp ?? 0),
         netoPaypal: Number(item?.netoPaypal ?? item?.neto_paypal ?? 0),
         totalBrutoEstimado: Number(item?.totalBrutoEstimado ?? item?.total_bruto_estimado ?? 0),

@@ -108,6 +108,8 @@ export class ReferidosComponent implements OnInit, OnDestroy {
 
   getGatewayClass(gateway: string): string {
     switch (gateway) {
+      case 'Bold':
+        return 'bg-bold';
       case 'MercadoPago':
         return 'bg-mp';
       case 'PayPal':

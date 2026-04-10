@@ -32,10 +32,15 @@
       <div class="kpi-title">Ganancia Neta del Periodo</div>
       <div class="kpi-value net-kpi">{{ formatCop(sales.totals.totalPeriodoNeto) }}</div>
     </div>
-
+ 
     <div class="kpi-card kpi-wompi">
       <div class="kpi-title">Total Wompi (COP)</div>
       <div class="kpi-value wompi-kpi">{{ formatCop(totalWompiPeriodo) }}</div>
+    </div>
+
+    <div class="kpi-card kpi-bold">
+      <div class="kpi-title">Total Bold (COP)</div>
+      <div class="kpi-value bold-kpi">{{ formatCop(totalBoldPeriodo) }}</div>
     </div>
 
     <div class="kpi-card kpi-mp">
@@ -75,6 +80,7 @@
         <tr>
           <th>Fecha</th>
           <th>Wompi (COP)</th>
+          <th>Bold (COP)</th>
           <th>Mercado Pago (COP)</th>
           <th>PayPal (USD)</th>
           <th>Total Dia (Estimado)</th>
@@ -89,6 +95,7 @@
             <span class="date-badge">{{ day.dia }}</span>
           </td>
           <td><span class="money-val cop">{{ formatCop(day.totalWompi) }}</span></td>
+          <td><span class="money-val cop">{{ formatCop(day.totalBold) }}</span></td>
           <td><span class="money-val cop">{{ formatCop(day.totalMp) }}</span></td>
           <td>
             <span class="money-val usd">{{ formatUsd(day.totalPaypal) }}</span>
@@ -109,7 +116,7 @@
         </tr>
         } @empty {
         <tr>
-          <td colspan="7" class="empty-row">No hay ventas registradas para mostrar.</td>
+          <td colspan="8" class="empty-row">No hay ventas registradas para mostrar.</td>
         </tr>
         }
       </tbody>

@@ -15,7 +15,7 @@
     <div class="kpi-card kpi-cop">
       <div class="kpi-title">Ingresos Brutos (COP)</div>
       <div class="kpi-value">{{ formatCop(data.totals.grandTotalCop) }}</div>
-      <small>(Wompi + MP)</small>
+      <small>(Wompi + Bold + MP)</small>
     </div>
 
     <div class="kpi-card kpi-usd">
@@ -67,6 +67,7 @@
           <th>Codigo</th>
           <th>Estado</th>
           <th>Mercado Pago</th>
+          <th>Bold</th>
           <th>Wompi</th>
           <th>PayPal</th>
           <th>Total Estimado</th>
@@ -93,6 +94,13 @@
               <span class="count-badge">{{ row.mercadopagoVentas }} ventas</span>
               <span class="money-val cop">B: {{ formatCop(row.dineroMpCop) }}</span>
               <span class="net-val">N: {{ formatCop(row.netoMp) }}</span>
+            </div>
+          </td>
+          <td>
+            <div class="money-cell">
+              <span class="count-badge">{{ row.boldVentas }} ventas</span>
+              <span class="money-val cop">B: {{ formatCop(row.dineroBoldCop) }}</span>
+              <span class="net-val">N: {{ formatCop(row.netoBold) }}</span>
             </div>
           </td>
           <td>

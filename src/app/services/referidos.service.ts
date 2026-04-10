@@ -16,7 +16,7 @@ export interface ReferralSaleProduct {
 }
 
 export interface ReferralSale {
-  gateway: 'Wompi' | 'MercadoPago' | 'PayPal' | string;
+  gateway: 'Wompi' | 'Bold' | 'MercadoPago' | 'PayPal' | string;
   fecha: string;
   promoCode: string;
   brutoCop: number;

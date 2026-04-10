@@ -28,8 +28,8 @@ export class ShopCart implements OnInit, OnDestroy {
     'AfzCjGoelcfp4GoKxGCUmORkOIK3hvfoARxUJSeMoNfBfAbAv93NrzHZLckXFtomgybWVua35j-ehS78';
   private readonly paypalCurrency = 'USD';
   readonly showBoldButton = true;
-  readonly showMercadoPagoButton = false;
-  readonly showWompiButton = false;
+  readonly showMercadoPagoButton = true;
+  readonly showWompiButton = true;
 
   cartItems: CartItem[] = [];
   user: User | null = null;

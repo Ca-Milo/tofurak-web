@@ -97,6 +97,10 @@
   background: #f08c00;
 }
 
+.kpi-bold::after {
+  background: #1f7a8c;
+}
+
 .kpi-mp::after {
   background: #009ee3;
 }
@@ -140,6 +144,10 @@
 
 .kpi-value.wompi-kpi {
   color: #f08c00;
+}
+
+.kpi-value.bold-kpi {
+  color: #1f7a8c;
 }
 
 .kpi-value.mp-kpi {

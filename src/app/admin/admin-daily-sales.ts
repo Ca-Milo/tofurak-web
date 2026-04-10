@@ -103,6 +103,10 @@ export class AdminDailySales implements OnInit, OnDestroy {
     return this.sales.days.reduce((total, day) => total + (day.totalWompi || 0), 0);
   }
 
+  get totalBoldPeriodo(): number {
+    return this.sales.days.reduce((total, day) => total + (day.totalBold || 0), 0);
+  }
+
   get totalMpPeriodo(): number {
     return this.sales.days.reduce((total, day) => total + (day.totalMp || 0), 0);
   }
