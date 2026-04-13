@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
 import { Observable, BehaviorSubject } from 'rxjs';
-import { tap, catchError } from 'rxjs/operators';
+import { tap, catchError, finalize } from 'rxjs/operators';
 import { throwError } from 'rxjs';
 import { API_BASE } from './api.constants';
 
@@ -112,6 +112,7 @@ export class Hart {
   private apiUrl = API_BASE;
   private tokenKey = 'authToken';
   private userKey = 'currentUser';
+  private isRefreshingProfile = false;
 
   // BehaviorSubjects para reactividad
   private authStatusSubject = new BehaviorSubject<boolean>(this.hasToken());
@@ -293,6 +294,31 @@ export class Hart {
     localStorage.removeItem(this.userKey);
     this.authStatusSubject.next(false);
     this.currentUserSubject.next(null);
+  }
+
+  refreshCurrentUser(): void {
+    if (!this.isAuthenticated() || this.isRefreshingProfile) {
+      return;
+    }
+
+    this.isRefreshingProfile = true;
+
+    this.getProfile()
+      .pipe(finalize(() => {
+        this.isRefreshingProfile = false;
+      }))
+      .subscribe({
+        next: (response) => {
+          if (!response?.success) {
+            this.logout();
+          }
+        },
+        error: (error) => {
+          if (error?.status === 401 || error?.status === 403) {
+            this.logout();
+          }
+        },
+      });
   }
 
   /**

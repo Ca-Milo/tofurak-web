@@ -28,8 +28,8 @@ export class ShopCart implements OnInit, OnDestroy {
     'AfzCjGoelcfp4GoKxGCUmORkOIK3hvfoARxUJSeMoNfBfAbAv93NrzHZLckXFtomgybWVua35j-ehS78';
   private readonly paypalCurrency = 'USD';
   readonly showBoldButton = true;
-  readonly showMercadoPagoButton = true;
-  readonly showWompiButton = true;
+  readonly showMercadoPagoButton = false;
+  readonly showWompiButton = false;
 
   cartItems: CartItem[] = [];
   user: User | null = null;
@@ -461,7 +461,7 @@ export class ShopCart implements OnInit, OnDestroy {
       await this.loadScript(
         `https://www.paypal.com/sdk/js?client-id=${encodeURIComponent(this.paypalClientId)}&currency=${encodeURIComponent(
           this.paypalCurrency,
-        )}&disable-funding=card`,
+        )}&components=buttons,funding-eligibility&enable-funding=card`,
         'paypal-sdk',
       );
     } catch {
@@ -475,76 +475,80 @@ export class ShopCart implements OnInit, OnDestroy {
       }
 
       container.innerHTML = '';
-      this.paypalRendered = true;
+      const paypalButtons = this.buildPayPalButtons();
 
-      window.paypal
-        .Buttons({
-          style: {
-            layout: 'vertical',
-            color: 'gold',
-            shape: 'rect',
-            label: 'pay',
-          },
-          onClick: (_data: any, actions: any) => {
-            if (!this.ensureUserCanPay() || this.hasPendingCoupon()) {
-              return actions.reject();
-            }
+      if (paypalButtons.isEligible()) {
+        this.paypalRendered = true;
+        void paypalButtons.render('#paypal-button-container');
+      }
+    });
+  }
 
-            return actions.resolve();
+  private buildPayPalButtons(): any {
+    return window.paypal.Buttons({
+      style: {
+        layout: 'vertical',
+        color: 'gold',
+        shape: 'rect',
+        label: 'pay',
+      },
+      onClick: (_data: any, actions: any) => {
+        if (!this.ensureUserCanPay() || this.hasPendingCoupon()) {
+          return actions.reject();
+        }
+
+        return actions.resolve();
+      },
+      createOrder: async () => {
+        try {
+          const response = await firstValueFrom(
+            this.paymentService.createPayPalOrder(this.buildPaymentPayload()),
+          );
+
+          if (!response?.orderID) {
+            throw new Error('No se recibio orderID');
+          }
+
+          return response.orderID;
+        } catch {
+          await Swal.fire('Error', 'No se pudo iniciar el pago con PayPal.', 'error');
+          return undefined;
+        }
+      },
+      onApprove: async (data: any) => {
+        Swal.fire({
+          title: 'Procesando pago...',
+          text: 'Por favor no cierres esta ventana',
+          allowOutsideClick: false,
+          didOpen: () => {
+            Swal.showLoading();
           },
-          createOrder: async () => {
-            try {
-              const response = await firstValueFrom(
-                this.paymentService.createPayPalOrder(this.buildPaymentPayload()),
+        });
+
+        this.paymentService
+          .capturePayPalOrder(data.orderID)
+          .pipe(takeUntil(this.destroy$))
+          .subscribe({
+            next: async () => {
+              this.cartService.clear();
+              await Swal.fire(
+                'Pago exitoso',
+                'Tus articulos fueron acreditados correctamente.',
+                'success',
               );
-
-              if (!response?.orderID) {
-                throw new Error('No se recibio orderID');
-              }
-
-              return response.orderID;
-            } catch {
-              await Swal.fire('Error', 'No se pudo iniciar el pago con PayPal.', 'error');
-              return undefined;
-            }
-          },
-          onApprove: async (data: any) => {
-            Swal.fire({
-              title: 'Procesando pago...',
-              text: 'Por favor no cierres esta ventana',
-              allowOutsideClick: false,
-              didOpen: () => {
-                Swal.showLoading();
-              },
-            });
-
-            this.paymentService
-              .capturePayPalOrder(data.orderID)
-              .pipe(takeUntil(this.destroy$))
-              .subscribe({
-                next: async () => {
-                  this.cartService.clear();
-                  await Swal.fire(
-                    'Pago exitoso',
-                    'Tus articulos fueron acreditados correctamente.',
-                    'success',
-                  );
-                },
-                error: async error => {
-                  await Swal.fire(
-                    'Error',
-                    error?.error?.message ||
-                      'Hubo un problema confirmando el pago con PayPal.',
-                    'error',
-                  );
-                },
-              });
-          },
-          onError: async () => {
-            await Swal.fire('Error PayPal', 'Ocurrio un error en la pasarela.', 'error');
-          },
-        })
-        .render('#paypal-button-container');
+            },
+            error: async error => {
+              await Swal.fire(
+                'Error',
+                error?.error?.message || 'Hubo un problema confirmando el pago con PayPal.',
+                'error',
+              );
+            },
+          });
+      },
+      onError: async () => {
+        await Swal.fire('Error PayPal', 'Ocurrio un error en la pasarela.', 'error');
+      },
     });
   }
 
