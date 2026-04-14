@@ -514,6 +514,7 @@ export class Hart {
    */
   private handleError(error: any): Observable<never> {
     let errorMessage = 'Error desconocido';
+    let errorList: string[] = [];
 
     if (error.error instanceof ErrorEvent) {
       // Error del cliente 
@@ -523,12 +524,18 @@ export class Hart {
       errorMessage = error.error.message 
         || error.error.error 
         || (typeof error.error === 'string' ? error.error : 'Error en la solicitud');
+      errorList = Array.isArray(error.error.errors) ? error.error.errors : [];
     } else if (typeof error.error === 'string') {
       // Si error.error es un string directo
       errorMessage = error.error;
     }
 
     console.error('Error en Hart:', errorMessage);
-    return throwError(() => new Error(errorMessage));
+    return throwError(() => ({
+      status: error?.status,
+      message: errorMessage,
+      errors: errorList,
+      error: error?.error,
+    }));
   }
 }

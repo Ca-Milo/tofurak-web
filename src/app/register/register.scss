@@ -218,44 +218,64 @@
 // Custom SweetAlert2 styles
 ::ng-deep {
   .custom-swal-popup {
-    background: #0f0d19 !important;
-    border-radius: 15px !important;
-    color: #fff !important;
+    background: #fff !important;
+    border-radius: 18px !important;
+    color: #111 !important;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08) !important;
   }
 
   .custom-swal-title {
-    color: #fff !important;
-    font-size: 1.5rem !important;
+    color: #111 !important;
+    font-size: 1.2rem !important;
+    font-weight: 300 !important;
+    letter-spacing: 0.08em !important;
   }
 
   .custom-swal-html-container {
-    color: #ddd !important;
-    font-size: 1rem !important;
-    line-height: 1.5;
+    color: #272624 !important;
+    font-size: 0.95rem !important;
+    line-height: 1.5 !important;
   }
 
   .custom-swal-confirm-button {
-    background-color: #c62836 !important;
+    background-color: #272624 !important;
     color: #fff !important;
     border: none !important;
-    border-radius: 5px !important;
-    padding: 10px 20px !important;
+    border-radius: 999px !important;
+    padding: 10px 22px !important;
     font-size: 1rem !important;
-    transition: background-color 0.3s;
+    font-weight: 700 !important;
+    transition: background-color 0.3s ease !important;
 
     &:hover {
-      background-color: #a1262f !important;
+      background-color: #111 !important;
     }
   }
-  
+
+  .swal2-loader {
+    border-color: #111 transparent #111 transparent !important;
+  }
+
+  .swal2-icon.swal2-warning {
+    border-color: #e84229 !important;
+    color: #e84229 !important;
+  }
+
+  .swal2-icon.swal2-error {
+    border-color: #e84229 !important;
+    color: #e84229 !important;
+  }
+
   .swal2-icon.swal2-success [class^=swal2-success-line][class$=long] {
-    background-color: #c62836 !important;
+    background-color: #272624 !important;
   }
+
   .swal2-icon.swal2-success [class^=swal2-success-line][class$=tip] {
-    background-color: #c62836 !important;
+    background-color: #272624 !important;
   }
+
   .swal2-icon.swal2-success .swal2-success-ring {
-    border-color: #c62836 !important;
+    border-color: rgba(39, 38, 36, 0.2) !important;
   }
 }
 

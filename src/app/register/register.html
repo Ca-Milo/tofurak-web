@@ -9,16 +9,6 @@
 
     <h4 class="auth-title">CREAR CUENTA</h4>
 
-    <div *ngIf="errorMessage" class="alert alert-error">
-      <span class="material-icons">error</span>
-      {{ errorMessage }}
-    </div>
-
-    <div *ngIf="successMessage" class="alert alert-success">
-      <span class="material-icons">check_circle</span>
-      {{ successMessage }}
-    </div>
-
     <form [formGroup]="registerForm" (ngSubmit)="onRegister()">
       <div class="auth-fields">
 
@@ -163,13 +153,9 @@
       <button
         type="submit"
         class="auth-button"
-        [disabled]="!isFormValid() || isLoading"
+        [disabled]="!isFormValid()"
       >
-        <span *ngIf="!isLoading">CREAR CUENTA</span>
-        <span *ngIf="isLoading" class="spinner-wrapper">
-          <mat-spinner diameter="20"></mat-spinner>
-          Creando...
-        </span>
+        CREAR CUENTA
       </button>
     </form>
 

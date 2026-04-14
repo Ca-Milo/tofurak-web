@@ -1,7 +1,6 @@
-import { Component, OnDestroy, ChangeDetectorRef, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { ReactiveFormsModule, FormsModule, FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { CommonModule } from '@angular/common';
-import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { Router } from '@angular/router';
 import { Hart } from '../services/hart';
 import { IpService } from '../services/ip.service';
@@ -15,8 +14,7 @@ import Swal from 'sweetalert2';
   imports: [ 
     CommonModule,
     FormsModule,
-    ReactiveFormsModule,
-    MatProgressSpinnerModule
+    ReactiveFormsModule
   ],
   templateUrl: './register.html',
   styleUrl: './register.scss',
@@ -25,10 +23,6 @@ export class Register implements OnDestroy, OnInit {
 
   showPassword = false;
   isLoading = false;
-  errorMessage = '';
-  successMessage = '';
-
-
 
   // IP pública del usuario
   userIpv4 = '';
@@ -45,8 +39,7 @@ export class Register implements OnDestroy, OnInit {
     private formBuilder: FormBuilder,
     private hart: Hart,
     private ipService: IpService,
-    private router: Router,
-    private cdr: ChangeDetectorRef
+    private router: Router
   ) {
     this.initForm();
   }
@@ -91,11 +84,23 @@ export class Register implements OnDestroy, OnInit {
   passwordMatchValidator(form: FormGroup) {
     const password = form.get('password');
     const confirmPassword = form.get('confirmPassword');
-    if (password && confirmPassword && password.value !== confirmPassword.value) {
-      confirmPassword.setErrors({ passwordMismatch: true });
-    } else {
-      confirmPassword?.setErrors(null);
+    const hasMismatch = !!password && !!confirmPassword && !!confirmPassword.value && password.value !== confirmPassword.value;
+    const currentErrors = confirmPassword?.errors || {};
+
+    if (!confirmPassword) {
+      return null;
     }
+
+    if (hasMismatch) {
+      confirmPassword.setErrors({ ...currentErrors, passwordMismatch: true });
+      return null;
+    }
+
+    if (currentErrors['passwordMismatch']) {
+      const { passwordMismatch, ...remainingErrors } = currentErrors;
+      confirmPassword.setErrors(Object.keys(remainingErrors).length > 0 ? remainingErrors : null);
+    }
+
     return null;
   }
 
@@ -127,15 +132,31 @@ export class Register implements OnDestroy, OnInit {
   }
 
   onRegister(): void {
-    this.errorMessage = '';
-    this.successMessage = '';
+    if (this.isLoading) {
+      return;
+    }
 
     if (this.registerForm.invalid) {
       this.registerForm.markAllAsTouched();
+      void Swal.fire({
+        title: 'Formulario incompleto',
+        text: 'Revisa los campos marcados antes de continuar.',
+        icon: 'warning',
+        confirmButtonText: 'Entendido',
+        background: '#0f0d19',
+        customClass: {
+          popup: 'custom-swal-popup',
+          title: 'custom-swal-title',
+          htmlContainer: 'custom-swal-html-container',
+          confirmButton: 'custom-swal-confirm-button'
+        },
+        heightAuto: false
+      });
       return;
     }
 
     this.isLoading = true;
+    this.openLoadingModal();
 
     const v = this.registerForm.value;
 
@@ -161,18 +182,21 @@ export class Register implements OnDestroy, OnInit {
     .subscribe({
       next: (res: any) => {
         this.isLoading = false;
+        Swal.close();
         
         let accountsHtml = '';
         const password = this.registerForm.value.password;
         const accounts = res?.data?.allAccounts || [];
 
         if (accounts.length > 0) {
-            accountsHtml = accounts.map((acc: any) => `<p><b>Usuario:</b> ${acc.cuenta} - <b>Contraseña:</b> ${password}</p>`).join('');
+            accountsHtml = accounts
+              .map((acc: any) => `<p><b>Usuario:</b> ${acc.cuenta} - <b>Contraseña:</b> ${password}</p>`)
+              .join('');
         } else {
             accountsHtml = '<p>¡Registro exitoso! Ya puedes iniciar sesión.</p>';
         } 
 
-        Swal.fire({
+        void Swal.fire({
           title: res.message || '¡Cuenta(s) creada(s)!',
           html: `
             <div style="text-align: left; margin-top: 20px;">
@@ -197,11 +221,86 @@ export class Register implements OnDestroy, OnInit {
       },
       error: (err) => {
         this.isLoading = false;
-        this.errorMessage = err.error.errors[0] || 'Error al registrar';
-        this.cdr.detectChanges();
-        console.error('Error al registrar:', err);
-      }
+        Swal.close();
+
+        void Swal.fire({
+          title: 'No se pudo completar el registro',
+          html: this.buildErrorHtml(err),
+          icon: 'error',
+          confirmButtonText: 'Cerrar',
+          background: '#0f0d19',
+          customClass: {
+            popup: 'custom-swal-popup',
+            title: 'custom-swal-title',
+            htmlContainer: 'custom-swal-html-container',
+            confirmButton: 'custom-swal-confirm-button'
+          },
+          heightAuto: false
+        });
+      },
     });
+  }
+
+  private openLoadingModal(): void {
+    void Swal.fire({
+      title: 'Creando cuenta...',
+      text: 'Estamos procesando tu registro.',
+      allowEscapeKey: false,
+      allowOutsideClick: false,
+      showConfirmButton: false,
+      background: '#0f0d19',
+      customClass: {
+        popup: 'custom-swal-popup',
+        title: 'custom-swal-title',
+        htmlContainer: 'custom-swal-html-container'
+      },
+      didOpen: () => {
+        Swal.showLoading();
+      },
+      heightAuto: false
+    });
+  }
+
+  private buildErrorHtml(error: unknown): string {
+    const messages = this.extractErrorMessages(error);
+
+    if (messages.length === 1) {
+      return `<p>${messages[0]}</p>`;
+    }
+
+    return `
+      <div style="text-align: left; margin-top: 20px;">
+        ${messages.map((message) => `<p>• ${message}</p>`).join('')}
+      </div>
+    `;
+  }
+
+  private extractErrorMessages(error: unknown): string[] {
+    const candidate = error as {
+      errors?: string[];
+      message?: string;
+      error?: {
+        errors?: string[];
+        message?: string;
+      };
+    };
+
+    const backendErrors = candidate?.errors;
+    if (Array.isArray(backendErrors) && backendErrors.length > 0) {
+      return backendErrors;
+    }
+
+    const nestedErrors = candidate?.error?.errors;
+    if (Array.isArray(nestedErrors) && nestedErrors.length > 0) {
+      return nestedErrors;
+    }
+
+    const message = candidate?.message || candidate?.error?.message;
+    if (message) {
+      return [message];
+    }
+
+    return ['Ocurrió un error inesperado al registrar la cuenta.'];
   }
 
   goToLogin() {
