@@ -1,0 +1,43 @@
+<app-header-shop></app-header-shop>
+
+<section class="bold-verification-page">
+  <div class="bold-verification-card">
+    <div
+      class="status-icon"
+      [class.is-approved]="state() === 'approved'"
+      [class.is-pending]="state() === 'pending' || state() === 'loading'"
+      [class.is-error]="state() === 'rejected' || state() === 'error'"
+    >
+      {{ icon() }}
+    </div>
+
+    <p class="status-label">{{ statusLabel() }}</p>
+    <h1 class="status-title">{{ title() }}</h1>
+    <p class="status-message">{{ message() }}</p>
+
+    <div class="reference-box" *ngIf="lookupValue()">
+      <span class="reference-caption">{{ lookupLabel() }}</span>
+      <strong class="reference-value">{{ lookupValue() }}</strong>
+    </div>
+
+    <p class="transaction-text" *ngIf="reference() && lookupKey() === 'bold-order-id'">
+      Referencia interna: <strong>{{ reference() }}</strong>
+    </p>
+
+    <p class="transaction-text" *ngIf="transactionId()">
+      Transaccion: <strong>{{ transactionId() }}</strong>
+    </p>
+
+    <div class="actions">
+      <button class="btn btn-primary" type="button" (click)="retryCheck()" [disabled]="checking()">
+        {{ checking() ? 'Consultando...' : 'Consultar de nuevo' }}
+      </button>
+
+      <button class="btn btn-secondary" type="button" (click)="retryPayment()" *ngIf="canRetryPayment()">
+        {{ paymentUrl() ? 'Reintentar pago' : 'Volver a intentarlo' }}
+      </button>
+
+      <a routerLink="/shop" class="btn btn-light">Ir a la tienda</a>
+    </div>
+  </div>
+</section>

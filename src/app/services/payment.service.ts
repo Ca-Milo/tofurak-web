@@ -40,6 +40,19 @@ export interface WompiAvailabilityResponse {
   disponible: boolean;
 }
 
+export interface BoldVerificationResponse {
+  lookupKey: string;
+  lookupValue: string;
+  reference: string;
+  status: string;
+  statusLabel: string;
+  message: string;
+  isApproved: boolean;
+  isPending: boolean;
+  paymentUrl?: string;
+  transactionId?: string;
+}
+
 interface ApiEnvelope<T> {
   success?: boolean;
   data?: T;
@@ -90,6 +103,17 @@ export class PaymentService {
     return this.http.post<{ paymentUrl?: string }>(`${this.baseUrl}/crear-orden-bold`, payload, {
       withCredentials: true,
     });
+  }
+
+  verifyBoldPayment(
+    identifier: string,
+    lookupKey: 'reference' | 'bold-order-id' = 'reference',
+  ): Observable<BoldVerificationResponse> {
+    const requestUrl = `${this.baseUrl}/verificar-bold/${encodeURIComponent(identifier)}`;
+
+    return this.http
+      .get<ApiEnvelope<any> | any>(requestUrl, { withCredentials: true })
+      .pipe(map(response => this.normalizeBoldVerification(response, identifier, lookupKey)));
   }
 
   generateWompiSignature(
@@ -171,6 +195,143 @@ export class PaymentService {
       valido: this.toBoolean(raw?.valido),
       message: raw?.message,
     };
+  }
+
+  private normalizeBoldVerification(
+    response: ApiEnvelope<any> | any,
+    identifier: string,
+    lookupKey: 'reference' | 'bold-order-id',
+  ): BoldVerificationResponse {
+    const raw = response?.data ?? response ?? {};
+    const explicitStatus = String(
+      raw?.status ??
+        raw?.estado ??
+        raw?.paymentStatus ??
+        raw?.payment_status ??
+        raw?.boldStatus ??
+        '',
+    )
+      .trim()
+      .toUpperCase();
+
+    const approvedByFlag =
+      this.toBoolean(raw?.validated) ||
+      this.toBoolean(raw?.valido) ||
+      this.toBoolean(raw?.approved) ||
+      this.toBoolean(raw?.isApproved);
+
+    const pendingByFlag =
+      this.toBoolean(raw?.pending) ||
+      this.toBoolean(raw?.isPending) ||
+      this.toBoolean(raw?.processing);
+
+    const normalizedStatus = this.normalizeBoldStatus(explicitStatus);
+
+    const status = approvedByFlag
+      ? 'APPROVED'
+      : pendingByFlag && !normalizedStatus
+        ? 'PENDING'
+        : normalizedStatus || 'PENDING';
+
+    const isApproved =
+      status === 'APPROVED' || status === 'COMPLETED' || status === 'SUCCESS';
+    const isPending =
+      !isApproved &&
+      [
+        'PENDING',
+        'PROCESSING',
+        'IN_PROCESS',
+        'CREATED',
+        'WAITING',
+        'AUTHORIZED',
+        'ACTIVE',
+      ].includes(status);
+
+    const fallbackMessage = this.getBoldVerificationMessage(status);
+
+    return {
+      lookupKey,
+      lookupValue: String(
+        raw?.lookupValue ??
+          raw?.lookup_value ??
+          raw?.boldOrderId ??
+          raw?.bold_order_id ??
+          raw?.reference ??
+          identifier ??
+          '',
+      ),
+      reference: String(raw?.reference ?? raw?.ref ?? identifier ?? ''),
+      status,
+      statusLabel: this.getBoldStatusLabel(status),
+      message: String(raw?.message ?? raw?.mensaje ?? response?.message ?? fallbackMessage),
+      paymentUrl: raw?.paymentUrl ?? raw?.payment_url ?? raw?.checkoutUrl ?? raw?.checkout_url,
+      transactionId: String(
+        raw?.transactionId ?? raw?.transaction_id ?? raw?.paymentId ?? raw?.payment_id ?? '',
+      ).trim(),
+      isApproved,
+      isPending,
+    };
+  }
+
+  private normalizeBoldStatus(status: string): string {
+    const normalized = String(status ?? '').trim().toUpperCase();
+
+    if (normalized === 'PAID') return 'APPROVED';
+    if (normalized === 'NOT_FOUND') return 'NOT_FOUND';
+    if (normalized === 'ACTIVE') return 'ACTIVE';
+    if (normalized === 'PROCESSING') return 'PROCESSING';
+    if (normalized === 'REJECTED') return 'REJECTED';
+
+    return normalized;
+  }
+
+  private getBoldStatusLabel(status: string): string {
+    switch (status) {
+      case 'APPROVED':
+      case 'COMPLETED':
+      case 'SUCCESS':
+        return 'Pago aprobado';
+      case 'ACTIVE':
+      case 'PENDING':
+      case 'PROCESSING':
+      case 'IN_PROCESS':
+      case 'CREATED':
+      case 'WAITING':
+      case 'AUTHORIZED':
+        return 'Pago pendiente';
+      case 'NOT_FOUND':
+        return 'Pago no encontrado';
+      case 'REJECTED':
+      case 'DECLINED':
+      case 'ERROR':
+      case 'VOIDED':
+      case 'CANCELLED':
+      case 'CANCELED':
+        return 'Pago rechazado';
+      default:
+        return this.getStatusLabel(status);
+    }
+  }
+
+  private getBoldVerificationMessage(status: string): string {
+    switch (status) {
+      case 'APPROVED':
+      case 'COMPLETED':
+      case 'SUCCESS':
+        return 'Tu pago fue validado correctamente.';
+      case 'ACTIVE':
+      case 'PENDING':
+      case 'PROCESSING':
+      case 'IN_PROCESS':
+      case 'CREATED':
+      case 'WAITING':
+      case 'AUTHORIZED':
+        return 'Tu pago sigue en proceso. Puedes consultar nuevamente en unos segundos.';
+      case 'NOT_FOUND':
+        return 'No encontramos un pago asociado a este identificador.';
+      default:
+        return 'El pago no pudo validarse. Puedes intentarlo de nuevo.';
+    }
   }
 
   private normalizeOrderHistory(response: unknown): OrderHistoryItem[] {

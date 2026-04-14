@@ -19,6 +19,7 @@ import { Shop } from './shop/shop';
 import { ShopCart } from './shop-cart/shop-cart';
 import { ShopProductComponent } from './shop-product/shop-product';
 import { ShopPaymentResult } from './shop-payment-result/shop-payment-result';
+import { ShopBoldVerification } from './shop-bold-verification/shop-bold-verification';
 import { ShopOrderHistory } from './shop-order-history/shop-order-history';
 import { AdminLayout } from './admin/admin-layout';
 import { AdminPlaceholder } from './admin/admin-placeholder';
@@ -98,6 +99,16 @@ export const routes: Routes = [
   path: 'shop-product/:id',
   component: ShopProductComponent,
   data: { animation: 'ShopProductPage' }
+},
+{
+  path: 'shop/bold',
+  component: ShopBoldVerification,
+  data: { animation: 'ShopBoldVerificationPage' }
+},
+{
+  path: 'shop/bold/:reference',
+  component: ShopBoldVerification,
+  data: { animation: 'ShopBoldVerificationPage' }
 },
 {
   path: 'shop/payment/approved',
