@@ -1035,17 +1035,17 @@
   color: #fff;
   text-shadow: 
     0 0 20px rgba(255, 208, 0, 0.4),
-    0 4px 20px rgba(0, 0, 0, 0.5);
+    0 4px 20px rgba(0, 0, 0, 0.8);
   letter-spacing: -1px;
 }
 
 .hero-highlight {
-  display: block;
+  display: inline-block;
   background: linear-gradient(135deg, #ffd000, #ffed4e);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
-  filter: drop-shadow(0 2px 8px rgba(255, 208, 0, 0.3));
+  text-shadow: 0 2px 8px rgba(255, 208, 0, 0.4);
 }
 
 /* ================= SUBTÍTULO ================= */
