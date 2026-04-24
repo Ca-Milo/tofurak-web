@@ -921,13 +921,302 @@
 
 .hero-image-block {
   width: 100%;
-  height: 100vh; /* 👈 clave */
-  min-height: 700px; /* opcional para no quedar enano */
+  height: 100vh;
+  min-height: 700px;
   
   background-image: url('../../assets/home-backgrounds/header.webp');
   background-size: cover;
-  background-position: center bottom; /* 👈 importante */
+  background-position: center bottom;
   background-repeat: no-repeat;
   border-bottom: 4px solid #000;
+  
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+
+  /* Overlay oscuro opcional para mejorar legibilidad */
+  &::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(
+      180deg,
+      rgba(0, 0, 0, 0.2) 0%,
+      rgba(0, 0, 0, 0.4) 50%,
+      rgba(0, 0, 0, 0.2) 100%
+    );
+    z-index: 1;
+  }
+}
+
+/* ================= HERO IMAGE CONTENT ================= */
+.hero-image-content {
+  position: relative;
+  z-index: 2;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 2rem;
+}
+
+.hero-image-inner {
+  text-align: center;
+  max-width: 1200px;
+  width: 100%;
+  animation: fadeInUp 0.8s ease-out;
+}
+
+/* ================= ANIMACIÓN ENTRADA ================= */
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* ================= BADGE CON ANIMACIÓN ================= */
+@keyframes badgePulse {
+  0%, 100% {
+    box-shadow: 0 0 0 0 rgba(255, 208, 0, 0.7);
+  }
+  50% {
+    box-shadow: 0 0 0 10px rgba(255, 208, 0, 0);
+  }
+}
+
+@keyframes badgeFloat {
+  0%, 100% {
+    transform: translateY(0px);
+  }
+  50% {
+    transform: translateY(-8px);
+  }
+}
+
+.hero-badge {
+  display: inline-block;
+  margin-bottom: 2rem;
+  animation: badgeFloat 3s ease-in-out infinite;
+}
+
+.badge-text {
+  display: inline-block;
+  padding: 0.75rem 2rem;
+  background: linear-gradient(135deg, rgba(255, 208, 0, 0.15), rgba(255, 237, 78, 0.1));
+  border: 2px solid rgba(255, 208, 0, 0.4);
+  border-radius: 50px;
+  font-family: 'Lexend', sans-serif;
+  font-size: 0.9rem;
+  font-weight: 700;
+  color: #ffd000;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  backdrop-filter: blur(10px);
+  box-shadow: 0 8px 32px rgba(255, 208, 0, 0.15);
+  animation: badgePulse 2s infinite;
+  white-space: nowrap;
+}
+
+/* ================= TÍTULO PRINCIPAL ================= */
+.hero-main-title {
+  margin: 0 0 1rem 0;
+  font-family: 'Lexend', sans-serif;
+  font-size: 3.5rem;
+  font-weight: 900;
+  line-height: 1.2;
+  color: #fff;
+  text-shadow: 
+    0 0 20px rgba(255, 208, 0, 0.4),
+    0 4px 20px rgba(0, 0, 0, 0.5);
+  letter-spacing: -1px;
+}
+
+.hero-highlight {
+  display: block;
+  background: linear-gradient(135deg, #ffd000, #ffed4e);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  filter: drop-shadow(0 2px 8px rgba(255, 208, 0, 0.3));
+}
+
+/* ================= SUBTÍTULO ================= */
+.hero-subtitle {
+  margin: 2rem 0 3rem 0;
+  font-family: 'Lexend', sans-serif;
+  font-size: 1.3rem;
+  font-weight: 600;
+  color: rgba(255, 255, 255, 0.9);
+  letter-spacing: 0.5px;
+  text-shadow: 0 2px 10px rgba(0, 0, 0, 0.5);
+}
+
+/* ================= BOTONES ================= */
+.hero-buttons {
+  display: flex;
+  gap: 1.5rem;
+  justify-content: center;
+  flex-wrap: wrap;
+  margin-top: 2rem;
+}
+
+.btn-play,
+.btn-learn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 1rem 2.5rem;
+  font-family: 'Lexend', sans-serif;
+  font-size: 1.1rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  text-decoration: none;
+  border-radius: 12px;
+  border: 2px solid transparent;
+  cursor: pointer;
+  transition: all 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.3);
+  position: relative;
+  overflow: hidden;
+}
+
+/* BOTÓN JUGAR (AMARILLO) */
+.btn-play {
+  background: linear-gradient(135deg, #ffd000, #ffed4e);
+  color: #000;
+  border-color: #ffed4e;
+}
+
+.btn-play::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+  transform: translateX(-100%);
+  transition: transform 0.6s ease;
+}
+
+.btn-play:hover::before {
+  transform: translateX(100%);
+}
+
+.btn-play:hover {
+  transform: translateY(-3px) scale(1.05);
+  box-shadow: 0 12px 32px rgba(255, 208, 0, 0.4);
+}
+
+/* BOTÓN SABER MÁS (ALTERNATIVO) */
+.btn-learn {
+  background: linear-gradient(135deg, rgba(255, 208, 0, 0.2), rgba(255, 208, 0, 0.1));
+  color: #ffd000;
+  border-color: rgba(255, 208, 0, 0.4);
+  backdrop-filter: blur(10px);
+}
+
+.btn-learn:hover {
+  background: linear-gradient(135deg, rgba(255, 208, 0, 0.3), rgba(255, 208, 0, 0.2));
+  color: #ffed4e;
+  border-color: rgba(255, 237, 78, 0.6);
+  transform: translateY(-3px) scale(1.05);
+  box-shadow: 0 12px 32px rgba(255, 208, 0, 0.3);
+}
+
+/* ================= RESPONSIVIDAD ================= */
+@media (max-width: 1024px) {
+  .hero-main-title {
+    font-size: 2.5rem;
+  }
+
+  .hero-subtitle {
+    font-size: 1.1rem;
+  }
+
+  .btn-play,
+  .btn-learn {
+    padding: 0.9rem 2rem;
+    font-size: 1rem;
+  }
+
+  .badge-text {
+    font-size: 0.85rem;
+    padding: 0.6rem 1.5rem;
+  }
+}
+
+@media (max-width: 768px) {
+  .hero-image-block {
+    min-height: 600px;
+  }
+
+  .hero-main-title {
+    font-size: 2rem;
+    margin-bottom: 0.5rem;
+  }
+
+  .hero-subtitle {
+    font-size: 1rem;
+    margin: 1.5rem 0 2rem 0;
+  }
+
+  .hero-buttons {
+    gap: 1rem;
+  }
+
+  .btn-play,
+  .btn-learn {
+    padding: 0.85rem 1.8rem;
+    font-size: 0.95rem;
+  }
+
+  .badge-text {
+    font-size: 0.8rem;
+    padding: 0.5rem 1.2rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .hero-image-block {
+    min-height: 500px;
+  }
+
+  .hero-main-title {
+    font-size: 1.5rem;
+    margin-bottom: 0.3rem;
+  }
+
+  .hero-subtitle {
+    font-size: 0.9rem;
+    margin: 1rem 0 1.5rem 0;
+  }
+
+  .hero-buttons {
+    flex-direction: column;
+    gap: 0.8rem;
+  }
+
+  .btn-play,
+  .btn-learn {
+    width: 100%;
+    padding: 0.8rem 1.5rem;
+    font-size: 0.9rem;
+  }
+
+  .badge-text {
+    font-size: 0.75rem;
+    padding: 0.4rem 1rem;
+  }
+
+  .hero-image-inner {
+    padding: 0 1rem;
+  }
 }
 

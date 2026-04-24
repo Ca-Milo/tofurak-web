@@ -2,7 +2,31 @@
 <div class="chonchito-scroll" *ngIf="chonchito" (click)="scrollToTop()"></div>
 <div class="full-body-home">
 
-  <div class="hero-image-block"></div>
+  <div class="hero-image-block">
+    <div class="hero-image-content">
+      <div class="hero-image-inner">
+        <!-- Etiqueta mmorpg con animación -->
+        <div class="hero-badge">
+          <span class="badge-text">MMORPG EN LÍNEA</span>
+        </div>
+
+        <!-- Título principal -->
+        <h1 class="hero-main-title">
+          un servidor como nunca antes
+          <span class="hero-highlight">lo has visto</span>
+        </h1>
+
+        <!-- Subtítulo -->
+        <p class="hero-subtitle">¿Te atreves a vivir esta aventura?</p>
+
+        <!-- Botones -->
+        <div class="hero-buttons">
+          <a routerLink="/download" class="btn-play">Jugar Ahora</a>
+          <a routerLink="/" class="btn-learn">Saber Más</a>
+        </div>
+      </div>
+    </div>
+  </div>
 
   <div class="first-block">
     
