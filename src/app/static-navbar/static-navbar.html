@@ -15,12 +15,14 @@
             </a>
         </div>
         <div class="ak-block-video" [ngClass]="{'ak-open': isOpen}">
-            <a class="ak-btn-reduce" (click)="reduceVideo()"></a>
+            <a class="ak-btn-reduce" [ngClass]="{'ak-open': isOpen}" (click)="reduceVideo()"></a>
             <div class="ak-text">
               <div class="ak-title">GUÍA</div>
               <div class="ak-baseline">MODO HÉROES AERMYFUS</div>
             </div>
-            <a target="_blank" href="https://youtube.com/shorts/8ddoiQAOl0k?si=O7mLcIGXOqc_BZ32" class="ak-btn-video ak-modal-trigger" (click)="openModal()"></a>
+            <div class="ak-videos-container">
+              <a target="_blank" href="https://youtube.com/shorts/8ddoiQAOl0k?si=O7mLcIGXOqc_BZ32" class="ak-btn-video ak-modal-trigger" (click)="openModal()"></a>
+            </div>
             <script type="application/json" [attr.data-config]="modalConfig"></script>
           </div>
     </div>
