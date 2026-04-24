@@ -169,16 +169,18 @@
 }
 
 .ak-fixedbar .ak-content-fixedbar .ak-block-video {
-    right: 0;
+    right: -100px;
     background: #191410;
     padding: 10px;
     position: absolute;
     transition: all .2s;
     top: -120px;
     display: none;
+    
   
     &.ak-open {
-      top: 0;
+      top: 25px;
+      background: rgba(25, 20, 16, 0.1);
     }
   
     @media all and (min-width: 1200px) {
