@@ -56,38 +56,36 @@
     }
 
     // Contenedor encima del video (IMPORTANTE)
-    .ak-block-content-start {
-      position: relative;
-      z-index: 5;
-      width: 100%;
-      max-width: 1560px;
-      margin: 0 auto;
-      padding-top: 0;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-    }
+.ak-block-content-start {
+  position: relative;
+  z-index: 5;
+  width: 100%;
+  max-width: 1560px;
+  margin: 0 auto;
+  padding: 0 40px;
+
+  display: flex;
+  justify-content: flex-start; // ⬅️ izquierda
+  align-items: flex-start;     // ⬅️ arriba
+}
 
     // Quita el fondo viejo y asegura que quede encima
-    .ak-block-text-home-start {
-      position: relative;
-      z-index: 6;
-      background: none !important;
-      width: auto !important;
-      height: auto !important;
-      margin: 0 auto;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-    }
-
-  .hero-copy {
+.ak-block-text-home-start {
   position: relative;
-  text-align: center;
+  z-index: 6;
+  background: none !important;
+
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start; // ⬅️ antes center
+  margin-top: 120px;       // ⬅️ lo subes visualmente
+}
+
+.hero-copy {
+  position: relative;
+  text-align: left;   // ⬅️ antes center
   max-width: 700px;
-  margin: 0 auto;
   padding: 10px 20px;
-  z-index: 2;
 }
 
 .hero-copy::before {
@@ -108,13 +106,13 @@
   border-radius: 8px;
 }
 
-    .hero-line {
+  .hero-line {
   font-family: 'lexend', sans-serif !important;
   font-size: 18px;          // ⬅️ más pequeño
   line-height: 1.35;
   margin: 0;
   color: rgba(255,255,255,0.95);
-  text-align: center;
+  text-align: left;
   
 }
 
@@ -241,6 +239,33 @@
             }
         }
     }
+
+    @media (max-width: 768px) {
+  .ak-block-content-start {
+    padding: 0 20px;
+  }
+
+  .ak-block-text-home-start {
+    margin-top: 80px;
+  }
+
+  .hero-copy {
+    max-width: 100%;
+  }
+
+  .hero-line {
+    font-size: 15px;
+  }
+
+  .hero-line--bold {
+    font-size: 17px;
+  }
+
+  .hero-online__label,
+  .hero-online__value {
+    font-size: 20px;
+  }
+}
 
     .news-block {
         background: url(../../assets/home-backgrounds/bg-news_3.jpg) center top no-repeat transparent;
