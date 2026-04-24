@@ -1,7 +1,11 @@
-<div class="header-full-container-new-version">
+<div class="header-full-container-new-version modern-header">
+
+  <!-- BORDE ANIMADO -->
+  <div class="header-border-glow"></div>
+
   <div class="header-full-container-new-version-left">
     <div class="header-full-container-new-version-left-main">
-      <h3>Aermyfus</h3>
+      <h3 class="logo-text">Aermyfus</h3>
     </div>
 
     <div class="header-full-container-new-version-left-logo">
@@ -13,11 +17,11 @@
     <div class="header-full-container-new-version-left-menu ng-star-inserted">
 
       <!-- Juego -->
-      <div class="header-full-container-new-version-left-menu-item">
+      <div class="header-full-container-new-version-left-menu-item modern-item">
         <span>Juego</span>
         <div class="header-full-container-new-version-left-menu-item-arrow"></div>
 
-        <div class="dropdown-menu">
+        <div class="dropdown-menu modern-dropdown">
           <div class="dropdown-menu-top"></div>
           <div class="dropdown-menu-content">
             <a routerLink="/" class="linka">
@@ -37,34 +41,29 @@
       </div>
 
       <!-- Actualidad -->
-<div class="header-full-container-new-version-left-menu-item">
-  <span>Actualidad</span>
-  <div class="header-full-container-new-version-left-menu-item-arrow"></div>
+      <div class="header-full-container-new-version-left-menu-item modern-item">
+        <span>Actualidad</span>
+        <div class="header-full-container-new-version-left-menu-item-arrow"></div>
 
-  <div class="dropdown-menu">
-    <div class="dropdown-menu-top"></div>
-    <div class="dropdown-menu-content">
-
-      <!-- Noticias → Facebook -->
-      <a routerLink="/news" class="linka">
-        <div class="dropdown-menu-content-item">Todas las noticias</div>
-      </a>
-
-      <!-- Guías → YouTube -->
-      <a routerLink="/guide" class="linka">
-        <div class="dropdown-menu-content-item">Guias</div>
-      </a>
-
-    </div>
-  </div>
-</div>
+        <div class="dropdown-menu modern-dropdown">
+          <div class="dropdown-menu-top"></div>
+          <div class="dropdown-menu-content">
+            <a routerLink="/news" class="linka">
+              <div class="dropdown-menu-content-item">Todas las noticias</div>
+            </a>
+            <a routerLink="/guide" class="linka">
+              <div class="dropdown-menu-content-item">Guias</div>
+            </a>
+          </div>
+        </div>
+      </div>
 
       <!-- Utilidades -->
-      <div class="header-full-container-new-version-left-menu-item">
+      <div class="header-full-container-new-version-left-menu-item modern-item">
         <span>Utilidades</span>
         <div class="header-full-container-new-version-left-menu-item-arrow"></div>
 
-        <div class="dropdown-menu">
+        <div class="dropdown-menu modern-dropdown">
           <div class="dropdown-menu-top"></div>
           <div class="dropdown-menu-content">
             <a href="https://retro.dofuscreator.com/" target="_blank" class="linka">
@@ -81,11 +80,11 @@
       </div>
 
       <!-- Redes -->
-      <div class="header-full-container-new-version-left-menu-item">
+      <div class="header-full-container-new-version-left-menu-item modern-item">
         <span>Redes</span>
         <div class="header-full-container-new-version-left-menu-item-arrow"></div>
 
-        <div class="dropdown-menu">
+        <div class="dropdown-menu modern-dropdown">
           <div class="dropdown-menu-top"></div>
           <div class="dropdown-menu-content">
             <a href="https://chat.whatsapp.com/GP7GydWP3VX58O9d5rBecX" target="_blank" class="linka">
@@ -104,43 +103,38 @@
         </div>
       </div>
 
-     <!-- <div class="header-full-container-new-version-left-menu-item">
-    <a routerLink="/evento" class="menu-direct-link evento-menu">
-        <span>Torneo PVM</span>
-    </a>
-    <div class="header-full-container-new-version-left-menu-item-direct"></div>
-</div> -->
-
-     <div class="header-full-container-new-version-left-menu-item">
-    <a routerLink="/shop" class="menu-direct-link">
-    <span>Tienda</span>
-  </a>
-  <div class="header-full-container-new-version-left-menu-item-direct"></div>
-</div>
-
-
-
+      <!-- Tienda -->
+      <div class="header-full-container-new-version-left-menu-item modern-item">
+        <a routerLink="/shop" class="menu-direct-link">
+          <span>Tienda</span>
+        </a>
+        <div class="header-full-container-new-version-left-menu-item-direct"></div>
+      </div>
 
     </div>
   </div>
 
   <div class="header-full-container-new-version-right">
+
     <div *ngIf="totalCartItems > 0" class="header-full-container-new-version-right-item ng-star-inserted">
-        <a routerLink="/shop-cart" class="menu-direct-link cart-link">
-          <div class="icon-shopping"></div>
-          <span class="quantity-cart">{{ totalCartItems }}</span>
-        </a>
+      <a routerLink="/shop-cart" class="menu-direct-link cart-link">
+        <div class="icon-shopping"></div>
+        <span class="quantity-cart">{{ totalCartItems }}</span>
+      </a>
     </div>
 
     <a *ngIf="!isLoggedIn" routerLink="/login" class="header-full-container-new-version-right-item ng-star-inserted">
       <div class="icon-login"></div>
     </a>
 
-    <div *ngIf="isLoggedIn" class="header-full-container-new-version-left-menu-item header-user-menu">
+    <!-- USER -->
+    <div *ngIf="isLoggedIn" class="header-full-container-new-version-left-menu-item header-user-menu modern-item">
       <img src="assets/avatar/avatar.png" alt="Avatar" class="user-avatar-header">
-      <div class="dropdown-menu">
+
+      <div class="dropdown-menu modern-dropdown">
         <div class="dropdown-menu-top"></div>
         <div class="dropdown-menu-content user-dropdown-content">
+          
           <div class="user-profile-header">
             <img src="assets/avatar/avatar.png" alt="Avatar" class="user-avatar-dropdown">
             <div class="user-info">
@@ -148,6 +142,7 @@
               <div class="user-subscription">{{ getSubscriptionStatus() }}</div>
             </div>
           </div>
+
           <div class="user-ogrinas-section">
             <img src="assets/ogrina.svg" alt="Ogrinas" class="ogrinas-icon">
             <div class="ogrinas-info">
@@ -155,6 +150,7 @@
               <a routerLink="/shop" class="ogrinas-buy-link">Comprar Ogrinas</a>
             </div>
           </div>
+
           <a routerLink="/profile" class="linka">
             <div class="dropdown-menu-content-item">Gestión de cuenta</div>
           </a>
@@ -168,12 +164,14 @@
       </div>
     </div>
 
+    <!-- BOTÓN JUGAR -->
     <button 
-  routerLink="/download"
-  class="play-header-button ng-star-inserted">
-  Jugar
-</button>
+      routerLink="/download"
+      class="play-header-button modern-play ng-star-inserted">
+      Jugar
+    </button>
 
+    <!-- BURGER -->
     <button
       type="button"
       class="burger-menu-button"
@@ -187,8 +185,10 @@
   </div>
 </div>
 
+<!-- BACKDROP -->
 <div class="mobile-menu-backdrop" [class.open]="isMobileMenuOpen" (click)="closeMobileMenu()"></div>
 
+<!-- MOBILE MENU -->
 <div class="full-header-menu-mobile" [class.open]="isMobileMenuOpen">
   <div class="full-header-menu-mobile-header">
     <button type="button" class="full-header-menu-mobile-header-close" (click)="closeMobileMenu()" aria-label="Cerrar menu"></button>
@@ -201,6 +201,9 @@
   </div>
 
   <div class="full-header-menu-mobile-body">
+
+    <!-- (MOBILE LO DEJAMOS IGUAL para no romper lógica, solo hereda estilos luego) -->
+
     <div class="fatheritemMobile">
       <button type="button" class="full-header-menu-mobile-body-list-item" (click)="toggleMobileSection('juego')">
         <span>Juego</span>
@@ -272,5 +275,6 @@
     >
       Jugar
     </button>
+
   </div>
 </div>
