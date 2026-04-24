@@ -1157,6 +1157,11 @@
     min-height: 600px;
   }
 
+
+    .hero-image-block {
+    background-position: 70% bottom;
+  }
+
   .hero-main-title {
     font-size: 2rem;
     margin-bottom: 0.5rem;
@@ -1188,6 +1193,16 @@
     min-height: 500px;
   }
 
+    .btn-play,
+    .btn-learn {
+    width: 100%;
+    box-sizing: border-box; 
+  }
+
+    .hero-image-block {
+    background-position: 70% bottom;
+  }
+
   .hero-main-title {
     font-size: 1.5rem;
     margin-bottom: 0.3rem;
@@ -1217,6 +1232,20 @@
 
   .hero-image-inner {
     padding: 0 1rem;
+  }
+  .hero-image-content {
+    padding: 0 1.2rem; /* equilibrio real izquierda/derecha */
+    box-sizing: border-box;
+  }
+
+  .hero-buttons {
+    width: 100%;
+  }
+
+  .btn-play,
+  .btn-learn {
+    width: 100%;
+    max-width: 100%;
   }
 }
 
