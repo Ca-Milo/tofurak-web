@@ -279,6 +279,69 @@
   }
 }
 
+
+@media (max-width: 768px) {
+
+  // Resetea el sistema de columnas viejo
+  .news-block .row {
+    display: flex;
+    justify-content: center;
+    margin: 0;
+  }
+
+  // Oculta izquierda
+  .news-block .left-col {
+    display: none;
+  }
+
+  // Columna derecha centrada real
+  .news-block .right-col {
+    width: 100%;
+    float: none;
+    display: flex;
+    justify-content: center;
+  }
+
+  // Contenido centrado
+  .news-block .ak-text {
+    padding: 60px 20px 40px;
+    text-align: center;
+    max-width: 420px;
+    margin: 0 auto;
+  }
+
+  // Título
+  .news-block .ak-title {
+    font-size: 26px;
+    line-height: 1.2;
+    text-shadow: 0 2px 6px rgba(0, 0, 0, 0.7);
+  }
+
+  // Texto base
+  .news-block .ak-baseline {
+    font-size: 15px;
+    line-height: 1.4;
+    text-shadow: 0 2px 6px rgba(0, 0, 0, 0.7);
+  }
+
+  // Botón corregido
+  .news-block .btn-osatopia {
+    font-size: 16px;
+    font-weight: 700;
+    padding: 12px 16px;
+
+    display: block;
+    width: 100%;
+    max-width: 240px;
+    margin: 20px auto 0;
+
+    text-align: center;
+    box-sizing: border-box; // ⬅️ evita desbordes
+  }
+}
+
+
+
     .news-block {
         background: url(../../assets/home-backgrounds/bg-news_3.webp) center top no-repeat transparent;
         min-height: 667px;
@@ -323,32 +386,51 @@
                         }
 
                         .btn-osatopia {
-                            font-family: "Bebas Neue", cursive !important;
-                            display: inline-block;
-                            background: #7faf17;
-                            box-shadow: 0 0 0 4px #c3de0c inset;
-                            border: 1px solid #000;
-                            border-radius: 0px;
-                            margin-top: 24px;
-                            text-shadow: none;
-                            text-decoration: none;
-                            position: relative;
-                            z-index: 2;
-                            color: #fff;
-                            text-transform: uppercase;
-                            padding: 15px 50px;
-                            font-size: 28px;
-                            cursor: pointer;
+  font-family: "Bebas Neue", cursive !important;
+  display: inline-block;
 
-                            &:hover {
-                                text-decoration: none;
-                                color: #ffffff;
-                                box-shadow: 0 0 0 3px #1dac00 inset;
-                                background-color: #bfd500;
-                                -webkit-transition: 0.2s all cubic-bezier(0.25, 0.46, 0.45, 0.94);
-                                transition: 0.2s all cubic-bezier(0.25, 0.46, 0.45, 0.94);
-                            }
-                        }
+  background: linear-gradient(135deg, #ffd54a, #ffb300);
+  color: #1a1a1a;
+
+  border: none;
+  border-radius: 999px; // totalmente redondeado
+
+  margin-top: 24px;
+  padding: 14px 48px;
+
+  font-size: 28px;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+
+  text-decoration: none;
+  position: relative;
+  z-index: 2;
+  cursor: pointer;
+
+  box-shadow:
+    0 6px 18px rgba(0, 0, 0, 0.25),
+    inset 0 1px 0 rgba(255, 255, 255, 0.4);
+
+  transition: all 0.25s ease;
+
+  &:hover {
+    background: linear-gradient(135deg, #ffe066, #ffc107);
+    color: #000;
+
+    transform: translateY(-3px) scale(1.03);
+
+    box-shadow:
+      0 10px 25px rgba(0, 0, 0, 0.35),
+      0 0 12px rgba(255, 193, 7, 0.6);
+  }
+
+  &:active {
+    transform: translateY(1px) scale(0.97);
+
+    box-shadow:
+      0 4px 10px rgba(0, 0, 0, 0.3);
+  }
+}
                     }
                 }
 
