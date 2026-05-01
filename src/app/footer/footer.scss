@@ -15,7 +15,7 @@
       padding-bottom: 1rem;
       border-bottom: 1px solid #838383;
       display: table;
-      color: #000;
+      color: #1a1a1a;
       display: flex;
       justify-content: space-between;
 
@@ -264,4 +264,75 @@
 
 .ultimo-footer {
   background-color: rgb(0, 0, 0);
+}
+
+@media (max-width: 768px) {
+
+  .footer .ak-block1 {
+    flex-direction: column; // ⬅️ apila todo
+    align-items: center;
+    gap: 30px;
+  }
+
+  // Links en grid responsive
+  .footer .ak-block-links {
+    width: 100%;
+    display: grid;
+    grid-template-columns: repeat(2, 1fr); // ⬅️ 2 columnas
+    gap: 20px;
+  }
+
+  // elimina floats viejos
+  .footer .clearfix {
+    float: none;
+    display: contents;
+  }
+
+  .footer .col-xs-6 {
+    width: 100%;
+    padding: 0;
+  }
+
+  // centra listas
+  .footer .ak-list {
+    align-items: center;
+    text-align: center;
+  }
+
+  .footer .ak-list a {
+    justify-content: center;
+    height: auto;
+    font-size: 13px;
+  }
+
+  // bloque descarga
+  .footer .ak-block-download {
+    width: 100%;
+    padding-top: 10px;
+  }
+
+  .footer .btn-primary {
+    width: 100%;
+    max-width: 280px;
+    margin: 20px auto 0;
+    display: block;
+  }
+
+  // parte legal
+  .footer .ak_legal .row {
+    flex-direction: column;
+    gap: 15px;
+  }
+
+  .footer .col-sm-1,
+  .footer .col-sm-4 {
+    width: 100%;
+    float: none;
+    text-align: center;
+  }
+
+  .footer .col-sm-7 {
+    width: 100%;
+  }
+
 }
